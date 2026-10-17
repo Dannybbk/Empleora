@@ -139,3 +139,25 @@ header {
     grid-template-columns: 1fr !important;
   }
 }
+
+@media (max-width: 900px) {
+  .nav {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px;
+  }
+
+  .nav-links {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100%;
+    position: static !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 10px 0 !important;
+  }
+
+  .logo {
+    font-size: 1.3rem !important;
+  }
+}
