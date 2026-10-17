@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de administración - Empleora</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="logo"><img src="logo.jpg" alt="Empleora"> EMPLEORA - Admin</a>
+    </div>
+  </header>
+
+  <main class="container" style="padding:40px 0;">
+    <h1 style="color:var(--primary);">Panel de administración</h1>
+    <h2 style="margin:24px 0 12px;">Anuncios pendientes</h2>
+    <div id="pending"></div>
+    <h2 style="margin:32px 0 12px;">Denuncias</h2>
+    <div id="reports"></div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script>
+    async function checkAdmin() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) { window.location.href = 'login.html'; return false; }
+      const { data } = await supabase.from('profiles').select('is_admin').eq('id', session.user.id).single();
+      if (!data?.is_admin) {
+        alert('No tienes permisos de administrador.');
+        window.location.href = 'index.html';
+        return false;
+      }
+      return true;
+    }
+
+    async function loadPending() {
+      const { data } = await supabase.from('ads').select('*').eq('status', 'pending').order('created_at');
+      document.getElementById('pending').innerHTML = data.map(ad => `
+        <div class="ad-card" style="margin-bottom:16px;">
+          <h3>${ad.title} - ${ad.profession}</h3>
+          <p>${ad.description}</p>
+          <button onclick="approve('${ad.id}')" class="btn btn-primary">Aprobar</button>
+          <button onclick="reject('${ad.id}')" class="btn btn-outline">Rechazar</button>
+        </div>
+      `).join('') || '<p>No hay anuncios pendientes.</p>';
+    }
+
+    async function loadReports() {
+      const { data } = await supabase.from('reports').select('*, ads(title)').order('created_at', { ascending: false });
+      document.getElementById('reports').innerHTML = data.map(r => `
+        <div style="padding:12px; border-bottom:1px solid #eee;">
+          Anuncio: ${r.ads?.title || r.ad_id}<br>
+          Motivo: ${r.reason}
+        </div>
+      `).join('') || '<p>No hay denuncias.</p>';
+    }
+
+    async function approve(id) {
+      await supabase.from('ads').update({ status: 'approved' }).eq('id', id);
+      loadPending();
+    }
+    async function reject(id) {
+      await supabase.from('ads').update({ status: 'rejected' }).eq('id', id);
+      loadPending();
+    }
+
+    (async () => {
+      if (await checkAdmin()) {
+        loadPending();
+        loadReports();
+      }
+    })();
+  </script>
+</body>
+</html>

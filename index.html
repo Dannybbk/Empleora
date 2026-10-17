@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empleora - Tu próximo trabajo empieza aquí</title>
+  <meta name="description" content="Publica gratis el trabajo que buscas y deja que las oportunidades te encuentren. Plataforma de anuncios de personas que buscan empleo en toda España.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="logo.jpg" type="image/jpeg">
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="logo">
+        <img src="logo.jpg" alt="Logo Empleora">
+        EMPLEORA
+      </a>
+      <button class="menu-toggle" aria-label="Abrir menú">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="buscar.html">Buscar trabajadores</a></li>
+        <li><a href="publicar.html">Publicar anuncio</a></li>
+        <li><a href="#faq">Preguntas frecuentes</a></li>
+        <li><a href="login.html" class="btn btn-outline">Iniciar sesión</a></li>
+        <li><a href="publicar.html" class="btn btn-primary">Publicar anuncio gratis</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Encuentra tu próxima oportunidad laboral</h1>
+      <p>Publica gratis el trabajo que buscas y deja que las oportunidades te encuentren. «Tu próximo trabajo empieza aquí».</p>
+      <div class="hero-buttons">
+        <a href="publicar.html" class="btn btn-primary btn-lg">Publicar anuncio gratis</a>
+        <a href="buscar.html" class="btn btn-outline btn-lg">Buscar trabajadores</a>
+      </div>
+      <form class="search-box" action="buscar.html" method="GET">
+        <input type="text" name="profesion" placeholder="Profesión o trabajo que buscas" aria-label="Profesión">
+        <input type="text" name="localidad" placeholder="Localidad o provincia" aria-label="Localidad">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </form>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>Categorías profesionales</h2>
+      <div class="categories-grid">
+        <a href="buscar.html?categoria=construccion" class="category-card"><span>🏗️</span>Construcción y reformas</a>
+        <a href="buscar.html?categoria=limpieza" class="category-card"><span>🧹</span>Limpieza</a>
+        <a href="buscar.html?categoria=hosteleria" class="category-card"><span>🍽️</span>Hostelería y turismo</a>
+        <a href="buscar.html?categoria=transporte" class="category-card"><span>🚚</span>Transporte y conducción</a>
+        <a href="buscar.html?categoria=logistica" class="category-card"><span>📦</span>Logística y almacén</a>
+        <a href="buscar.html?categoria=administracion" class="category-card"><span>📋</span>Administración y oficina</a>
+        <a href="buscar.html?categoria=comercio" class="category-card"><span>🛍️</span>Comercio y ventas</a>
+        <a href="buscar.html?categoria=atencion" class="category-card"><span>💬</span>Atención al cliente</a>
+        <a href="buscar.html?categoria=informatica" class="category-card"><span>💻</span>Informática y tecnología</a>
+        <a href="buscar.html?categoria=sanidad" class="category-card"><span>🏥</span>Sanidad</a>
+        <a href="buscar.html?categoria=educacion" class="category-card"><span>📚</span>Educación</a>
+        <a href="buscar.html?categoria=mantenimiento" class="category-card"><span>🔧</span>Mantenimiento y reparaciones</a>
+        <a href="buscar.html?categoria=agricultura" class="category-card"><span>🌾</span>Agricultura y campo</a>
+        <a href="buscar.html?categoria=industria" class="category-card"><span>🏭</span>Industria</a>
+        <a href="buscar.html?categoria=estetica" class="category-card"><span>💇</span>Peluquería y estética</a>
+        <a href="buscar.html?categoria=cuidado" class="category-card"><span>❤️</span>Cuidado de personas</a>
+        <a href="buscar.html?categoria=marketing" class="category-card"><span>📢</span>Marketing y comunicación</a>
+        <a href="buscar.html?categoria=domestico" class="category-card"><span>🏠</span>Trabajo doméstico</a>
+        <a href="buscar.html?categoria=otros" class="category-card"><span>➕</span>Otros sectores</a>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--bg-soft);">
+    <div class="container">
+      <h2>Últimos anuncios publicados</h2>
+      <div class="ads-grid">
+        <div class="ad-card">
+          <h3>Camarero con experiencia</h3>
+          <div class="ad-meta">Hostelería • Madrid • Hace 2 horas</div>
+          <p class="ad-desc">Busco trabajo de camarero en restaurantes o bares de Madrid. Tengo 3 años de experiencia y disponibilidad inmediata.</p>
+          <a href="anuncio.html?id=ejemplo1" class="btn btn-outline">Ver anuncio</a>
+        </div>
+        <div class="ad-card">
+          <h3>Auxiliar de limpieza</h3>
+          <div class="ad-meta">Limpieza • Barcelona • Hace 5 horas</div>
+          <p class="ad-desc">Persona responsable busca empleo en limpieza de oficinas o comunidades. Preferencia por jornada de mañana.</p>
+          <a href="anuncio.html?id=ejemplo2" class="btn btn-outline">Ver anuncio</a>
+        </div>
+        <div class="ad-card">
+          <h3>Conductor de reparto</h3>
+          <div class="ad-meta">Transporte • Valencia • Hace 1 día</div>
+          <p class="ad-desc">Conductor con carnet B y experiencia en reparto local. Disponible para jornadas completas o parciales.</p>
+          <a href="anuncio.html?id=ejemplo3" class="btn btn-outline">Ver anuncio</a>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 32px;">
+        <a href="buscar.html" class="btn btn-primary">Ver todos los anuncios</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2>¿Cómo funciona Empleora?</h2>
+      <div class="how-grid">
+        <div class="how-step">
+          <div class="num">1</div>
+          <h3>Publica tu anuncio</h3>
+          <p>Completa el formulario gratuito con lo que buscas, tu experiencia y cómo quieres ser contactado.</p>
+        </div>
+        <div class="how-step">
+          <div class="num">2</div>
+          <h3>Revisión rápida</h3>
+          <p>Revisamos el anuncio para asegurar que es auténtico y cumple las normas de la plataforma.</p>
+        </div>
+        <div class="how-step">
+          <div class="num">3</div>
+          <h3>Recibe oportunidades</h3>
+          <p>Empresas, autónomos y particulares te contactan según el método que hayas elegido.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" style="background: var(--bg-soft);">
+    <div class="container">
+      <h2>Preguntas frecuentes</h2>
+      <details class="faq-item">
+        <summary>¿Es gratis publicar un anuncio?</summary>
+        <p>Sí, durante la fase inicial todos los anuncios de búsqueda de empleo son gratuitos.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Quién puede publicar?</summary>
+        <p>Cualquier persona que busque trabajo en España, de cualquier edad laboral, sector y nivel de experiencia.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Cómo me contactan?</summary>
+        <p>Tú eliges el método preferido (email, teléfono, WhatsApp, etc.) y solo se muestra lo que tú decidas.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Cuánto tiempo dura un anuncio?</summary>
+        <p>Los anuncios caducan a los 30 días. Puedes renovarlos fácilmente desde tu cuenta.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Puedo editar o eliminar mi anuncio?</summary>
+        <p>Sí, una vez registrado puedes gestionar todos tus anuncios.</p>
+      </details>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>Empleora</h4>
+          <p>Tu próximo trabajo empieza aquí. Plataforma gratuita de anuncios de personas que buscan empleo en España.</p>
+        </div>
+        <div>
+          <h4>Enlaces</h4>
+          <a href="publicar.html">Publicar anuncio</a>
+          <a href="buscar.html">Buscar trabajadores</a>
+          <a href="login.html">Iniciar sesión</a>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <a href="privacidad.html">Política de privacidad</a>
+          <a href="condiciones.html">Condiciones de uso</a>
+          <a href="cookies.html">Cookies</a>
+        </div>
+        <div>
+          <h4>Contacto</h4>
+          <a href="mailto:contacto@empleora.es">contacto@empleora.es</a>
+          <p>España</p>
+        </div>
+      </div>
+      <div class="copyright">
+        © 2026 Empleora. Todos los derechos reservados. Diseñada para facilitar oportunidades laborales reales.
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

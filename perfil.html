@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis anuncios - Empleora</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="logo"><img src="logo.jpg" alt="Empleora"> EMPLEORA</a>
+      <ul class="nav-links">
+        <li><a href="publicar.html">Publicar nuevo</a></li>
+        <li><a href="#" id="logout">Cerrar sesión</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container" style="padding:40px 0;">
+    <h1 style="color:var(--primary);">Mis anuncios</h1>
+    <div id="my-ads" class="ads-grid" style="margin-top:24px;"></div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script>
+    async function loadMyAds() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        window.location.href = 'login.html';
+        return;
+      }
+      const { data } = await supabase.from('ads').select('*').eq('user_id', session.user.id).order('created_at', { ascending: false });
+      const container = document.getElementById('my-ads');
+      container.innerHTML = data.map(ad => `
+        <div class="ad-card">
+          <h3>${ad.title}</h3>
+          <div class="ad-meta">Estado: <strong>${ad.status}</strong> • ${ad.city}</div>
+          <p>${ad.description.substring(0,100)}...</p>
+          <button onclick="deleteAd('${ad.id}')" class="btn btn-outline" style="margin-top:8px;">Eliminar</button>
+        </div>
+      `).join('') || '<p>Aún no has publicado anuncios.</p>';
+    }
+
+    async function deleteAd(id) {
+      if (!confirm('¿Eliminar este anuncio?')) return;
+      await supabase.from('ads').delete().eq('id', id);
+      loadMyAds();
+    }
+
+    document.getElementById('logout').addEventListener('click', async (e) => {
+      e.preventDefault();
+      await supabase.auth.signOut();
+      window.location.href = 'index.html';
+    });
+
+    loadMyAds();
+  </script>
+</body>
+</html>

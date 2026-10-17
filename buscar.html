@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscar trabajadores - Empleora</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="logo"><img src="logo.jpg" alt="Empleora"> EMPLEORA</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="publicar.html">Publicar</a></li>
+        <li><a href="login.html">Iniciar sesión</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 40px 0;">
+    <h1 style="color: var(--primary);">Buscar trabajadores</h1>
+    <form id="search-form" style="display:flex; gap:12px; flex-wrap:wrap; margin:24px 0;">
+      <input type="text" name="profesion" placeholder="Profesión" style="padding:12px; flex:1; min-width:180px; border:1px solid #ddd; border-radius:8px;">
+      <input type="text" name="localidad" placeholder="Localidad o provincia" style="padding:12px; flex:1; min-width:180px; border:1px solid #ddd; border-radius:8px;">
+      <select name="categoria" style="padding:12px; border:1px solid #ddd; border-radius:8px;">
+        <option value="">Todas las categorías</option>
+      </select>
+      <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+    <div id="results" class="ads-grid"></div>
+    <p id="no-results" style="display:none; text-align:center; margin-top:40px;">No se encontraron anuncios con esos criterios.</p>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/buscar.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publicar anuncio gratis - Empleora</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="logo"><img src="logo.jpg" alt="Empleora"> EMPLEORA</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="buscar.html">Buscar</a></li>
+        <li><a href="perfil.html">Mis anuncios</a></li>
+        <li id="auth-links"></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 40px 0; max-width: 700px;">
+    <h1 style="color: var(--primary); margin-bottom: 8px;">Publicar anuncio gratis</h1>
+    <p style="color: var(--text-muted); margin-bottom: 24px;">Completa el formulario. Tu anuncio se revisará antes de publicarse.</p>
+
+    <form id="ad-form">
+      <div style="margin-bottom: 16px;">
+        <label>Título del anuncio *</label>
+        <input type="text" name="title" required style="width:100%; padding:12px; margin-top:4px; border:1px solid #ddd; border-radius:8px;">
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label>Profesión o trabajo que buscas *</label>
+        <input type="text" name="profession" required style="width:100%; padding:12px; margin-top:4px; border:1px solid #ddd; border-radius:8px;">
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label>Sector profesional *</label>
+        <select name="category" required style="width:100%; padding:12px; margin-top:4px; border:1px solid #ddd; border-radius:8px;">
+          <option value="">Selecciona...</option>
+        </select>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+        <div>
+          <label>Provincia *</label>
+          <input type="text" name="province" required style="width:100%; padding:12px; margin-top:4px; border:1px solid #ddd; border-radius:8px;">
+        </div>
+        <div>
+          <label>Localidad *</label>
+          <input type="text" name="city" required style="width:100%; padding:12px; margin-top:4px; border:1px solid #ddd; border-radius:8px;">
+        </div>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label>Descripción *</label>
+        <textarea name="description" rows="5" required style="width:100%; padding:12px; margin-top:4px; border:1px solid #ddd; border-radius:8px;"></textarea>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label>Experiencia laboral</label>
+        <textarea name="experience" rows="3" style="width:100%; padding:12px; margin-top:4px; border:1px solid #ddd; border-radius:8px;"></textarea>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label>Habilidades</label>
+        <input type="text" name="skills" style="width:100%; padding:12px; margin-top:4px; border:1px solid #ddd; border-radius:8px;">
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+        <div>
+          <label>Tipo de jornada</label>
+          <select name="jornada" style="width:100%; padding:12px; margin-top:4px; border:1px solid #ddd; border-radius:8px;">
+            <option value="">Selecciona...</option>
+            <option>Completa</option>
+            <option>Parcial</option>
+            <option>Por horas</option>
+            <option>Fines de semana</option>
+          </select>
+        </div>
+        <div>
+          <label>Disponibilidad</label>
+          <input type="text" name="disponibilidad" placeholder="Inmediata, a partir de..." style="width:100%; padding:12px; margin-top:4px; border:1px solid #ddd; border-radius:8px;">
+        </div>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <label>Método de contacto preferido *</label>
+        <select name="contact_method" required style="width:100%; padding:12px; margin-top:4px; border:1px solid #ddd; border-radius:8px;">
+          <option value="">Selecciona...</option>
+          <option value="email">Email</option>
+          <option value="telefono">Teléfono</option>
+          <option value="whatsapp">WhatsApp</option>
+        </select>
+      </div>
+      <div style="margin-bottom: 24px;">
+        <label>Dato de contacto (solo se mostrará a quien tú elijas) *</label>
+        <input type="text" name="contact_info" required style="width:100%; padding:12px; margin-top:4px; border:1px solid #ddd; border-radius:8px;">
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg" style="width:100%;">Publicar anuncio gratis</button>
+    </form>
+    <p id="message" style="margin-top:16px;"></p>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/publicar.js"></script>
+</body>
+</html>
