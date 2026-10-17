@@ -1,6 +1,4 @@
-// Configuración de Supabase
-// REEMPLAZA estas dos líneas con tus datos de Supabase (te explico cómo en el README)
-const SUPABASE_URL = 'TU_SUPABASE_URL_AQUI';
-const SUPABASE_ANON_KEY = 'TU_SUPABASE_ANON_KEY_AQUI';
+const SUPABASE_URL = 'https://ctkiiimazwpztekpfnrn.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0a2lpaW1hendwenRla3dmbnJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMzkxMDYsImV4cCI6MjEwNzgxNTEwNn0.Ck7I90BIhDgTKSzbnHKothXKXc91ViJkpDyDkAFhYwk';
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
