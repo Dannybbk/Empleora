@@ -27,9 +27,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    <script>
-  alert('El JavaScript está cargando');
-</script>
+    alert('JavaScript cargado');
     const SUPABASE_URL = 'https://ctkiiimazwpztekpfnrn.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0a2lpaW1hendwenRla3dmbnJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMzkxMDYsImV4cCI6MjEwNzgxNTEwNn0.Ck7I90BIhDgTKSzbnHKothXKXc91ViJkpDyDkAFhYwk';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -45,16 +43,17 @@
         const { data, error } = await supabase.auth.signUp({ email, password });
 
         if (error) {
-          alert('Error de Supabase: ' + error.message);
+          alert('Error: ' + error.message);
           msg.style.color = 'red';
           msg.textContent = error.message;
         } else {
           await supabase.from('profiles').insert([{ id: data.user.id }]);
+          alert('Cuenta creada');
           msg.style.color = 'green';
           msg.textContent = 'Cuenta creada. Revisa tu email o inicia sesión.';
         }
       } catch (err) {
-        alert('Error completo: ' + JSON.stringify(err));
+        alert('Error: ' + err.message);
         msg.style.color = 'red';
         msg.textContent = 'Error: ' + err.message;
       }
