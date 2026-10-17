@@ -29,19 +29,28 @@
   <script>
     const SUPABASE_URL = 'https://ctkiiimazwpztekpfnrn.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0a2lpaW1hendwenRla3dmbnJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMzkxMDYsImV4cCI6MjEwNzgxNTEwNn0.Ck7I90BIhDgTKSzbnHKothXKXc91ViJkpDyDkAFhYwk';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    // Inicializamos el cliente con un nombre único para evitar conflictos con la librería
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     document.getElementById('register-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = e.target.email.value;
       const password = e.target.password.value;
-      const { data, error } = await supabase.auth.signUp({ email, password });
+      
       const msg = document.getElementById('message');
+      msg.style.color = '#666';
+      msg.textContent = 'Procesando registro...';
+
+      const { data, error } = await supabaseClient.auth.signUp({ email, password });
+
       if (error) {
         msg.style.color = 'red';
         msg.textContent = error.message;
       } else {
-        await supabase.from('profiles').insert([{ id: data.user.id }]);
+        if (data && data.user) {
+          await supabaseClient.from('profiles').insert([{ id: data.user.id }]);
+        }
         msg.style.color = 'green';
         msg.textContent = 'Cuenta creada. Revisa tu email o inicia sesión.';
       }
