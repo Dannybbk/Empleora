@@ -76,25 +76,8 @@
   <section style="background: var(--bg-soft);">
     <div class="container">
       <h2>Últimos anuncios publicados</h2>
-      <div class="ads-grid">
-        <div class="ad-card">
-          <h3>Camarero con experiencia</h3>
-          <div class="ad-meta">Hostelería • Madrid • Hace 2 horas</div>
-          <p class="ad-desc">Busco trabajo de camarero en restaurantes o bares de Madrid. Tengo 3 años de experiencia y disponibilidad inmediata.</p>
-          <a href="anuncio.html?id=ejemplo1" class="btn btn-outline">Ver anuncio</a>
-        </div>
-        <div class="ad-card">
-          <h3>Auxiliar de limpieza</h3>
-          <div class="ad-meta">Limpieza • Barcelona • Hace 5 horas</div>
-          <p class="ad-desc">Persona responsable busca empleo en limpieza de oficinas o comunidades. Preferencia por jornada de mañana.</p>
-          <a href="anuncio.html?id=ejemplo2" class="btn btn-outline">Ver anuncio</a>
-        </div>
-        <div class="ad-card">
-          <h3>Conductor de reparto</h3>
-          <div class="ad-meta">Transporte • Valencia • Hace 1 día</div>
-          <p class="ad-desc">Conductor con carnet B y experiencia en reparto local. Disponible para jornadas completas o parciales.</p>
-          <a href="anuncio.html?id=ejemplo3" class="btn btn-outline">Ver anuncio</a>
-        </div>
+      <div id="ads-container" class="ads-grid">
+        <p>Cargando anuncios...</p>
       </div>
       <div style="text-align: center; margin-top: 32px;">
         <a href="buscar.html" class="btn btn-primary">Ver todos los anuncios</a>
@@ -182,6 +165,42 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const clienteSupabase = window.supabaseClient || window.supabase;
+      const container = document.getElementById('ads-container');
+
+      if (!clienteSupabase || !container) return;
+
+      const { data: ads, error } = await clienteSupabase
+        .from('ads')
+        .select('*')
+        .eq('status', 'approved')
+        .order('created_at', { ascending: false })
+        .limit(6);
+
+      if (error) {
+        console.error('Error cargando anuncios:', error);
+        container.innerHTML = '<p>Ocurrió un error al cargar los anuncios.</p>';
+        return;
+      }
+
+      if (!ads || ads.length === 0) {
+        container.innerHTML = '<p>No hay anuncios publicados actualmente.</p>';
+        return;
+      }
+
+      container.innerHTML = ads.map(ad => `
+        <div class="ad-card">
+          <h3>${ad.profession || 'Puesto de trabajo'}</h3>
+          <div class="ad-meta">${ad.category || ''} • ${ad.city || ad.province || 'España'}</div>
+          <p class="ad-desc">${ad.description || ''}</p>
+          <a href="anuncio.html?id=${ad.id}" class="btn btn-outline">Ver anuncio</a>
+        </div>
+      `).join('');
+    });
+  </script>
 </body>
 </html>
