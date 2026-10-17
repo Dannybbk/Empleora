@@ -1,6 +1,6 @@
-// Configuración global de Supabase para Empleora
-const SUPABASE_URL = 'https://tu-proyecto.supabase.co'; // Reemplaza con tu URL real de Supabase si es distinta
-const SUPABASE_ANON_KEY = 'tu-clave-anonima-publica'; // Reemplaza con tu Key anónima de Supabase
+// Configuración de Supabase para Empleora
+const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
 
 // Inicializar cliente global de Supabase
 if (window.supabase) {
