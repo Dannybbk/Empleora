@@ -42,6 +42,7 @@
         const { data, error } = await supabase.auth.signUp({ email, password });
 
         if (error) {
+          alert('Error de Supabase: ' + error.message);
           msg.style.color = 'red';
           msg.textContent = error.message;
         } else {
@@ -50,6 +51,7 @@
           msg.textContent = 'Cuenta creada. Revisa tu email o inicia sesión.';
         }
       } catch (err) {
+        alert('Error completo: ' + JSON.stringify(err));
         msg.style.color = 'red';
         msg.textContent = 'Error: ' + err.message;
       }
