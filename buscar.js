@@ -1,19 +1,25 @@
+// Configuración de Supabase integrada directamente
+const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
+
+// Inicializar cliente localmente en este archivo
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 async function loadCategories() {
-  const cliente = window.supabaseClient || window.supabase;
-  const { data } = await cliente.from('categories').select('*').order('name');
+  const { data } = await supabaseClient.from('categories').select('*').order('name');
   const select = document.querySelector('select[name="categoria"]');
-  data?.forEach(c => {
-    const opt = document.createElement('option');
-    opt.value = c.id;
-    opt.textContent = c.name;
-    select.appendChild(opt);
-  });
+  if (select && data) {
+    data.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = c.name;
+      select.appendChild(opt);
+    });
+  }
 }
 
 async function searchAds(params = {}) {
-  const cliente = window.supabaseClient || window.supabase;
-  
-  let query = cliente.from('ads')
+  let query = supabaseClient.from('ads')
     .select('id, title, profession, city, province, description, created_at, categories(name)')
     .eq('status', 'approved')
     .order('created_at', { ascending: false })
