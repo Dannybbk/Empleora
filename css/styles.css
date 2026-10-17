@@ -95,3 +95,47 @@ header {
 }
 
 .btn-outline
+
+@media (max-width: 900px) {
+  .menu-toggle {
+    display: block !important;
+  }
+
+  .nav-links {
+    display: none !important;
+    position: absolute;
+    top: 65px;
+    left: 0;
+    right: 0;
+    background: white;
+    flex-direction: column;
+    padding: 16px 20px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    gap: 12px;
+    z-index: 1000;
+  }
+
+  .nav-links.active {
+    display: flex !important;
+  }
+
+  .hero h1 {
+    font-size: 2rem !important;
+  }
+
+  .hero {
+    padding: 40px 0 30px !important;
+  }
+
+  .search-box {
+    flex-direction: column !important;
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .ads-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
