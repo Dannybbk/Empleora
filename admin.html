@@ -17,63 +17,113 @@
 
   <main class="container" style="padding:40px 0;">
     <h1 style="color:var(--primary);">Panel de administración</h1>
+    
     <h2 style="margin:24px 0 12px;">Anuncios pendientes</h2>
-    <div id="pending"></div>
+    <div id="pending">Cargando anuncios pendientes...</div>
+    
     <h2 style="margin:32px 0 12px;">Denuncias</h2>
-    <div id="reports"></div>
+    <div id="reports">Cargando denuncias...</div>
   </main>
 
   <script src="js/config.js"></script>
   <script>
     async function checkAdmin() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) { window.location.href = 'login.html'; return false; }
-      const { data } = await supabase.from('profiles').select('is_admin').eq('id', session.user.id).single();
-      if (!data?.is_admin) {
-        alert('No tienes permisos de administrador.');
+      // Usamos el cliente configurado globalmente
+      const clienteSupabase = window.supabaseClient || window.supabase;
+      
+      if (!clienteSupabase) {
+        alert('Error al conectar con la base de datos.');
+        return false;
+      }
+
+      const { data: { session } } = await clienteSupabase.auth.getSession();
+      
+      // 1. Si no hay sesión iniciada, redirigir a login
+      if (!session) { 
+        alert('Debes iniciar sesión para acceder al panel.');
+        window.location.href = 'login.html'; 
+        return false; 
+      }
+      
+      // 2. Tu correo único de administrador
+      const correoAdmin = 'danny10bbk@gmail.com'; 
+
+      // 3. Comprobar si el usuario conectado es el administrador
+      if (session.user.email !== correoAdmin) {
+        alert('Acceso restringido solo para administradores.');
         window.location.href = 'index.html';
         return false;
       }
+
       return true;
     }
 
     async function loadPending() {
-      const { data } = await supabase.from('ads').select('*').eq('status', 'pending').order('created_at');
-      document.getElementById('pending').innerHTML = data.map(ad => `
-        <div class="ad-card" style="margin-bottom:16px;">
+      const clienteSupabase = window.supabaseClient || window.supabase;
+      const { data, error } = await clienteSupabase.from('ads').select('*').eq('status', 'pending').order('created_at', { ascending: false });
+      
+      const pendingDiv = document.getElementById('pending');
+      if (error) {
+        pendingDiv.innerHTML = '<p style="color:red;">Error al cargar anuncios pendientes: ' + error.message + '</p>';
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        pendingDiv.innerHTML = '<p>No hay anuncios pendientes de revisión.</p>';
+        return;
+      }
+
+      pendingDiv.innerHTML = data.map(ad => `
+        <div class="ad-card" style="margin-bottom:16px; padding:16px; border:1px solid #eee; border-radius:8px;">
           <h3>${ad.title} - ${ad.profession}</h3>
+          <p><strong>Sector:</strong> ${ad.category} | <strong>Ubicación:</strong> ${ad.city}, ${ad.province}</p>
           <p>${ad.description}</p>
-          <button onclick="approve('${ad.id}')" class="btn btn-primary">Aprobar</button>
-          <button onclick="reject('${ad.id}')" class="btn btn-outline">Rechazar</button>
+          <p><strong>Contacto:</strong> ${ad.contact_method}: ${ad.contact_info}</p>
+          <div style="margin-top:12px;">
+            <button onclick="approve('${ad.id}')" class="btn btn-primary" style="margin-right:8px;">Aprobar</button>
+            <button onclick="reject('${ad.id}')" class="btn btn-outline">Rechazar</button>
+          </div>
         </div>
-      `).join('') || '<p>No hay anuncios pendientes.</p>';
+      `).join('');
     }
 
     async function loadReports() {
-      const { data } = await supabase.from('reports').select('*, ads(title)').order('created_at', { ascending: false });
-      document.getElementById('reports').innerHTML = data.map(r => `
+      const clienteSupabase = window.supabaseClient || window.supabase;
+      const { data, error } = await clienteSupabase.from('reports').select('*, ads(title)').order('created_at', { ascending: false });
+      
+      const reportsDiv = document.getElementById('reports');
+      if (error || !data || data.length === 0) {
+        reportsDiv.innerHTML = '<p>No hay denuncias pendientes.</p>';
+        return;
+      }
+
+      reportsDiv.innerHTML = data.map(r => `
         <div style="padding:12px; border-bottom:1px solid #eee;">
-          Anuncio: ${r.ads?.title || r.ad_id}<br>
-          Motivo: ${r.reason}
+          <strong>Anuncio:</strong> ${r.ads?.title || r.ad_id}<br>
+          <strong>Motivo:</strong> ${r.reason}
         </div>
-      `).join('') || '<p>No hay denuncias.</p>';
+      `).join('');
     }
 
     async function approve(id) {
-      await supabase.from('ads').update({ status: 'approved' }).eq('id', id);
-      loadPending();
-    }
-    async function reject(id) {
-      await supabase.from('ads').update({ status: 'rejected' }).eq('id', id);
+      const clienteSupabase = window.supabaseClient || window.supabase;
+      await clienteSupabase.from('ads').update({ status: 'approved' }).eq('id', id);
       loadPending();
     }
 
-    (async () => {
+    async function reject(id) {
+      const clienteSupabase = window.supabaseClient || window.supabase;
+      await clienteSupabase.from('ads').update({ status: 'rejected' }).eq('id', id);
+      loadPending();
+    }
+
+    // Inicio automático al cargar la página
+    document.addEventListener('DOMContentLoaded', async () => {
       if (await checkAdmin()) {
         loadPending();
         loadReports();
       }
-    })();
+    });
   </script>
 </body>
 </html>
