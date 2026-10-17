@@ -47,11 +47,8 @@
         msg.style.color = 'red';
         msg.textContent = error.message;
       } else {
-        if (data && data.user) {
-          await supabaseClient.from('profiles').insert([{ id: data.user.id }]);
-        }
         msg.style.color = 'green';
-        msg.textContent = 'Cuenta creada. Revisa tu email o inicia sesión.';
+        msg.textContent = '¡Cuenta creada con éxito! Ya puedes iniciar sesión.';
       }
     });
   </script>
