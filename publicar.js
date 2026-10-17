@@ -1,26 +1,29 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  // Usamos de forma segura el cliente de Supabase disponible
-  const clienteSupabase = window.supabaseClient || window.supabase;
+  // Usamos el cliente único configurado en el paso anterior
+  const supabase = window.supabaseClient;
 
-  if (!clienteSupabase) {
-    console.error("No se encontró el cliente de Supabase.");
+  if (!supabase) {
+    console.error("Error: Supabase no está inicializado.");
     return;
   }
 
   // Comprobar sesión
-  const { data: { session }, error: sessionError } = await clienteSupabase.auth.getSession();
+  const { data: { session } } = await supabase.auth.getSession();
   const msg = document.getElementById('message');
   const form = document.getElementById('ad-form');
 
   if (!session) {
-    if (msg) msg.innerHTML = 'Debes <a href="login.html">iniciar sesión</a> para publicar un anuncio.';
+    if (msg) {
+      msg.style.color = 'red';
+      msg.innerHTML = 'Debes <a href="login.html">iniciar sesión</a> para publicar un anuncio.';
+    }
     if (form) form.style.display = 'none';
     return;
   }
 
   form.addEventListener('submit', async (e) => {
-    e.preventDefault(); // EVITA QUE SE RECARGUE LA PÁGINA
-    
+    e.preventDefault(); // Evita que la página se recargue
+
     if (msg) {
       msg.style.color = '#666';
       msg.textContent = 'Enviando anuncio...';
@@ -30,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       user_id: session.user.id,
       title: form.title.value,
       profession: form.profession.value,
-      category: form.category.value, // Coincide con el select de tu HTML
+      category: form.category.value,
       province: form.province.value,
       city: form.city.value,
       description: form.description.value,
@@ -43,10 +46,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       status: 'pending'
     };
 
-    const { error } = await clienteSupabase.from('ads').insert([data]);
+    const { error } = await supabase.from('ads').insert([data]);
     
     if (error) {
-      console.error('Error de Supabase:', error);
       if (msg) {
         msg.style.color = 'red';
         msg.textContent = 'Error: ' + error.message;
@@ -54,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
       if (msg) {
         msg.style.color = 'green';
-        msg.textContent = '¡Anuncio enviado! Será revisado antes de publicarse.';
+        msg.textContent = '¡Anuncio enviado con éxito! Será revisado antes de publicarse.';
       }
       form.reset();
     }
