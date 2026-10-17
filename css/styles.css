@@ -219,3 +219,21 @@ header {
     align-items: center !important;
   }
 }
+
+@media (max-width: 900px) {
+  .search-box {
+    flex-direction: column !important;
+    gap: 10px !important;
+    padding: 16px !important;
+  }
+
+  .search-box input {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 14px !important;
+  }
+
+  .search-box button {
+    width: 100% !important;
+  }
+}
