@@ -15,18 +15,21 @@
   </form>
   <p id="message"></p>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
+    <script>
+    alert('1');
     const supabase = window.supabase.createClient(
       'https://ctkiiimazwpztekpfnrn.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0a2lpaW1hendwenRla3dmbnJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMzkxMDYsImV4cCI6MjEwNzgxNTEwNn0.Ck7I90BIhDgTKSzbnHKothXKXc91ViJkpDyDkAFhYwk'
     );
+    alert('2');
 
     document.getElementById('login-form').addEventListener('submit', async function(e) {
       e.preventDefault();
+      alert('3');
       const email = e.target.email.value;
       const password = e.target.password.value;
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      alert('4');
       if (error) {
         alert(error.message);
       } else {
@@ -35,5 +38,3 @@
       }
     });
   </script>
-</body>
-</html>
