@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - Empleora</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="logo"><img src="logo.jpg" alt="Empleora"> EMPLEORA</a>
+    </div>
+  </header>
+
+  <main class="container" style="max-width:400px; padding:60px 0;">
+    <h1 style="color:var(--primary); text-align:center;">Crear cuenta gratis</h1>
+    <form id="register-form" style="margin-top:24px;">
+      <input type="email" name="email" placeholder="Email" required style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd; border-radius:8px;">
+      <input type="password" name="password" placeholder="Contraseña (mínimo 6 caracteres)" required minlength="6" style="width:100%; padding:12px; margin-bottom:16px; border:1px solid #ddd; border-radius:8px;">
+      <button type="submit" class="btn btn-primary" style="width:100%;">Registrarme</button>
+    </form>
+    <p style="text-align:center; margin-top:16px;">¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
+    <p id="message" style="text-align:center; margin-top:12px;"></p>
+  </main>
+
+  <script>
+    const SUPABASE_URL = 'https://ctkiiimazwpztekpfnrn.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0a2lpaW1hendwenRla3dmbnJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMzkxMDYsImV4cCI6MjEwNzgxNTEwNn0.Ck7I90BIhDgTKSzbnHKothXKXc91ViJkpDyDkAFhYwk';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = e.target.email.value;
+      const password = e.target.password.value;
+      const { data, error } = await sb.auth.signUp({ email, password });
+      const msg = document.getElementById('message');
+      if (error) {
+        msg.style.color = 'red';
+        msg.textContent = error.message;
+      } else {
+        await sb.from('profiles').insert([{ id: data.user.id }]);
+        msg.style.color = 'green';
+        msg.textContent = 'Cuenta creada. Revisa tu email o inicia sesión.';
+      }
+    });
+  </script>
+</body>
+</html>
