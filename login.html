@@ -6,7 +6,6 @@
   <title>Iniciar sesión - Empleora</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <header>
@@ -20,25 +19,39 @@
     <form id="login-form" style="margin-top:24px;">
       <input type="email" name="email" placeholder="Email" required style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd; border-radius:8px;">
       <input type="password" name="password" placeholder="Contraseña" required style="width:100%; padding:12px; margin-bottom:16px; border:1px solid #ddd; border-radius:8px;">
-      <button type="submit" class="btn btn-primary" style="width:100%;">Entrar</button>
+      <button type="submit" class="btn btn-primary" style="width:100%;">Iniciar sesión</button>
     </form>
-    <p style="text-align:center; margin-top:16px;">¿No tienes cuenta? <a href="registro.html">Regístrate gratis</a></p>
+    <p style="text-align:center; margin-top:16px;">¿No tienes cuenta? <a href="registro.html">Regístrate</a></p>
     <p id="message" style="text-align:center; margin-top:12px;"></p>
   </main>
 
-  <script src="js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    const SUPABASE_URL = 'https://ctkiiimazwpztekpfnrn.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0a2lpaW1hendwenRla3dmbnJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMzkxMDYsImV4cCI6MjEwNzgxNTEwNn0.Ck7I90BIhDgTKSzbnHKothXKXc91ViJkpDyDkAFhYwk';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = e.target.email.value;
-      const password = e.target.password.value;
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
       const msg = document.getElementById('message');
-      if (error) {
+      msg.textContent = 'Entrando...';
+
+      try {
+        const email = e.target.email.value;
+        const password = e.target.password.value;
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          msg.style.color = 'red';
+          msg.textContent = error.message;
+        } else {
+          msg.style.color = 'green';
+          msg.textContent = 'Sesión iniciada. Redirigiendo...';
+          setTimeout(() => window.location.href = 'index.html', 1000);
+        }
+      } catch (err) {
         msg.style.color = 'red';
-        msg.textContent = error.message;
-      } else {
-        window.location.href = 'perfil.html';
+        msg.textContent = 'Error: ' + err.message;
       }
     });
   </script>
