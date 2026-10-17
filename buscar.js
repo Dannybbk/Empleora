@@ -1,5 +1,6 @@
 async function loadCategories() {
-  const { data } = await supabase.from('categories').select('*').order('name');
+  const cliente = window.supabaseClient || window.supabase;
+  const { data } = await cliente.from('categories').select('*').order('name');
   const select = document.querySelector('select[name="categoria"]');
   data?.forEach(c => {
     const opt = document.createElement('option');
@@ -10,7 +11,9 @@ async function loadCategories() {
 }
 
 async function searchAds(params = {}) {
-  let query = supabase.from('ads')
+  const cliente = window.supabaseClient || window.supabase;
+  
+  let query = cliente.from('ads')
     .select('id, title, profession, city, province, description, created_at, categories(name)')
     .eq('status', 'approved')
     .order('created_at', { ascending: false })
@@ -23,13 +26,13 @@ async function searchAds(params = {}) {
   const { data, error } = await query;
   const container = document.getElementById('results');
   const noResults = document.getElementById('no-results');
-  container.innerHTML = '';
+  if (container) container.innerHTML = '';
 
   if (!data || data.length === 0) {
-    noResults.style.display = 'block';
+    if (noResults) noResults.style.display = 'block';
     return;
   }
-  noResults.style.display = 'none';
+  if (noResults) noResults.style.display = 'none';
 
   data.forEach(ad => {
     const card = document.createElement('div');
@@ -37,7 +40,7 @@ async function searchAds(params = {}) {
     card.innerHTML = `
       <h3>${ad.title}</h3>
       <div class="ad-meta">${ad.profession} • ${ad.city || ad.province} • ${new Date(ad.created_at).toLocaleDateString('es-ES')}</div>
-      <p class="ad-desc">${ad.description.substring(0, 140)}...</p>
+      <p class="ad-desc">${ad.description ? ad.description.substring(0, 140) : ''}...</p>
       <a href="anuncio.html?id=${ad.id}" class="btn btn-outline">Ver anuncio</a>
     `;
     container.appendChild(card);
@@ -48,13 +51,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadCategories();
   await searchAds();
 
-  document.getElementById('search-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form = e.target;
-    await searchAds({
-      profesion: form.profesion.value,
-      localidad: form.localidad.value,
-      categoria: form.categoria.value
+  const searchForm = document.getElementById('search-form');
+  if (searchForm) {
+    searchForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      await searchAds({
+        profesion: form.profesion.value,
+        localidad: form.localidad.value,
+        categoria: form.categoria.value
+      });
     });
-  });
+  }
 });
