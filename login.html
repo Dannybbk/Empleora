@@ -4,23 +4,50 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Iniciar sesión - Empleora</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <h1>Iniciar sesión</h1>
-  <form id="login-form">
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="password" name="password" placeholder="Contraseña" required>
-    <button type="submit">Iniciar sesión</button>
-  </form>
-  <p id="message"></p>
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="logo"><img src="logo.jpg" alt="Empleora"> EMPLEORA</a>
+    </div>
+  </header>
+
+  <main class="container" style="max-width:400px; padding:60px 0;">
+    <h1 style="color:var(--primary); text-align:center;">Iniciar sesión</h1>
+    <form id="login-form" style="margin-top:24px;">
+      <input type="email" name="email" placeholder="Email" required style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd; border-radius:8px;">
+      <input type="password" name="password" placeholder="Contraseña" required style="width:100%; padding:12px; margin-bottom:16px; border:1px solid #ddd; border-radius:8px;">
+      <button type="submit" class="btn btn-primary" style="width:100%;">Iniciar sesión</button>
+    </form>
+    <p style="text-align:center; margin-top:16px;">¿No tienes cuenta? <a href="registro.html">Regístrate</a></p>
+    <p id="message" style="text-align:center; margin-top:12px;"></p>
+  </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    alert('Script OK');
-    document.getElementById('login-form').addEventListener('submit', function(e) {
+    const SUPABASE_URL = 'https://ctkiiimazwpztekpfnrn.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0a2lpaW1hendwenRla3dmbnJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMzkxMDYsImV4cCI6MjEwNzgxNTEwNn0.Ck7I90BIhDgTKSzbnHKothXKXc91ViJkpDyDkAFhYwk';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
       e.preventDefault();
-      alert('Formulario OK');
+      const msg = document.getElementById('message');
+      msg.textContent = 'Entrando...';
+
+      const email = e.target.email.value;
+      const password = e.target.password.value;
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        alert('Error: ' + error.message);
+        msg.style.color = 'red';
+        msg.textContent = error.message;
+      } else {
+        alert('Sesión iniciada');
+        window.location.href = 'admin.html';
+      }
     });
   </script>
 </body>
