@@ -6,6 +6,7 @@
   <title>Iniciar sesión - Empleora</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <header>
@@ -25,7 +26,6 @@
     <p id="message" style="text-align:center; margin-top:12px;"></p>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
   <script>
     document.getElementById('login-form').addEventListener('submit', async (e) => {
@@ -38,7 +38,7 @@
         msg.style.color = 'red';
         msg.textContent = error.message;
       } else {
-        window.location.href = 'index.html';
+        window.location.href = 'admin.html';
       }
     });
   </script>
