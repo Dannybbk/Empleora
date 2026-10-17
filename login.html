@@ -32,7 +32,8 @@
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     document.getElementById('login-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
+     e.preventDefault();
+      alert('Formulario enviado');
       const msg = document.getElementById('message');
       msg.textContent = 'Entrando...';
 
