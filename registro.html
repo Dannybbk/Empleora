@@ -6,6 +6,7 @@
   <title>Registro - Empleora</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <header>
@@ -25,37 +26,21 @@
     <p id="message" style="text-align:center; margin-top:12px;"></p>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
   <script>
-    alert('JavaScript cargado');
-    const SUPABASE_URL = 'https://ctkiiimazwpztekpfnrn.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0a2lpaW1hendwenRla3dmbnJuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMzkxMDYsImV4cCI6MjEwNzgxNTEwNn0.Ck7I90BIhDgTKSzbnHKothXKXc91ViJkpDyDkAFhYwk';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
     document.getElementById('register-form').addEventListener('submit', async (e) => {
       e.preventDefault();
+      const email = e.target.email.value;
+      const password = e.target.password.value;
+      const { data, error } = await supabase.auth.signUp({ email, password });
       const msg = document.getElementById('message');
-      msg.textContent = 'Procesando...';
-
-      try {
-        const email = e.target.email.value;
-        const password = e.target.password.value;
-        const { data, error } = await supabase.auth.signUp({ email, password });
-
-        if (error) {
-          alert('Error: ' + error.message);
-          msg.style.color = 'red';
-          msg.textContent = error.message;
-        } else {
-          await supabase.from('profiles').insert([{ id: data.user.id }]);
-          alert('Cuenta creada');
-          msg.style.color = 'green';
-          msg.textContent = 'Cuenta creada. Revisa tu email o inicia sesión.';
-        }
-      } catch (err) {
-        alert('Error: ' + err.message);
+      if (error) {
         msg.style.color = 'red';
-        msg.textContent = 'Error: ' + err.message;
+        msg.textContent = error.message;
+      } else {
+        await supabase.from('profiles').insert([{ id: data.user.id }]);
+        msg.style.color = 'green';
+        msg.textContent = 'Cuenta creada. Revisa tu email o inicia sesión.';
       }
     });
   </script>
