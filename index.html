@@ -38,7 +38,6 @@
         </a>
         <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
           <a href="index.html" class="text-brand-600">Inicio</a>
-          <a href="#categorias" class="hover:text-brand-600">Categorías</a>
           <a href="#anuncios" class="hover:text-brand-600">Ofertas de Empleo</a>
           <a href="#" onclick="checkAuthAndRedirect(event)" class="hover:text-brand-600">Publicar Anuncio</a>
         </nav>
@@ -53,7 +52,6 @@
     </div>
     <div id="mobile-menu" class="hidden md:hidden border-b border-slate-200 bg-white px-4 pt-2 pb-4 space-y-2">
       <a href="index.html" class="block px-3 py-2 rounded-md font-medium text-brand-600 bg-brand-50">Inicio</a>
-      <a href="#categorias" class="block px-3 py-2 rounded-md font-medium text-slate-700">Categorías</a>
       <a href="#anuncios" class="block px-3 py-2 rounded-md font-medium text-slate-700">Ofertas de Empleo</a>
       <div class="pt-2 border-t border-slate-100 flex flex-col gap-2">
         <a href="login.html" class="w-full text-center px-4 py-2 font-semibold text-slate-700 bg-slate-100 rounded-lg">Iniciar sesión</a>
@@ -70,86 +68,13 @@
       <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
         Encuentra tu próximo empleo en <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-emerald-500">Roda Trabajo</span>
       </h1>
-      
-      <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200/80 mt-8 max-w-3xl mx-auto">
-        <form id="search-form" class="flex flex-col gap-3">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div class="relative flex items-center">
-              <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-slate-400"></i>
-              <input type="text" id="input-keyword" placeholder="¿Qué trabajo buscas?" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all">
-            </div>
-            <div class="relative flex items-center">
-              <i class="fa-solid fa-layer-group absolute left-3.5 text-slate-400"></i>
-              <select id="select-categoria" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm text-slate-700 border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer font-medium">
-                <option value="">Ver todas las categorías ▾</option>
-                <option value="construccion">🏗️ Construcción y reformas</option>
-                <option value="limpieza">🧹 Limpieza</option>
-                <option value="hosteleria">🍽️ Hostelería y turismo</option>
-                <option value="transporte">🚚 Transporte y conducción</option>
-                <option value="logistica">📦 Logística y almacén</option>
-                <option value="administracion">📋 Administración y oficina</option>
-                <option value="comercio">🛍️ Comercio y ventas</option>
-                <option value="atencion-cliente">🎧 Atención al cliente</option>
-                <option value="informatica">💻 Informática y tecnología</option>
-                <option value="sanidad">🏥 Sanidad</option>
-                <option value="educacion">🎓 Educación</option>
-                <option value="mantenimiento">🔧 Mantenimiento</option>
-                <option value="agricultura">🌾 Agricultura y campo</option>
-                <option value="industria">🏭 Industria</option>
-                <option value="peluqueria">✂️ Peluquería y estética</option>
-                <option value="cuidado">❤️ Cuidado de personas</option>
-                <option value="marketing">📣 Marketing</option>
-                <option value="domestico">🏠 Trabajo doméstico</option>
-                <option value="otros">➕ Otros sectores</option>
-              </select>
-            </div>
-            <div class="relative flex items-center">
-              <i class="fa-solid fa-location-dot absolute left-3.5 text-slate-400"></i>
-              <select id="select-provincia" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm text-slate-700 border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer font-medium">
-                <option value="">Toda España</option>
-                <option value="madrid">1. Madrid</option>
-                <option value="toledo">2. Toledo</option>
-                <option value="barcelona">3. Barcelona</option>
-                <option value="valencia">4. Valencia</option>
-                <option value="sevilla">5. Sevilla</option>
-                <option value="zaragoza">6. Zaragoza</option>
-                <option value="malaga">7. Málaga</option>
-                <option value="murcia">8. Murcia</option>
-                <option value="palma">9. Palma de Mallorca</option>
-                <option value="bilbao">10. Bilbao</option>
-                <option value="alicante">11. Alicante</option>
-                <option value="cordoba">12. Córdoba</option>
-                <option value="valladolid">13. Valladolid</option>
-                <option value="vigo">14. Vigo</option>
-                <option value="gijon">15. Gijón</option>
-                <option value="granada">16. Granada</option>
-                <option value="coruna">17. A Coruña</option>
-                <option value="san-sebastian">18. San Sebastián</option>
-                <option value="santander">19. Santander</option>
-                <option value="las-palmas">20. Las Palmas de Gran Canaria</option>
-              </select>
-            </div>
-          </div>
-          <div class="flex flex-col sm:flex-row gap-3 pt-1">
-            <div id="container-municipio" class="flex-1 relative hidden flex items-center">
-              <i class="fa-solid fa-map-pin absolute left-3.5 text-slate-400"></i>
-              <select id="select-municipio" class="w-full pl-10 pr-4 py-3 bg-brand-50/50 border border-brand-200 rounded-xl text-sm text-slate-800 focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer font-medium">
-                <option value="">Todos los municipios y alrededores</option>
-              </select>
-            </div>
-            <button type="button" id="btn-buscar" class="w-full sm:w-auto px-8 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 ml-auto cursor-pointer">
-              <span>Buscar ofertas</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </button>
-          </div>
-        </form>
-      </div>
     </div>
   </section>
 
   <section id="anuncios" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex justify-between items-end mb-6">
+    <div class="mb-6">
       <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Últimos anuncios publicados</h2>
+      <p class="text-slate-500 text-sm mt-1">Pulsa en "Ver oferta" para ver todos los detalles y contactar</p>
     </div>
     <div id="contenedor-anuncios" class="space-y-4">
       <div class="text-center py-8 text-slate-500">
@@ -160,16 +85,8 @@
   </section>
 
   <footer class="bg-slate-900 text-slate-400 text-sm mt-16 border-t border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-      <div class="flex items-center gap-2">
-        <div class="w-6 h-6 rounded-md overflow-hidden flex flex-col border border-slate-700">
-          <div class="h-1/4 bg-red-600 w-full"></div>
-          <div class="h-2/4 bg-yellow-500 w-full"></div>
-          <div class="h-1/4 bg-red-600 w-full"></div>
-        </div>
-        <span class="font-bold text-white tracking-wide">RODA TRABAJO</span>
-        <span class="text-xs text-slate-500">© 2026. Todos los derechos reservados.</span>
-      </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+      <span class="text-white font-bold">RODA TRABAJO © 2026. Todos los derechos reservados.</span>
     </div>
   </footer>
 
@@ -203,28 +120,78 @@
           if (ad.status && ad.status !== 'approved') return;
           const card = document.createElement('div');
           card.className = "p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4";
+          
           card.innerHTML = `
             <div class="space-y-2">
               <div class="flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-brand-100 text-brand-800">${ad.categoria || ad.category || 'Empleo'}</span>
+                <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-brand-100 text-brand-800">${ad.categoria || 'Empleo'}</span>
                 <span class="text-xs text-slate-400">• ${ad.created_at ? new Date(ad.created_at).toLocaleDateString() : 'Reciente'}</span>
               </div>
               <h3 class="text-lg font-bold text-slate-900">${ad.titulo || ad.title || 'Oferta'}</h3>
               <p class="text-sm text-slate-600 flex items-center gap-4">
-                <span><i class="fa-solid fa-location-dot text-slate-400"></i> ${ad.city || ad.provincia || ad.province || 'España'}</span>
-                <span><i class="fa-solid fa-euro-sign text-slate-400"></i> ${ad.sueldo || ad.salario || 'A convenir'}</span>
+                <span><i class="fa-solid fa-location-dot text-slate-400"></i> ${ad.city || ad.provincia || 'España'}</span>
+                <span><i class="fa-solid fa-euro-sign text-slate-400"></i> ${ad.sueldo || 'A convenir'}</span>
               </p>
             </div>
-            <button onclick='alert("Para ver detalles y contactar, accede desde la versión completa.")' class="px-4 py-2 bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer shrink-0">
-              Ver oferta
-            </button>
           `;
+
+          const btnVer = document.createElement('button');
+          btnVer.className = "px-4 py-2 bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer shrink-0";
+          btnVer.textContent = "Ver oferta";
+          btnVer.onclick = () => verDetalleAnuncio(ad);
+
+          card.appendChild(btnVer);
           contenedor.appendChild(card);
         });
       } catch (err) {
         console.error(err);
         contenedor.innerHTML = '<p class="text-center text-red-500 py-8">Error al cargar anuncios.</p>';
       }
+    }
+
+    function verDetalleAnuncio(ad) {
+      const anterior = document.getElementById('modal-detalle-oferta');
+      if (anterior) anterior.remove();
+
+      const modal = document.createElement('div');
+      modal.id = 'modal-detalle-oferta';
+      modal.className = "fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm";
+      
+      const titulo = ad.titulo || ad.title || 'Oferta';
+      modal.innerHTML = `
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100 max-h-[90vh] overflow-y-auto">
+          <button onclick="document.getElementById('modal-detalle-oferta').remove()" class="absolute top-5 right-5 w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+          <div class="space-y-2">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-brand-100 text-brand-800 uppercase">${ad.categoria || 'Empleo'}</span>
+            <h2 class="text-2xl font-black text-slate-900">${titulo}</h2>
+          </div>
+          <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl">
+            <div><span class="block text-xs font-bold text-slate-400 uppercase">Ubicación</span><span class="text-sm font-semibold text-slate-800">${ad.city || ad.provincia || 'España'}</span></div>
+            <div><span class="block text-xs font-bold text-slate-400 uppercase">Sueldo</span><span class="text-sm font-semibold text-slate-800">${ad.sueldo || 'A convenir'}</span></div>
+          </div>
+          <div class="space-y-2">
+            <h4 class="font-bold text-slate-900 text-sm uppercase">Descripción</h4>
+            <div class="text-slate-600 text-sm bg-slate-50/50 p-4 rounded-2xl whitespace-pre-line">${ad.descripcion || ad.description || 'Sin descripción.'}</div>
+          </div>
+          <div class="border-t border-slate-100 pt-4 space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-paper-plane text-brand-600"></i> Contactar con el anunciante</h4>
+            <form action="mailto:info@rodatrabajo.com" method="POST" enctype="text/plain" class="space-y-3">
+              <input type="hidden" name="Anuncio" value="${titulo}">
+              <input type="text" name="Nombre" required placeholder="Tu Nombre" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+              <div class="grid grid-cols-2 gap-3">
+                <input type="tel" name="Telefono" required placeholder="Teléfono" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                <input type="email" name="Email" required placeholder="Email" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+              </div>
+              <textarea name="Mensaje" rows="3" required placeholder="Escribe tu mensaje o presentación..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm"></textarea>
+              <div class="flex gap-2">
+                <button type="submit" class="flex-1 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl text-center cursor-pointer">Enviar mensaje</button>
+                <button type="button" onclick="document.getElementById('modal-detalle-oferta').remove()" class="py-3 px-5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-xl cursor-pointer">Cerrar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
     }
 
     document.addEventListener('DOMContentLoaded', cargarAnuncios);
