@@ -380,7 +380,7 @@
 
           const card = document.createElement('div');
           card.className = "p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4";
-          card.setAttribute('data-provincia', ad.provincia || '');
+          card.setAttribute('data-provincia', ad.city || ad.provincia || '');
           card.setAttribute('data-categoria', ad.categoria || '');
           card.setAttribute('data-municipio', ad.municipio || '');
 
@@ -392,7 +392,7 @@
               </div>
               <h3 class="text-lg font-bold text-slate-900">${ad.titulo || ad.title || 'Oferta de empleo'}</h3>
               <p class="text-sm text-slate-600 flex items-center gap-4">
-                <span><i class="fa-solid fa-location-dot text-slate-400"></i> ${ad.provincia || 'España'} ${ad.municipio ? '(' + ad.municipio + ')' : ''}</span>
+                <span><i class="fa-solid fa-location-dot text-slate-400"></i> ${ad.city || ad.provincia || 'España'}</span>
                 <span><i class="fa-solid fa-euro-sign text-slate-400"></i> ${ad.sueldo || ad.salario || 'A convenir'}</span>
               </p>
             </div>
@@ -434,7 +434,7 @@
           <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
             <div>
               <span class="block text-xs font-bold text-slate-400 uppercase">Ubicación</span>
-              <span class="text-sm font-semibold text-slate-800"><i class="fa-solid fa-location-dot text-brand-600 mr-1"></i> ${ad.provincia || 'España'} ${ad.municipio ? '(' + ad.municipio + ')' : ''}</span>
+              <span class="text-sm font-semibold text-slate-800"><i class="fa-solid fa-location-dot text-brand-600 mr-1"></i> ${ad.city || ad.provincia || 'España'}</span>
             </div>
             <div>
               <span class="block text-xs font-bold text-slate-400 uppercase">Salario / Sueldo</span>
@@ -623,7 +623,7 @@
         const cardMuni = card.getAttribute('data-municipio');
         const text = card.textContent.toLowerCase();
 
-        let matchProv = !provinciaVal || cardProv === provinciaVal;
+        let matchProv = !provinciaVal || cardProv.toLowerCase().includes(provinciaVal);
         let matchCat = !categoriaVal || cardCat === categoriaVal;
         let matchMuni = !municipioVal || cardMuni === municipioVal;
         let matchKw = !keyword || text.includes(keyword);
