@@ -1,61 +1,72 @@
-<main class="container" style="padding: 40px 0;">
-  <h1 style="color: var(--primary); margin-bottom: 24px;">Últimos anuncios publicados</h1>
-  
-  <!-- Contenedor obligatorio para los anuncios -->
-  <div id="ads-container" style="display: grid; gap: 20px;">
-    <p>Cargando anuncios...</p>
-  </div>
-</main>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empleora - Encuentra trabajo y profesionales</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a href="index.html" class="logo"><img src="logo.jpg" alt="Empleora"> EMPLEORA</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="buscar.html">Buscar</a></li>
+        <li><a href="publicar.html">Publicar</a></li>
+        <li><a href="login.html">Iniciar sesión</a></li>
+      </ul>
+    </div>
+  </header>
 
-<!-- Scripts necesarios -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/main.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', async () => {
-    const container = document.getElementById('ads-container');
-    if (!container) return;
+  <main class="container" style="padding: 40px 0;">
+    <h1 style="color: var(--primary); margin-bottom: 24px;">Últimos anuncios publicados</h1>
+    
+    <div id="ads-container" style="display: grid; gap: 20px;">
+      <p>Cargando anuncios...</p>
+    </div>
+  </main>
 
-    try {
-      // Usar el cliente global de Supabase de forma segura
-      const cliente = window.supabaseClient || (window.supabase && window.supabase.createClient('https://ctkiiimazwpztekwfnrn.supabase.co', 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87'));
+  <!-- Scripts necesarios -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const container = document.getElementById('ads-container');
+      if (!container) return;
 
-      if (!cliente) {
-        container.innerHTML = '<p>Error de configuración en el cliente de base de datos.</p>';
-        return;
-      }
+      try {
+        const cliente = window.supabaseClient || window.supabase.createClient('https://ctkiiimazwpztekwfnrn.supabase.co', 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87');
 
-      const { data: ads, error } = await cliente
-        .from('ads')
-        .select('*')
-        .eq('status', 'approved')
-        .order('created_at', { ascending: false })
-        .limit(10);
+        const { data: ads, error } = await cliente
+          .from('ads')
+          .select('*')
+          .eq('status', 'approved')
+          .order('created_at', { ascending: false })
+          .limit(10);
 
-      if (error) {
-        console.error('Error de Supabase:', error);
-        container.innerHTML = '<p>No se pudieron cargar los anuncios en este momento.</p>';
-        return;
-      }
+        if (error || !ads || ads.length === 0) {
+          container.innerHTML = '<p>No hay anuncios publicados todavía.</p>';
+          return;
+        }
 
-      if (!ads || ads.length === 0) {
-        container.innerHTML = '<p>No hay anuncios publicados todavía.</p>';
-        return;
-      }
-
-      container.innerHTML = ads.map(ad => `
-        <div class="ad-card" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:20px; text-align:left;">
-          <h3 style="margin-bottom:8px; color:#1e293b;">${ad.title || ad.profession || 'Anuncio'}</h3>
-          <div class="ad-meta" style="color:#64748b; font-size:14px; margin-bottom:12px;">
-            ${ad.city || ad.province || 'España'} • ${new Date(ad.created_at).toLocaleDateString('es-ES')}
+        container.innerHTML = ads.map(ad => `
+          <div class="ad-card" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:20px; text-align:left;">
+            <h3 style="margin-bottom:8px; color:#1e293b;">${ad.title || ad.profession || 'Anuncio'}</h3>
+            <div class="ad-meta" style="color:#64748b; font-size:14px; margin-bottom:12px;">
+              ${ad.city || ad.province || 'España'} &bull; ${new Date(ad.created_at).toLocaleDateString('es-ES')}
+            </div>
+            <p class="ad-desc" style="color:#334155; margin-bottom:16px;">${ad.description ? ad.description.substring(0, 140) : ''}...</p>
+            <a href="anuncio.html?id=${ad.id}" class="btn btn-outline">Ver anuncio</a>
           </div>
-          <p class="ad-desc" style="color:#334155; margin-bottom:16px;">${ad.description ? ad.description.substring(0, 140) : ''}...</p>
-          <a href="anuncio.html?id=${ad.id}" class="btn btn-outline">Ver anuncio</a>
-        </div>
-      `).join('');
+        `).join('');
 
-    } catch (err) {
-      console.error('Error inesperado:', err);
-      container.innerHTML = '<p>Ocurrió un error al cargar la página.</p>';
-    }
-  });
-</script>
+      } catch (err) {
+        console.error('Error:', err);
+        container.innerHTML = '<p>Error al cargar los anuncios.</p>';
+      }
+    });
+  </script>
+</body>
+</html>
