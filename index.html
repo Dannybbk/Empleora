@@ -1,307 +1,3 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roda Trabajo - Encuentra Trabajo y Oportunidades</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts: Plus Jakarta Sans -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Plus Jakarta Sans', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#15803d',
-            }
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    .glass-nav {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-  </style>
-</head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
-
-  <!-- NAVIGATION HEADER -->
-  <header class="sticky top-0 z-50 glass-nav border-b border-slate-200/80 transition-all">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        
-        <!-- Logo con Bandera de España -->
-        <a href="index.html" class="flex items-center gap-2.5 group cursor-pointer">
-          <div class="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform flex flex-col border border-slate-200">
-            <div class="h-1/4 bg-red-600 w-full"></div>
-            <div class="h-2/4 bg-yellow-500 w-full"></div>
-            <div class="h-1/4 bg-red-600 w-full"></div>
-          </div>
-          <span class="text-xl font-black tracking-tight text-slate-900 group-hover:text-brand-600 transition-colors">
-            RODA TRABAJO
-          </span>
-        </a>
-
-        <!-- Desktop Nav Links -->
-        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-          <a href="index.html" class="text-brand-600 transition-colors">Inicio</a>
-          <a href="#categorias" class="hover:text-brand-600 transition-colors">Categorías</a>
-          <a href="#anuncios" class="hover:text-brand-600 transition-colors">Ofertas de Empleo</a>
-          <a href="#" onclick="checkAuthAndRedirect(event)" class="hover:text-brand-600 transition-colors">Publicar Anuncio</a>
-        </nav>
-
-        <!-- Right Buttons -->
-        <div class="hidden md:flex items-center gap-3">
-          <a href="login.html" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-600 transition-colors">
-            Iniciar sesión
-          </a>
-          <a href="#" onclick="checkAuthAndRedirect(event)" class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-lg shadow-brand-500/25 transition-all">
-            + Publicar Anuncio
-          </a>
-        </div>
-
-        <!-- Mobile menu button -->
-        <div class="md:hidden">
-          <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100">
-            <i class="fa-solid fa-bars text-xl"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mobile Menu Dropdown -->
-    <div id="mobile-menu" class="hidden md:hidden border-b border-slate-200 bg-white px-4 pt-2 pb-4 space-y-2">
-      <a href="index.html" class="block px-3 py-2 rounded-md font-medium text-brand-600 bg-brand-50">Inicio</a>
-      <a href="#categorias" class="block px-3 py-2 rounded-md font-medium text-slate-700 hover:bg-slate-50">Categorías</a>
-      <a href="#anuncios" class="block px-3 py-2 rounded-md font-medium text-slate-700 hover:bg-slate-50">Ofertas de Empleo</a>
-      <div class="pt-2 border-t border-slate-100 flex flex-col gap-2">
-        <a href="login.html" class="w-full text-center px-4 py-2 font-semibold text-slate-700 bg-slate-100 rounded-lg">Iniciar sesión</a>
-        <a href="#" onclick="checkAuthAndRedirect(event)" class="w-full text-center px-4 py-2 font-semibold text-white bg-brand-600 rounded-lg">+ Publicar Anuncio</a>
-      </div>
-    </div>
-  </header>
-
-  <!-- HERO SECTION CON NUEVO TEXTO INSPIRADOR -->
-  <section class="relative bg-gradient-to-b from-brand-50/60 via-slate-50 to-slate-50 pt-10 pb-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-4xl mx-auto text-center space-y-6">
-      
-      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-bold uppercase tracking-wider">
-        <i class="fa-solid fa-bolt"></i> Tu portal de empleo local y nacional
-      </span>
-
-      <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-        Encuentra tu próximo empleo en <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-emerald-500">Roda Trabajo</span>
-      </h1>
-      
-      <!-- NUEVO TEXTO -->
-      <div class="space-y-3 text-base sm:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-        <p class="font-bold text-slate-800 text-lg sm:text-xl">
-          En Roda Trabajo, creemos que todo el mundo merece una oportunidad.
-        </p>
-        <p class="text-slate-600 font-normal">
-          Detrás de cada persona que busca trabajo hay una historia. Hay alguien que quiere salir adelante, una familia que cuidar, unas facturas que pagar, sueños que cumplir y muchas ganas de construir un futuro mejor.
-        </p>
-      </div>
-
-      <!-- FORMULARIO DE BÚSQUEDA INTEGRADO -->
-      <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200/80 mt-8 max-w-3xl mx-auto">
-        <form id="search-form" class="flex flex-col gap-3">
-          
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-            
-            <!-- 1. Buscador Palabra clave -->
-            <div class="relative flex items-center">
-              <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-slate-400"></i>
-              <input type="text" id="input-keyword" placeholder="¿Qué trabajo buscas?" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all">
-            </div>
-
-            <!-- 2. TODAS LAS CATEGORÍAS INTEGRADO EN EL BUSCADOR -->
-            <div class="relative flex items-center">
-              <i class="fa-solid fa-layer-group absolute left-3.5 text-slate-400"></i>
-              <select id="select-categoria" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm text-slate-700 border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer font-medium">
-                <option value="">Ver todas las categorías ▾</option>
-                <option value="construccion">🏗️ Construcción y reformas</option>
-                <option value="limpieza">🧹 Limpieza</option>
-                <option value="hosteleria">🍽️ Hostelería y turismo</option>
-                <option value="transporte">🚚 Transporte y conducción</option>
-                <option value="logistica">📦 Logística y almacén</option>
-                <option value="administracion">📋 Administración y oficina</option>
-                <option value="comercio">🛍️ Comercio y ventas</option>
-                <option value="atencion-cliente">🎧 Atención al cliente</option>
-                <option value="informatica">💻 Informática y tecnología</option>
-                <option value="sanidad">🏥 Sanidad</option>
-                <option value="educacion">🎓 Educación</option>
-                <option value="mantenimiento">🔧 Mantenimiento</option>
-                <option value="agricultura">🌾 Agricultura y campo</option>
-                <option value="industria">🏭 Industria</option>
-                <option value="peluqueria">✂️ Peluquería y estética</option>
-                <option value="cuidado">❤️ Cuidado de personas</option>
-                <option value="marketing">📣 Marketing</option>
-                <option value="domestico">🏠 Trabajo doméstico</option>
-                <option value="otros">➕ Otros sectores</option>
-              </select>
-            </div>
-
-            <!-- 3. LAS 20 CIUDADES MÁS IMPORTANTES DE ESPAÑA -->
-            <div class="relative flex items-center">
-              <i class="fa-solid fa-location-dot absolute left-3.5 text-slate-400"></i>
-              <select id="select-provincia" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm text-slate-700 border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer font-medium">
-                <option value="">Toda España</option>
-                <option value="madrid">1. Madrid</option>
-                <option value="toledo">2. Toledo</option>
-                <option value="barcelona">3. Barcelona</option>
-                <option value="valencia">4. Valencia</option>
-                <option value="sevilla">5. Sevilla</option>
-                <option value="zaragoza">6. Zaragoza</option>
-                <option value="malaga">7. Málaga</option>
-                <option value="murcia">8. Murcia</option>
-                <option value="palma">9. Palma de Mallorca</option>
-                <option value="bilbao">10. Bilbao</option>
-                <option value="alicante">11. Alicante</option>
-                <option value="cordoba">12. Córdoba</option>
-                <option value="valladolid">13. Valladolid</option>
-                <option value="vigo">14. Vigo</option>
-                <option value="gijon">15. Gijón</option>
-                <option value="granada">16. Granada</option>
-                <option value="coruna">17. A Coruña</option>
-                <option value="san-sebastian">18. San Sebastián</option>
-                <option value="santander">19. Santander</option>
-                <option value="las-palmas">20. Las Palmas de Gran Canaria</option>
-              </select>
-            </div>
-
-          </div>
-
-          <!-- Fila Secundaria: Municipios y Alrededores -->
-          <div class="flex flex-col sm:flex-row gap-3 pt-1">
-            
-            <!-- Municipio / Alrededores -->
-            <div id="container-municipio" class="flex-1 relative hidden flex items-center">
-              <i class="fa-solid fa-map-pin absolute left-3.5 text-slate-400"></i>
-              <select id="select-municipio" class="w-full pl-10 pr-4 py-3 bg-brand-50/50 border border-brand-200 rounded-xl text-sm text-slate-800 focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer font-medium">
-                <option value="">Todos los municipios y alrededores</option>
-              </select>
-            </div>
-
-            <!-- Botón Buscar -->
-            <button type="button" id="btn-buscar" class="w-full sm:w-auto px-8 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 ml-auto">
-              <span>Buscar ofertas</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </button>
-          </div>
-
-        </form>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- BANNER PUBLICAR ANUNCIO Y OFERTAS DE EMPLEO -->
-  <section id="publicar" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      
-      <!-- Tarjeta 1: Para Empleadores -->
-      <div class="relative overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 sm:p-8 rounded-3xl shadow-xl flex flex-col justify-between group">
-        <div class="space-y-3 relative z-10">
-          <div class="w-12 h-12 bg-brand-500/20 border border-brand-500/30 rounded-2xl flex items-center justify-center text-brand-400 text-xl font-bold">
-            <i class="fa-solid fa-bullhorn"></i>
-          </div>
-          <span class="inline-block px-3 py-1 bg-brand-500/20 text-brand-400 text-xs font-bold rounded-full uppercase tracking-wider">Para Particulares o Empresas</span>
-          <h3 class="text-2xl font-black tracking-tight">¿Buscas personal o quieres publicar una oferta?</h3>
-          <p class="text-slate-300 text-sm leading-relaxed">
-            Publica tu anuncio gratis en menos de 2 minutos y conecta directamente con profesionales en tu zona.
-          </p>
-        </div>
-        <div class="pt-6 relative z-10">
-          <a href="#" onclick="checkAuthAndRedirect(event)" class="inline-flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5">
-            <span>Publicar anuncio gratis</span>
-            <i class="fa-solid fa-plus"></i>
-          </a>
-        </div>
-      </div>
-
-      <!-- Tarjeta 2: Para Buscadores de Empleo -->
-      <div class="relative overflow-hidden bg-gradient-to-br from-brand-600 to-emerald-700 text-white p-6 sm:p-8 rounded-3xl shadow-xl flex flex-col justify-between group">
-        <div class="space-y-3 relative z-10">
-          <div class="w-12 h-12 bg-white/20 border border-white/30 rounded-2xl flex items-center justify-center text-white text-xl font-bold">
-            <i class="fa-solid fa-briefcase"></i>
-          </div>
-          <span class="inline-block px-3 py-1 bg-white/20 text-white text-xs font-bold rounded-full uppercase tracking-wider">Para Candidatos</span>
-          <h3 class="text-2xl font-black tracking-tight">¿Buscas trabajo rápido en tu localidad?</h3>
-          <p class="text-emerald-100 text-sm leading-relaxed">
-            Explora ofertas de empleo en tiempo real sin trámites complicados.
-          </p>
-        </div>
-        <div class="pt-6 relative z-10">
-          <a href="#anuncios" class="inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-slate-100 text-slate-900 font-bold text-sm rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5">
-            <span>Explorar ofertas recientes</span>
-            <i class="fa-solid fa-arrow-down"></i>
-          </a>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- CATEGORÍAS PRINCIPALES GRID VISUAL -->
-  <section id="categorias" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="mb-6">
-      <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Categorías más solicitadas</h2>
-      <p class="text-slate-500 text-sm mt-1">Acceso directo a las ofertas principales</p>
-    </div>
-
-    <!-- GRID DE TARJETAS PRINCIPALES -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-      
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shrink-0">
-          <i class="fa-solid fa-helmet-safety"></i>
-        </div>
-        <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Construcción y reformas</h3>
-      </a>
-
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-xl shrink-0">
-          <i class="fa-solid fa-broom"></i>
-        </div>
-        <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Limpieza</h3>
-      </a>
-
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl shrink-0">
-          <i class="fa-solid fa-utensils"></i>
-        </div>
-        <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Hostelería y turismo</h3>
-      </a>
-
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0">
-          <i class="fa-solid fa-truck-fast"></i>
-        </div>
-        <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Transporte y conducción</h3>
-      </a>
-
-    </div>
-  </section>
-
-  <!-- LATEST ANNOUNCEMENTS SECTION (DINÁMICO DESDE SUPABASE) -->
   <section id="anuncios" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex justify-between items-end mb-6">
       <div>
@@ -309,8 +5,6 @@
         <p class="text-slate-500 text-sm mt-1">Ofertas destacadas agregadas recientemente</p>
       </div>
     </div>
-
-    <!-- Job Cards Dinámicas -->
     <div id="contenedor-anuncios" class="space-y-4">
       <div class="text-center py-8 text-slate-500">
         <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
@@ -319,7 +13,6 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer class="bg-slate-900 text-slate-400 text-sm mt-16 border-t border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row justify-between items-center gap-4">
       <div class="flex items-center gap-2">
@@ -339,18 +32,15 @@
     </div>
   </footer>
 
-  <!-- SUPABASE JS Y SCRIPT DE INTERACTIVIDAD -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
-
     const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     async function checkAuthAndRedirect(e) {
       e.preventDefault();
       const { data: { session } } = await cliente.auth.getSession();
-
       if (!session) {
         window.location.href = 'login.html';
       } else {
@@ -358,235 +48,116 @@
       }
     }
 
-    // CARGAR ANUNCIOS DESDE SUPABASE (TABLA: ads)
     async function cargarAnuncios() {
       const contenedor = document.getElementById('contenedor-anuncios');
       try {
-        const { data: anuncios, error } = await cliente
-          .from('ads')
-          .select('*')
-          .order('created_at', { ascending: false });
-
+        const { data: anuncios, error } = await cliente.from('ads').select('*').order('created_at', { ascending: false });
         if (error) throw error;
-
         if (!anuncios || anuncios.length === 0) {
           contenedor.innerHTML = '<p class="text-center text-slate-500 py-8">No hay anuncios publicados en este momento.</p>';
           return;
         }
-
         contenedor.innerHTML = '';
         anuncios.forEach(ad => {
           if (ad.status && ad.status !== 'approved') return;
-
           const card = document.createElement('div');
           card.className = "p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4";
           card.setAttribute('data-provincia', ad.city || ad.provincia || '');
-          card.setAttribute('data-categoria', ad.categoria || '');
+          card.setAttribute('data-categoria', ad.categoria || ad.category || '');
           card.setAttribute('data-municipio', ad.municipio || '');
 
           card.innerHTML = `
             <div class="space-y-2">
               <div class="flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-brand-100 text-brand-800">${ad.categoria || 'Empleo'}</span>
+                <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-brand-100 text-brand-800">${ad.categoria || ad.category || 'Empleo'}</span>
                 <span class="text-xs text-slate-400">• ${ad.created_at ? new Date(ad.created_at).toLocaleDateString() : 'Reciente'}</span>
               </div>
-              <h3 class="text-lg font-bold text-slate-900">${ad.titulo || ad.title || 'Oferta de empleo'}</h3>
+              <h3 class="text-lg font-bold text-slate-900">${ad.titulo || ad.title || 'Oferta'}</h3>
               <p class="text-sm text-slate-600 flex items-center gap-4">
-                <span><i class="fa-solid fa-location-dot text-slate-400"></i> ${ad.city || ad.provincia || 'España'}</span>
+                <span><i class="fa-solid fa-location-dot text-slate-400"></i> ${ad.city || ad.provincia || ad.province || 'España'}</span>
                 <span><i class="fa-solid fa-euro-sign text-slate-400"></i> ${ad.sueldo || ad.salario || 'A convenir'}</span>
               </p>
             </div>
-            <button onclick='verDetalleAnuncio(${JSON.stringify(ad)})' class="px-4 py-2 bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-700 font-semibold text-sm rounded-xl transition-colors text-center shrink-0 cursor-pointer">
+            <button onclick='verDetalleAnuncio(${JSON.stringify(ad)})' class="px-4 py-2 bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer shrink-0">
               Ver oferta
             </button>
           `;
           contenedor.appendChild(card);
         });
       } catch (err) {
-        console.error('Error al cargar anuncios:', err);
-        contenedor.innerHTML = '<p class="text-center text-red-500 py-8">Hubo un error al cargar los anuncios.</p>';
+        console.error(err);
+        contenedor.innerHTML = '<p class="text-center text-red-500 py-8">Error al cargar anuncios.</p>';
       }
     }
 
-    // FUNCIÓN PARA ABRIR EL MODAL CON DETALLES Y FORMULARIO DE CONTACTO
     function verDetalleAnuncio(ad) {
-      const modalAnterior = document.getElementById('modal-detalle-oferta');
-      if (modalAnterior) modalAnterior.remove();
+      const anterior = document.getElementById('modal-detalle-oferta');
+      if (anterior) anterior.remove();
 
       const modal = document.createElement('div');
       modal.id = 'modal-detalle-oferta';
-      modal.className = "fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn";
+      modal.className = "fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm";
       
-      const tituloAnuncio = ad.titulo || ad.title || 'Oferta de empleo';
-
+      const titulo = ad.titulo || ad.title || 'Oferta';
       modal.innerHTML = `
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100 max-h-[90vh] overflow-y-auto">
-          <button onclick="document.getElementById('modal-detalle-oferta').remove()" class="absolute top-5 right-5 w-10 h-10 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center text-slate-600 transition-colors">
-            <i class="fa-solid fa-xmark text-lg"></i>
-          </button>
-
+          <button onclick="document.getElementById('modal-detalle-oferta').remove()" class="absolute top-5 right-5 w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
           <div class="space-y-2">
-            <span class="px-3 py-1 rounded-full text-xs font-bold bg-brand-100 text-brand-800 uppercase tracking-wider">${ad.categoria || 'Empleo'}</span>
-            <h2 class="text-2xl font-black text-slate-900 leading-snug">${tituloAnuncio}</h2>
-            <p class="text-xs text-slate-400">Publicado el ${ad.created_at ? new Date(ad.created_at).toLocaleDateString() : 'Reciente'}</p>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-brand-100 text-brand-800 uppercase">${ad.categoria || ad.category || 'Empleo'}</span>
+            <h2 class="text-2xl font-black text-slate-900">${titulo}</h2>
           </div>
-
-          <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-            <div>
-              <span class="block text-xs font-bold text-slate-400 uppercase">Ubicación</span>
-              <span class="text-sm font-semibold text-slate-800"><i class="fa-solid fa-location-dot text-brand-600 mr-1"></i> ${ad.city || ad.provincia || 'España'}</span>
-            </div>
-            <div>
-              <span class="block text-xs font-bold text-slate-400 uppercase">Salario / Sueldo</span>
-              <span class="text-sm font-semibold text-slate-800"><i class="fa-solid fa-euro-sign text-brand-600 mr-1"></i> ${ad.sueldo || ad.salario || 'A convenir'}</span>
-            </div>
+          <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl">
+            <div><span class="block text-xs font-bold text-slate-400 uppercase">Ubicación</span><span class="text-sm font-semibold text-slate-800">${ad.city || ad.provincia || 'España'}</span></div>
+            <div><span class="block text-xs font-bold text-slate-400 uppercase">Sueldo</span><span class="text-sm font-semibold text-slate-800">${ad.sueldo || ad.salario || 'A convenir'}</span></div>
           </div>
-
           <div class="space-y-2">
-            <h4 class="font-bold text-slate-900 text-sm uppercase tracking-wide">Descripción del puesto</h4>
-            <div class="text-slate-600 text-sm leading-relaxed bg-slate-50/50 p-4 rounded-2xl border border-slate-100 whitespace-pre-line">
-              ${ad.descripcion || ad.description || 'No hay descripción detallada para esta oferta.'}
-            </div>
+            <h4 class="font-bold text-slate-900 text-sm uppercase">Descripción</h4>
+            <div class="text-slate-600 text-sm bg-slate-50/50 p-4 rounded-2xl whitespace-pre-line">${ad.descripcion || ad.description || 'Sin descripción.'}</div>
           </div>
-
-          <!-- FORMULARIO DE CONTACTO PARA LA OFERTA -->
           <div class="border-t border-slate-100 pt-4 space-y-3">
-            <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2">
-              <i class="fa-solid fa-paper-plane text-brand-600"></i> Contactar sobre este anuncio
-            </h4>
-            
+            <h4 class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-paper-plane text-brand-600"></i> Contactar</h4>
             <form action="mailto:info@rodatrabajo.com" method="POST" enctype="text/plain" class="space-y-3">
-              <input type="hidden" name="Anuncio" value="${tituloAnuncio}">
-              
-              <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Tu Nombre</label>
-                <input type="text" name="Nombre" required placeholder="Ej: Juan Pérez" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500">
+              <input type="hidden" name="Anuncio" value="${titulo}">
+              <input type="text" name="Nombre" required placeholder="Tu Nombre" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+              <div class="grid grid-cols-2 gap-3">
+                <input type="tel" name="Telefono" required placeholder="Teléfono" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+                <input type="email" name="Email" required placeholder="Email" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm">
               </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono</label>
-                  <input type="tel" name="Telefono" required placeholder="Ej: 600000000" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-slate-600 mb-1">Correo Electrónico (Email)</label>
-                  <input type="email" name="Email" required placeholder="tucorreo@gmail.com" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500">
-                </div>
-              </div>
-
-              <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Mensaje</label>
-                <textarea name="Mensaje" rows="3" required placeholder="Hola, estoy interesado en este puesto..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500"></textarea>
-              </div>
-
-              <div class="flex gap-2 pt-2">
-                <button type="submit" class="flex-1 py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl text-center shadow-lg shadow-brand-500/20 transition-all flex items-center justify-center gap-2">
-                  <i class="fa-solid fa-envelope"></i>
-                  <span>Enviar mensaje</span>
-                </button>
-                <button type="button" onclick="document.getElementById('modal-detalle-oferta').remove()" class="py-3 px-5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-xl transition-colors">
-                  Cerrar
-                </button>
+              <textarea name="Mensaje" rows="3" required placeholder="Mensaje..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm"></textarea>
+              <div class="flex gap-2">
+                <button type="submit" class="flex-1 py-3 bg-brand-600 text-white font-bold text-sm rounded-xl text-center">Enviar mensaje</button>
+                <button type="button" onclick="document.getElementById('modal-detalle-oferta').remove()" class="py-3 px-5 bg-slate-100 text-slate-700 font-bold text-sm rounded-xl">Cerrar</button>
               </div>
             </form>
           </div>
-
         </div>
       `;
-
       document.body.appendChild(modal);
     }
 
     document.addEventListener('DOMContentLoaded', cargarAnuncios);
 
     const municipiosPorProvincia = {
-      madrid: [
-        "Alcobendas", "San Sebastián de los Reyes", "Pozuelo de Alarcón", "Majadahonda", 
-        "Las Rozas de Madrid", "Boadilla del Monte", "Alcorcón", "Móstoles", "Fuenlabrada", 
-        "Leganés", "Getafe", "Parla", "Pinto", "Valdemoro", "Aranjuez", "Coslada", 
-        "San Fernando de Henares", "Torrejón de Ardoz", "Alcalá de Henares", "Rivas-Vaciamadrid", 
-        "Tres Cantos", "Colmenar Viejo", "Collado Villalba"
-      ],
-      toledo: [
-        "Olías del Rey", "Bargas", "Cobisa", "Argés", "Nambroca", "Burguillos de Toledo", 
-        "Mocejón", "Magán", "Guadamur", "Polán", "Sonseca", "Torrijos", "Illescas", 
-        "Seseña", "Yuncos", "Ocaña", "Talavera de la Reina", "Consuegra"
-      ],
-      barcelona: [
-        "L'Hospitalet de Llobregat", "Badalona", "Santa Coloma de Gramenet", "Sant Adrià de Besòs", 
-        "Cornellà de Llobregat", "El Prat de Llobregat", "Esplugues de Llobregat", "Sant Just Desvern", 
-        "Sant Cugat del Vallès", "Cerdanyola del Vallès", "Sabadell", "Terrassa", "Granollers", "Mataró"
-      ],
-      valencia: [
-        "Torrent", "Paterna", "Mislata", "Burjassot", "Quart de Poblet", "Manises", 
-        "Aldaia", "Alaquàs", "Xirivella", "Catarroja", "Alfafar", "Silla", "Paiporta", 
-        "Picanya", "Moncada", "Bétera", "Sagunto"
-      ],
-      sevilla: [
-        "Dos Hermanas", "Alcalá de Guadaíra", "Mairena del Aljarafe", "Tomares", "Camas", 
-        "San Juan de Aznalfarache", "Bormujos", "La Rinconada", "Coria del Río", "Gelves", 
-        "Gines", "Espartinas", "Utrera", "Carmona"
-      ],
-      zaragoza: [
-        "Utebo", "Cuarte de Huerva", "María de Huerva", "La Puebla de Alfindén", 
-        "Villanueva de Gállego", "Zuera", "Cadrete", "La Muela", "Pinseque", "Épila", "La Almunia de Doña Godina"
-      ],
-      malaga: [
-        "Torremolinos", "Benalmádena", "Fuengirola", "Mijas", "Marbella", "Estepona", 
-        "Rincón de la Victoria", "Vélez-Málaga", "Alhaurín de la Torre", "Alhaurín el Grande", "Cártama", "Antequera"
-      ],
-      murcia: [
-        "Alcantarilla", "Molina de Segura", "Las Torres de Cotillas", "Santomera", 
-        "Beniel", "Archena", "Ceutí", "Lorquí", "Alguazas", "Cieza", "Cartagena", "San Javier"
-      ],
-      palma: [
-        "Marratxí", "Calvià", "Llucmajor", "Bunyola", "Esporles", "Valldemossa", 
-        "Andratx", "Santa María del Camí", "Algaida", "Sóller"
-      ],
-      bilbao: [
-        "Barakaldo", "Getxo", "Portugalete", "Santurtzi", "Sestao", "Basauri", 
-        "Galdakao", "Leioa", "Erandio", "Sondika", "Derio", "Durango"
-      ],
-      alicante: [
-        "San Vicente del Raspeig", "Sant Joan d'Alacant", "Mutxamel", "El Campello", 
-        "Elche", "Santa Pola", "San Juan de Alicante", "Villajoyosa", "Benidorm", "Elda", "Petrer", "Novelda"
-      ],
-      cordoba: [
-        "Almodóvar del Río", "La Carlota", "Villafranca de Córdoba", "El Carpio", 
-        "Montoro", "Palma del Río", "Posadas", "Fernán-Núñez", "Montilla", "Puente Genil"
-      ],
-      valladolid: [
-        "Laguna de Duero", "Arroyo de la Encomienda", "La Cistérniga", "Zaratán", 
-        "Simancas", "Tudela de Duero", "Cigales", "Santovenia de Pisuerga", "Cabezón de Pisuerga", "Medina del Campo"
-      ],
-      vigo: [
-        "Redondela", "Mos", "O Porriño", "Nigrán", "Baiona", "Gondomar", 
-        "Cangas", "Moaña", "Ponteareas", "Tui"
-      ],
-      gijon: [
-        "Avilés", "Villaviciosa", "Carreño", "Gozón", "Siero", "Llanera", 
-        "Corvera de Asturias", "Langreo", "Mieres"
-      ],
-      granada: [
-        "Armilla", "Maracena", "La Zubia", "Ogíjares", "Huétor Vega", "Albolote", 
-        "Atarfe", "Peligros", "Churriana de la Vega", "Las Gabias", "Santa Fe", "Cúllar Vega"
-      ],
-      coruna: [
-        "Oleiros", "Arteixo", "Culleredo", "Cambre", "Bergondo", "Sada", 
-        "Betanzos", "Carral", "Abegondo"
-      ],
-      "san-sebastian": [
-        "Pasaia", "Errenteria", "Hernani", "Astigarraga", "Lasarte-Oria", 
-        "Usurbil", "Oiartzun", "Hondarribia", "Irun", "Zarautz"
-      ],
-      santander: [
-        "Camargo", "El Astillero", "Santa Cruz de Bezana", "Piélagos", 
-        "Marina de Cudeyo", "Villaescusa", "Miengo", "Torrelavega", "Santoña", "Laredo"
-      ],
-      "las-palmas": [
-        "Telde", "Arucas", "Santa Brígida", "Teror", "Firgas", "Valsequillo", 
-        "Ingenio", "Agüimes", "Gáldar", "Santa María de Guía"
-      ]
+      madrid: ["Alcobendas", "San Sebastián de los Reyes", "Pozuelo de Alarcón", "Majadahonda", "Las Rozas de Madrid", "Boadilla del Monte", "Alcorcón", "Móstoles", "Fuenlabrada", "Leganés", "Getafe", "Parla", "Pinto", "Valdemoro", "Aranjuez", "Coslada", "San Fernando de Henares", "Torrejón de Ardoz", "Alcalá de Henares", "Rivas-Vaciamadrid", "Tres Cantos", "Colmenar Viejo", "Collado Villalba"],
+      toledo: ["Olías del Rey", "Bargas", "Cobisa", "Argés", "Nambroca", "Burguillos de Toledo", "Mocejón", "Magán", "Guadamur", "Polán", "Sonseca", "Torrijos", "Illescas", "Seseña", "Yuncos", "Ocaña", "Talavera de la Reina", "Consuegra"],
+      barcelona: ["L'Hospitalet de Llobregat", "Badalona", "Santa Coloma de Gramenet", "Sant Adrià de Besòs", "Cornellà de Llobregat", "El Prat de Llobregat", "Esplugues de Llobregat", "Sant Just Desvern", "Sant Cugat del Vallès", "Cerdanyola del Vallès", "Sabadell", "Terrassa", "Granollers", "Mataró"],
+      valencia: ["Torrent", "Paterna", "Mislata", "Burjassot", "Quart de Poblet", "Manises", "Aldaia", "Alaquàs", "Xirivella", "Catarroja", "Alfafar", "Silla", "Paiporta", "Picanya", "Moncada", "Bétera", "Sagunto"],
+      sevilla: ["Dos Hermanas", "Alcalá de Guadaíra", "Mairena del Aljarafe", "Tomares", "Camas", "San Juan de Aznalfarache", "Bormujos", "La Rinconada", "Coria del Río", "Gelves", "Gines", "Espartinas", "Utrera", "Carmona"],
+      zaragoza: ["Utebo", "Cuarte de Huerva", "María de Huerva", "La Puebla de Alfindén", "Villanueva de Gállego", "Zuera", "Cadrete", "La Muela", "Pinseque", "Épila", "La Almunia de Doña Godina"],
+      malaga: ["Torremolinos", "Benalmádena", "Fuengirola", "Mijas", "Marbella", "Estepona", "Rincón de la Victoria", "Vélez-Málaga", "Alhaurín de la Torre", "Alhaurín el Grande", "Cártama", "Antequera"],
+      murcia: ["Alcantarilla", "Molina de Segura", "Las Torres de Cotillas", "Santomera", "Beniel", "Archena", "Ceutí", "Lorquí", "Alguazas", "Cieza", "Cartagena", "San Javier"],
+      palma: ["Marratxí", "Calvià", "Llucmajor", "Bunyola", "Esporles", "Valldemossa", "Andratx", "Santa María del Camí", "Algaida", "Sóller"],
+      bilbao: ["Barakaldo", "Getxo", "Portugalete", "Santurtzi", "Sestao", "Basauri", "Galdakao", "Leioa", "Erandio", "Sondika", "Derio", "Durango"],
+      alicante: ["San Vicente del Raspeig", "Sant Joan d'Alacant", "Mutxamel", "El Campello", "Elche", "Santa Pola", "San Juan de Alicante", "Villajoyosa", "Benidorm", "Elda", "Petrer", "Novelda"],
+      cordoba: ["Almodóvar del Río", "La Carlota", "Villafranca de Córdoba", "El Carpio", "Montoro", "Palma del Río", "Posadas", "Fernán-Núñez", "Montilla", "Puente Genil"],
+      valladolid: ["Laguna de Duero", "Arroyo de la Encomienda", "La Cistérniga", "Zaratán", "Simancas", "Tudela de Duero", "Cigales", "Santovenia de Pisuerga", "Cabezón de Pisuerga", "Medina del Campo"],
+      vigo: ["Redondela", "Mos", "O Porriño", "Nigrán", "Baiona", "Gondomar", "Cangas", "Moaña", "Ponteareas", "Tui"],
+      gijon: ["Avilés", "Villaviciosa", "Carreño", "Gozón", "Siero", "Llanera", "Corvera de Asturias", "Langreo", "Mieres"],
+      granada: ["Armilla", "Maracena", "La Zubia", "Ogíjares", "Huétor Vega", "Albolote", "Atarfe", "Peligros", "Churriana de la Vega", "Las Gabias", "Santa Fe", "Cúllar Vega"],
+      coruna: ["Oleiros", "Arteixo", "Culleredo", "Cambre", "Bergondo", "Sada", "Betanzos", "Carral", "Abegondo"],
+      "san-sebastian": ["Pasaia", "Errenteria", "Hernani", "Astigarraga", "Lasarte-Oria", "Usurbil", "Oiartzun", "Hondarribia", "Irun", "Zarautz"],
+      santander: ["Camargo", "El Astillero", "Santa Cruz de Bezana", "Piélagos", "Marina de Cudeyo", "Villaescusa", "Miengo", "Torrelavega", "Santoña", "Laredo"],
+      "las-palmas": ["Telde", "Arucas", "Santa Brígida", "Teror", "Firgas", "Valsequillo", "Ingenio", "Agüimes", "Gáldar", "Santa María de Guía"]
     };
 
     const selectProvincia = document.getElementById('select-provincia');
@@ -609,7 +180,6 @@
       }
     });
 
-    // BUSCADOR
     document.getElementById('btn-buscar').addEventListener('click', () => {
       const provinciaVal = selectProvincia.value;
       const categoriaVal = document.getElementById('select-categoria').value;
@@ -624,7 +194,7 @@
         const text = card.textContent.toLowerCase();
 
         let matchProv = !provinciaVal || cardProv.toLowerCase().includes(provinciaVal);
-        let matchCat = !categoriaVal || cardCat === categoriaVal;
+        let matchCat = !categoriaVal || cardCat.toLowerCase().includes(categoriaVal.toLowerCase());
         let matchMuni = !municipioVal || cardMuni === municipioVal;
         let matchKw = !keyword || text.includes(keyword);
 
@@ -637,12 +207,9 @@
       document.getElementById('anuncios').scrollIntoView({ behavior: 'smooth' });
     });
 
-    // MENÚ MÓVIL
     const btnMobile = document.getElementById('mobile-menu-btn');
     const menuMobile = document.getElementById('mobile-menu');
-    btnMobile.addEventListener('click', () => {
-      menuMobile.classList.toggle('hidden');
-    });
+    btnMobile.addEventListener('click', () => { menuMobile.classList.toggle('hidden'); });
   </script>
 </body>
 </html>
