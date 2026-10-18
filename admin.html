@@ -3,127 +3,169 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panel de administración - Empleora</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Panel de Administración - Empleora</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="css/styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+  <!-- Pantalla de bloqueo inicial -->
+  <div id="auth-guard" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#f8fafc; z-index:9999; justify-content:center; align-items:center; text-align:center; padding:20px;">
+    <div style="background:#fff; padding:40px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); max-width:400px; width:100%;">
+      <h2 style="color:#ef4444; margin-bottom:15px;">Acceso Denegado</h2>
+      <p style="color:#64748b; margin-bottom:20px;">Esta sección es exclusiva para el administrador. Debes iniciar sesión con tu cuenta autorizada.</p>
+      <a href="login.html" class="btn" style="background:#3b82f6; color:#fff; text-decoration:none; padding:10px 20px; border-radius:6px; display:inline-block;">Iniciar sesión</a>
+    </div>
+  </div>
+
   <header>
     <div class="container nav">
       <a href="index.html" class="logo"><img src="logo.jpg" alt="Empleora"> EMPLEORA - Admin</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Ver Web</a></li>
+        <li><a href="#" onclick="logoutAdmin()">Cerrar sesión</a></li>
+      </ul>
     </div>
   </header>
 
-  <main class="container" style="padding:40px 0;">
-    <h1 style="color:var(--primary);">Panel de administración</h1>
-    
-    <h2 style="margin:24px 0 12px;">Anuncios pendientes</h2>
-    <div id="pending">Cargando anuncios pendientes...</div>
-    
-    <h2 style="margin:32px 0 12px;">Denuncias</h2>
-    <div id="reports">Cargando denuncias...</div>
+  <main class="container" style="padding: 40px 0;">
+    <h1 style="color: var(--primary); margin-bottom: 24px;">Panel de administración</h1>
+
+    <!-- Sección de Anuncios Pendientes -->
+    <section style="margin-bottom: 40px;">
+      <h2>Anuncios pendientes de aprobación</h2>
+      <div id="pending-container" style="margin-top: 15px;">
+        <p>Cargando pendientes...</p>
+      </div>
+    </section>
+
+    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 40px 0;">
+
+    <!-- Sección de Control Total (Todos los Anuncios) -->
+    <section>
+      <h2>Gestión de todos los anuncios publicados</h2>
+      <p style="color: #64748b; font-size: 14px; margin-bottom: 15px;">Aquí puedes ver, borrar o renovar cualquier anuncio aprobado en la plataforma.</p>
+      <div id="all-ads-container" style="display: grid; gap: 15px; margin-top: 15px;">
+        <p>Cargando anuncios...</p>
+      </div>
+    </section>
   </main>
 
-  <script src="js/config.js"></script>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/main.js"></script>
   <script>
-    async function checkAdmin() {
-      // Usamos el cliente configurado globalmente
-      const clienteSupabase = window.supabaseClient || window.supabase;
-      
-      if (!clienteSupabase) {
-        alert('Error al conectar con la base de datos.');
+    const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
+
+    // 🛑 ESCRIBE AQUÍ TU CORREO EXACTO DE ADMINISTRADOR
+    const ADMIN_EMAIL = 'danny10bbk@gmail.com'; // Cambia esto si tu correo de admin es otro
+
+    async function verificarAccesoAdmin() {
+      const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const { data: { session } } = await cliente.auth.getSession();
+
+      const guard = document.getElementById('auth-guard');
+
+      if (!session || session.user.email !== ADMIN_EMAIL) {
+        // Si no ha iniciado sesión o el correo no coincide con el tuyo, bloqueamos la pantalla
+        guard.style.display = 'flex';
         return false;
       }
-
-      const { data: { session } } = await clienteSupabase.auth.getSession();
-      
-      // 1. Si no hay sesión iniciada, redirigir a login
-      if (!session) { 
-        alert('Debes iniciar sesión para acceder al panel.');
-        window.location.href = 'login.html'; 
-        return false; 
-      }
-      
-      // 2. Tu correo único de administrador
-      const correoAdmin = 'danny10bbk@gmail.com'; 
-
-      // 3. Comprobar si el usuario conectado es el administrador
-      if (session.user.email !== correoAdmin) {
-        alert('Acceso restringido solo para administradores.');
-        window.location.href = 'index.html';
-        return false;
-      }
-
       return true;
     }
 
-    async function loadPending() {
-      const clienteSupabase = window.supabaseClient || window.supabase;
-      const { data, error } = await clienteSupabase.from('ads').select('*').eq('status', 'pending').order('created_at', { ascending: false });
+    async function loadAdminPanel() {
+      const esAdmin = await verificarAccesoAdmin();
+      if (!esAdmin) return;
+
+      const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       
-      const pendingDiv = document.getElementById('pending');
-      if (error) {
-        pendingDiv.innerHTML = '<p style="color:red;">Error al cargar anuncios pendientes: ' + error.message + '</p>';
-        return;
-      }
+      const pendingContainer = document.getElementById('pending-container');
+      const allAdsContainer = document.getElementById('all-ads-container');
 
-      if (!data || data.length === 0) {
-        pendingDiv.innerHTML = '<p>No hay anuncios pendientes de revisión.</p>';
-        return;
-      }
+      // 1. Cargar pendientes
+      const { data: pendingAds, error: errPending } = await cliente
+        .from('ads')
+        .select('*')
+        .eq('status', 'pending');
 
-      pendingDiv.innerHTML = data.map(ad => `
-        <div class="ad-card" style="margin-bottom:16px; padding:16px; border:1px solid #eee; border-radius:8px;">
-          <h3>${ad.title} - ${ad.profession}</h3>
-          <p><strong>Sector:</strong> ${ad.category} | <strong>Ubicación:</strong> ${ad.city}, ${ad.province}</p>
-          <p>${ad.description}</p>
-          <p><strong>Contacto:</strong> ${ad.contact_method}: ${ad.contact_info}</p>
-          <div style="margin-top:12px;">
-            <button onclick="approve('${ad.id}')" class="btn btn-primary" style="margin-right:8px;">Aprobar</button>
-            <button onclick="reject('${ad.id}')" class="btn btn-outline">Rechazar</button>
+      if (errPending) {
+        pendingContainer.innerHTML = '<p>Error al cargar pendientes.</p>';
+      } else if (!pendingAds || pendingAds.length === 0) {
+        pendingContainer.innerHTML = '<p>No hay anuncios pendientes de revisión.</p>';
+      } else {
+        pendingContainer.innerHTML = pendingAds.map(ad => `
+          <div style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:15px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong>${ad.title || ad.profession}</strong> (${ad.city || 'España'})<br>
+              <small style="color:#64748b;">${ad.description ? ad.description.substring(0, 80) : ''}...</small>
+            </div>
+            <div>
+              <button onclick="approveAd('${ad.id}')" class="btn" style="background:#10b981; color:#fff; padding:6px 12px; border:none; border-radius:4px; cursor:pointer;">Aprobar</button>
+              <button onclick="deleteAd('${ad.id}')" class="btn" style="background:#ef4444; color:#fff; padding:6px 12px; border:none; border-radius:4px; cursor:pointer; margin-left:5px;">Rechazar</button>
+            </div>
           </div>
-        </div>
-      `).join('');
-    }
-
-    async function loadReports() {
-      const clienteSupabase = window.supabaseClient || window.supabase;
-      const { data, error } = await clienteSupabase.from('reports').select('*, ads(title)').order('created_at', { ascending: false });
-      
-      const reportsDiv = document.getElementById('reports');
-      if (error || !data || data.length === 0) {
-        reportsDiv.innerHTML = '<p>No hay denuncias pendientes.</p>';
-        return;
+        `).join('');
       }
 
-      reportsDiv.innerHTML = data.map(r => `
-        <div style="padding:12px; border-bottom:1px solid #eee;">
-          <strong>Anuncio:</strong> ${r.ads?.title || r.ad_id}<br>
-          <strong>Motivo:</strong> ${r.reason}
-        </div>
-      `).join('');
-    }
+      // 2. Cargar TODOS los anuncios para control total
+      const { data: allAds, error: errAll } = await cliente
+        .from('ads')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-    async function approve(id) {
-      const clienteSupabase = window.supabaseClient || window.supabase;
-      await clienteSupabase.from('ads').update({ status: 'approved' }).eq('id', id);
-      loadPending();
-    }
-
-    async function reject(id) {
-      const clienteSupabase = window.supabaseClient || window.supabase;
-      await clienteSupabase.from('ads').update({ status: 'rejected' }).eq('id', id);
-      loadPending();
-    }
-
-    // Inicio automático al cargar la página
-    document.addEventListener('DOMContentLoaded', async () => {
-      if (await checkAdmin()) {
-        loadPending();
-        loadReports();
+      if (errAll) {
+        allAdsContainer.innerHTML = '<p>Error al cargar la lista de anuncios.</p>';
+      } else if (!allAds || allAds.length === 0) {
+        allAdsContainer.innerHTML = '<p>No hay anuncios en la base de datos.</p>';
+      } else {
+        allAdsContainer.innerHTML = allAds.map(ad => `
+          <div style="background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:15px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong>${ad.title || ad.profession}</strong> [Estado: <span style="color:${ad.status === 'approved' ? 'green' : 'orange'}">${ad.status}</span>]<br>
+              <small style="color:#64748b;">${ad.city || 'España'} &bull; Creado: ${new Date(ad.created_at).toLocaleDateString('es-ES')}</small>
+            </div>
+            <div>
+              <button onclick="renewAd('${ad.id}')" class="btn" style="background:#3b82f6; color:#fff; padding:6px 12px; border:none; border-radius:4px; cursor:pointer; margin-right:5px;">Renovar</button>
+              <button onclick="deleteAd('${ad.id}')" class="btn" style="background:#ef4444; color:#fff; padding:6px 12px; border:none; border-radius:4px; cursor:pointer;">Borrar</button>
+            </div>
+          </div>
+        `).join('');
       }
-    });
+    }
+
+    async function approveAd(id) {
+      const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const { error } = await cliente.from('ads').update({ status: 'approved' }).eq('id', id);
+      if (error) alert('Error al aprobar');
+      else loadAdminPanel();
+    }
+
+    async function deleteAd(id) {
+      if (!confirm('¿Estás seguro de querer borrar este anuncio?')) return;
+      const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const { error } = await cliente.from('ads').delete().eq('id', id);
+      if (error) alert('Error al borrar');
+      else loadAdminPanel();
+    }
+
+    async function renewAd(id) {
+      const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const { error } = await cliente.from('ads').update({ created_at: new Date().toISOString() }).eq('id', id);
+      if (error) alert('Error al renovar');
+      else {
+        alert('¡Anuncio renovado con éxito!');
+        loadAdminPanel();
+      }
+    }
+
+    async function logoutAdmin() {
+      const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      await cliente.auth.signOut();
+      window.location.href = 'login.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', loadAdminPanel);
   </script>
 </body>
 </html>
