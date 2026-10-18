@@ -25,7 +25,10 @@
     .nav-links a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 14px; padding: 8px 14px; border-radius: 8px; }
     .container { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
     
-    .badge-profile { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-left: 8px; }
+    .profile-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; background: #fff; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); }
+    .profile-avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: #e2e8f0; border: 2px solid var(--primary); }
+
+    .badge-profile { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: 4px; }
     .badge-particular { background: #e0f2fe; color: #0369a1; }
     .badge-profesional { background: #dcfce7; color: #15803d; }
 
@@ -59,12 +62,12 @@
   </header>
 
   <main class="container">
-    <div style="margin-bottom: 24px;">
-      <h1 style="font-size: 24px; font-weight: 700; margin-bottom: 6px;">
-        Mis Anuncios Publicados
-        <span id="profile-tag"></span>
-      </h1>
-      <p style="color: var(--text-muted); font-size: 14px;">Gestiona, renueva, modifica o elimina los anuncios de tu cuenta.</p>
+    <div class="profile-header">
+      <img id="user-avatar-img" class="profile-avatar" src="https://via.placeholder.com/64?text=Foto" alt="Foto de perfil">
+      <div>
+        <h1 style="font-size: 20px; font-weight: 700;" id="user-email-title">Mi Panel</h1>
+        <div id="profile-tag"></div>
+      </div>
     </div>
 
     <div id="user-ads-container">
@@ -111,15 +114,26 @@
       if (!session) {
         container.innerHTML = `
           <div style="background:#fff; padding:30px; border-radius:12px; border:1px solid var(--border-color); text-align:center;">
-            <p style="margin-bottom:15px; color:var(--text-muted);">Debes iniciar sesión con tu cuenta para ver tus anuncios.</p>
+            <p style="margin-bottom:15px; color:var(--text-muted);">Debes iniciar sesión para ver tus anuncios.</p>
             <a href="login.html" class="btn" style="background:var(--primary); color:#fff;">Iniciar sesión</a>
           </div>
         `;
         return;
       }
 
-      // Mostrar tipo de perfil en la cabecera
-      const userRole = session.user.user_metadata?.user_role || 'particular';
+      // Cargar foto y datos del usuario
+      const metadata = session.user.user_metadata || {};
+      const userRole = metadata.user_role || 'particular';
+      const avatarUrl = metadata.avatar_url;
+
+      if (avatarUrl) {
+        document.getElementById('user-avatar-img').src = avatarUrl;
+      } else {
+        document.getElementById('user-avatar-img').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(session.user.email)}&background=10b981&color=fff`;
+      }
+
+      document.getElementById('user-email-title').innerText = session.user.email;
+
       const tagElement = document.getElementById('profile-tag');
       if (userRole === 'profesional') {
         tagElement.className = 'badge-profile badge-profesional';
@@ -140,7 +154,7 @@
       if (error || !ads || ads.length === 0) {
         container.innerHTML = `
           <div style="background:#fff; padding:30px; border-radius:12px; border:1px solid var(--border-color); text-align:center;">
-            <p style="color:var(--text-muted); margin-bottom:15px;">No tienes anuncios publicados con este correo (${userEmail}).</p>
+            <p style="color:var(--text-muted); margin-bottom:15px;">No tienes anuncios publicados aún con el correo (${userEmail}).</p>
             <a href="publicar.html" class="btn" style="background:var(--primary); color:#fff;">Publicar anuncio gratis</a>
           </div>
         `;
@@ -173,7 +187,7 @@
       const { error } = await cliente.from('ads').update({ created_at: new Date().toISOString() }).eq('id', id);
       if (error) alert('Error al renovar.');
       else {
-        alert('¡Anuncio renovado con éxito! Ha vuelto a subir al principio.');
+        alert('¡Anuncio renovado con éxito!');
         loadUserAds();
       }
     }
