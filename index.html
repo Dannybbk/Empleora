@@ -47,7 +47,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         
-        <!-- Logo (AHORA VUELVE A INICIO CORRECTAMENTE) -->
+        <!-- Logo -->
         <a href="index.html" class="flex items-center gap-2 group cursor-pointer">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white font-black text-xl shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
             E
@@ -62,7 +62,7 @@
           <a href="index.html" class="text-brand-600 transition-colors">Inicio</a>
           <a href="#categorias" class="hover:text-brand-600 transition-colors">Categorías</a>
           <a href="#anuncios" class="hover:text-brand-600 transition-colors">Ofertas de Empleo</a>
-          <a href="#" class="hover:text-brand-600 transition-colors">Publicar Anuncio</a>
+          <a href="#publicar" class="hover:text-brand-600 transition-colors">Publicar Anuncio</a>
         </nav>
 
         <!-- Right Buttons -->
@@ -70,8 +70,8 @@
           <a href="login.html" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-600 transition-colors">
             Iniciar sesión
           </a>
-          <a href="login.html" class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-lg shadow-brand-500/25 transition-all">
-            Registrarse
+          <a href="#publicar" class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-lg shadow-brand-500/25 transition-all">
+            + Publicar Anuncio
           </a>
         </div>
 
@@ -91,13 +91,13 @@
       <a href="#anuncios" class="block px-3 py-2 rounded-md font-medium text-slate-700 hover:bg-slate-50">Ofertas de Empleo</a>
       <div class="pt-2 border-t border-slate-100 flex flex-col gap-2">
         <a href="login.html" class="w-full text-center px-4 py-2 font-semibold text-slate-700 bg-slate-100 rounded-lg">Iniciar sesión</a>
-        <a href="login.html" class="w-full text-center px-4 py-2 font-semibold text-white bg-brand-600 rounded-lg">Registrarse</a>
+        <a href="#publicar" class="w-full text-center px-4 py-2 font-semibold text-white bg-brand-600 rounded-lg">+ Publicar Anuncio</a>
       </div>
     </div>
   </header>
 
-  <!-- HERO SECTION WITH MULTI-LEVEL LOCATION SEARCH -->
-  <section class="relative bg-gradient-to-b from-brand-50/60 via-slate-50 to-slate-50 pt-12 pb-16 px-4 sm:px-6 lg:px-8">
+  <!-- HERO SECTION WITH BUSCADOR + CATEGORÍAS EN EL MEDIO + PROVINCIAS -->
+  <section class="relative bg-gradient-to-b from-brand-50/60 via-slate-50 to-slate-50 pt-10 pb-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-4xl mx-auto text-center space-y-6">
       
       <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-bold uppercase tracking-wider">
@@ -112,21 +112,49 @@
         Conectamos a profesionales con empresas y particulares en toda España de forma rápida y directa.
       </p>
 
-      <!-- SEARCH FORM WITH ANNESTED LOCATIONS -->
-      <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200/80 mt-8 max-w-3xl mx-auto">
+      <!-- FORMULARIO DE BÚSQUEDA INTEGRADO -->
+      <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200/80 mt-6 max-w-3xl mx-auto">
         <form id="search-form" class="flex flex-col gap-3">
           
-          <div class="flex flex-col sm:flex-row gap-3">
-            <!-- Keyword input -->
-            <div class="flex-1 relative flex items-center">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            
+            <!-- 1. Palabras clave / Buscador -->
+            <div class="relative flex items-center">
               <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-slate-400"></i>
-              <input type="text" id="input-keyword" placeholder="Puesto, oficio o palabra clave..." class="w-full pl-10 pr-4 py-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all">
+              <input type="text" id="input-keyword" placeholder="¿Qué trabajo buscas?" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all">
             </div>
 
-            <!-- Provincia / Ciudad Principal -->
-            <div class="sm:w-1/3 relative flex items-center">
+            <!-- 2. CATEGORÍAS (COLOCADO EN EL MEDIO) -->
+            <div class="relative flex items-center">
+              <i class="fa-solid fa-layer-group absolute left-3.5 text-slate-400"></i>
+              <select id="select-categoria" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm text-slate-700 border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer">
+                <option value="">Todas las categorías</option>
+                <option value="construccion">Construcción y reformas</option>
+                <option value="limpieza">Limpieza</option>
+                <option value="hosteleria">Hostelería y turismo</option>
+                <option value="transporte">Transporte y conducción</option>
+                <option value="logistica">Logística y almacén</option>
+                <option value="administracion">Administración y oficina</option>
+                <option value="comercio">Comercio y ventas</option>
+                <option value="atencion-cliente">Atención al cliente</option>
+                <option value="informatica">Informática y tecnología</option>
+                <option value="sanidad">Sanidad</option>
+                <option value="educacion">Educación</option>
+                <option value="mantenimiento">Mantenimiento</option>
+                <option value="agricultura">Agricultura y campo</option>
+                <option value="industria">Industria</option>
+                <option value="peluqueria">Peluquería y estética</option>
+                <option value="cuidado">Cuidado de personas</option>
+                <option value="marketing">Marketing</option>
+                <option value="domestico">Trabajo doméstico</option>
+                <option value="otros">Otros sectores</option>
+              </select>
+            </div>
+
+            <!-- 3. Toda España / Provincias -->
+            <div class="relative flex items-center">
               <i class="fa-solid fa-location-dot absolute left-3.5 text-slate-400"></i>
-              <select id="select-provincia" class="w-full pl-10 pr-4 py-3 bg-slate-50 rounded-xl text-sm text-slate-700 border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer">
+              <select id="select-provincia" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm text-slate-700 border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer">
                 <option value="">Toda España</option>
                 <option value="madrid">Madrid</option>
                 <option value="barcelona">Barcelona</option>
@@ -136,10 +164,13 @@
                 <option value="zaragoza">Zaragoza</option>
               </select>
             </div>
+
           </div>
 
-          <div class="flex flex-col sm:flex-row gap-3">
-            <!-- Municipio / Zona -->
+          <!-- Fila Secundaria: Municipios y Botón Buscar -->
+          <div class="flex flex-col sm:flex-row gap-3 pt-1">
+            
+            <!-- Municipio / Zona (Aparece si se elige provincia) -->
             <div id="container-municipio" class="flex-1 relative hidden flex items-center">
               <i class="fa-solid fa-map-pin absolute left-3.5 text-slate-400"></i>
               <select id="select-municipio" class="w-full pl-10 pr-4 py-3 bg-brand-50/50 border border-brand-200 rounded-xl text-sm text-slate-800 focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer">
@@ -147,7 +178,7 @@
               </select>
             </div>
 
-            <!-- Submit button -->
+            <!-- Botón Buscar -->
             <button type="button" id="btn-buscar" class="w-full sm:w-auto px-8 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 ml-auto">
               <span>Buscar ofertas</span>
               <i class="fa-solid fa-arrow-right"></i>
@@ -160,7 +191,56 @@
     </div>
   </section>
 
-  <!-- CATEGORIES SECTION WITH COLLAPSE / EXPAND -->
+  <!-- BANNER PRO / DESTACADO: PUBLICAR ANUNCIO Y BUSCAR EMPLEO -->
+  <section id="publicar" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- Tarjeta 1: Para Empleadores / Empresas -->
+      <div class="relative overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 sm:p-8 rounded-3xl shadow-xl flex flex-col justify-between group">
+        <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-brand-500/10 rounded-full blur-2xl group-hover:bg-brand-500/20 transition-all"></div>
+        <div class="space-y-3 relative z-10">
+          <div class="w-12 h-12 bg-brand-500/20 border border-brand-500/30 rounded-2xl flex items-center justify-center text-brand-400 text-xl font-bold">
+            <i class="fa-solid fa-bullhorn"></i>
+          </div>
+          <span class="inline-block px-3 py-1 bg-brand-500/20 text-brand-400 text-xs font-bold rounded-full uppercase tracking-wider">Para Particular o Empresa</span>
+          <h3 class="text-2xl font-black tracking-tight">¿Buscas personal o quieres publicar una oferta?</h3>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Publica tu anuncio en menos de 2 minutos y conecta de forma directa con cientos de candidatos interesados en tu zona.
+          </p>
+        </div>
+        <div class="pt-6 relative z-10">
+          <a href="login.html" class="inline-flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5">
+            <span>Publicar anuncio gratis</span>
+            <i class="fa-solid fa-plus"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Tarjeta 2: Para Buscadores de Empleo -->
+      <div class="relative overflow-hidden bg-gradient-to-br from-brand-600 to-emerald-700 text-white p-6 sm:p-8 rounded-3xl shadow-xl flex flex-col justify-between group">
+        <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-all"></div>
+        <div class="space-y-3 relative z-10">
+          <div class="w-12 h-12 bg-white/20 border border-white/30 rounded-2xl flex items-center justify-center text-white text-xl font-bold">
+            <i class="fa-solid fa-briefcase"></i>
+          </div>
+          <span class="inline-block px-3 py-1 bg-white/20 text-white text-xs font-bold rounded-full uppercase tracking-wider">Para Candidatos</span>
+          <h3 class="text-2xl font-black tracking-tight">¿Buscas trabajo rápido en tu localidad?</h3>
+          <p class="text-emerald-100 text-sm leading-relaxed">
+            Accede directamente a las ofertas publicadas en tiempo real sin procesos largos ni registros complicados.
+          </p>
+        </div>
+        <div class="pt-6 relative z-10">
+          <a href="#anuncios" class="inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-slate-100 text-slate-900 font-bold text-sm rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5">
+            <span>Explorar ofertas recientes</span>
+            <i class="fa-solid fa-arrow-down"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CATEGORIES SECTION WITH ACCORDION COLLAPSE -->
   <section id="categorias" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-2">
       <div>
@@ -178,7 +258,7 @@
     <!-- GRID DE CATEGORÍAS -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       
-      <!-- 1. Construcción (Siempre visible) -->
+      <!-- 1. Construcción -->
       <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
         <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shrink-0">
           <i class="fa-solid fa-helmet-safety"></i>
@@ -186,7 +266,7 @@
         <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Construcción y reformas</h3>
       </a>
 
-      <!-- 2. Limpieza (Siempre visible) -->
+      <!-- 2. Limpieza -->
       <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
         <div class="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-xl shrink-0">
           <i class="fa-solid fa-broom"></i>
@@ -194,7 +274,7 @@
         <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Limpieza</h3>
       </a>
 
-      <!-- 3. Hostelería (Siempre visible) -->
+      <!-- 3. Hostelería -->
       <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
         <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl shrink-0">
           <i class="fa-solid fa-utensils"></i>
@@ -202,7 +282,7 @@
         <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Hostelería y turismo</h3>
       </a>
 
-      <!-- 4. Transporte (Siempre visible) -->
+      <!-- 4. Transporte -->
       <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
         <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0">
           <i class="fa-solid fa-truck-fast"></i>
@@ -351,7 +431,7 @@
     <div id="contenedor-anuncios" class="space-y-4">
       
       <!-- Card 1 -->
-      <div class="p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4" data-provincia="madrid" data-municipio="pozuelo-de-alarcón">
+      <div class="p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4" data-provincia="madrid" data-categoria="construccion" data-municipio="pozuelo-de-alarcón">
         <div class="space-y-2">
           <div class="flex items-center gap-2">
             <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-amber-100 text-amber-800">Construcción</span>
@@ -369,7 +449,7 @@
       </div>
 
       <!-- Card 2 -->
-      <div class="p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4" data-provincia="barcelona" data-municipio="barcelona-capital">
+      <div class="p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4" data-provincia="barcelona" data-categoria="hosteleria" data-municipio="barcelona-capital">
         <div class="space-y-2">
           <div class="flex items-center gap-2">
             <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-rose-100 text-rose-800">Hostelería</span>
@@ -407,7 +487,7 @@
 
   <!-- SCRIPTS DE INTERACTIVIDAD -->
   <script>
-    // 1. LISTADO COMPLETO DE MUNICIPIOS POR PROVINCIA (MADRID EXPANDIDO)
+    // 1. LISTADO DE MUNICIPIOS
     const municipiosPorProvincia = {
       madrid: [
         "Madrid Centro", "Majadahonda", "Pozuelo de Alarcón", "Aravaca", 
@@ -438,7 +518,6 @@
     const containerMunicipio = document.getElementById('container-municipio');
     const selectMunicipio = document.getElementById('select-municipio');
 
-    // Cambiar lista de municipios al elegir provincia
     selectProvincia.addEventListener('change', (e) => {
       const provincia = e.target.value;
       
@@ -458,9 +537,10 @@
       }
     });
 
-    // 2. BUSCADOR INTERACTIVO
+    // 2. BUSCADOR FILTRADO
     document.getElementById('btn-buscar').addEventListener('click', () => {
       const provinciaVal = selectProvincia.value;
+      const categoriaVal = document.getElementById('select-categoria').value;
       const municipioVal = selectMunicipio.value;
       const keyword = document.getElementById('input-keyword').value.toLowerCase().trim();
 
@@ -468,21 +548,22 @@
       
       cards.forEach(card => {
         const cardProv = card.getAttribute('data-provincia');
+        const cardCat = card.getAttribute('data-categoria');
         const cardMuni = card.getAttribute('data-municipio');
         const text = card.textContent.toLowerCase();
 
         let matchProv = !provinciaVal || cardProv === provinciaVal;
+        let matchCat = !categoriaVal || cardCat === categoriaVal;
         let matchMuni = !municipioVal || cardMuni === municipioVal;
         let matchKw = !keyword || text.includes(keyword);
 
-        if (matchProv && matchMuni && matchKw) {
+        if (matchProv && matchCat && matchMuni && matchKw) {
           card.classList.remove('hidden');
         } else {
           card.classList.add('hidden');
         }
       });
 
-      // Mover suavemente hacia la sección de anuncios
       document.getElementById('anuncios').scrollIntoView({ behavior: 'smooth' });
     });
 
