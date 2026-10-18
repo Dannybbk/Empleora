@@ -1,26 +1,44 @@
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/main.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      const container = document.getElementById('ads-container');
-      
-      // Cliente blindado para evitar errores
-      const cliente = window.supabaseClient || window.supabase.createClient('https://ctkiiimazwpztekwfnrn.supabase.co', 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87');
+<main class="container" style="padding: 40px 0;">
+  <h1 style="color: var(--primary); margin-bottom: 24px;">Últimos anuncios publicados</h1>
+  
+  <!-- Contenedor obligatorio para los anuncios -->
+  <div id="ads-container" style="display: grid; gap: 20px;">
+    <p>Cargando anuncios...</p>
+  </div>
+</main>
 
-      if (!container) return;
+<!-- Scripts necesarios -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/main.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const container = document.getElementById('ads-container');
+    if (!container) return;
+
+    try {
+      // Usar el cliente global de Supabase de forma segura
+      const cliente = window.supabaseClient || (window.supabase && window.supabase.createClient('https://ctkiiimazwpztekwfnrn.supabase.co', 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87'));
+
+      if (!cliente) {
+        container.innerHTML = '<p>Error de configuración en el cliente de base de datos.</p>';
+        return;
+      }
 
       const { data: ads, error } = await cliente
         .from('ads')
-        .select('*');
+        .select('*')
+        .eq('status', 'approved')
+        .order('created_at', { ascending: false })
+        .limit(10);
 
       if (error) {
-        console.error('Error al obtener anuncios:', error);
-        container.innerHTML = '<p>No se pudieron cargar los anuncios.</p>';
+        console.error('Error de Supabase:', error);
+        container.innerHTML = '<p>No se pudieron cargar los anuncios en este momento.</p>';
         return;
       }
 
       if (!ads || ads.length === 0) {
-        container.innerHTML = '<p>No hay anuncios disponibles en este momento.</p>';
+        container.innerHTML = '<p>No hay anuncios publicados todavía.</p>';
         return;
       }
 
@@ -28,11 +46,16 @@
         <div class="ad-card" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:20px; text-align:left;">
           <h3 style="margin-bottom:8px; color:#1e293b;">${ad.title || ad.profession || 'Anuncio'}</h3>
           <div class="ad-meta" style="color:#64748b; font-size:14px; margin-bottom:12px;">
-            ${ad.category || 'General'} • ${ad.city || ad.province || 'España'}
+            ${ad.city || ad.province || 'España'} • ${new Date(ad.created_at).toLocaleDateString('es-ES')}
           </div>
-          <p class="ad-desc" style="color:#334155; margin-bottom:16px;">${ad.experience || ad.skills || ad.description || 'Sin descripción adicional'}</p>
+          <p class="ad-desc" style="color:#334155; margin-bottom:16px;">${ad.description ? ad.description.substring(0, 140) : ''}...</p>
           <a href="anuncio.html?id=${ad.id}" class="btn btn-outline">Ver anuncio</a>
         </div>
       `).join('');
-    });
-  </script>
+
+    } catch (err) {
+      console.error('Error inesperado:', err);
+      container.innerHTML = '<p>Ocurrió un error al cargar la página.</p>';
+    }
+  });
+</script>
