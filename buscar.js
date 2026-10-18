@@ -1,12 +1,16 @@
-// Configuración de Supabase integrada directamente
+// 1. Inicializar el cliente de Supabase correctamente usando la librería de la CDN
 const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
 
-// Inicializar cliente localmente en este archivo
+// Creamos la instancia oficial del cliente
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 async function loadCategories() {
-  const { data } = await supabaseClient.from('categories').select('*').order('name');
+  const { data, error } = await supabaseClient.from('categories').select('*').order('name');
+  if (error) {
+    console.error('Error al cargar categorías:', error);
+    return;
+  }
   const select = document.querySelector('select[name="categoria"]');
   if (select && data) {
     data.forEach(c => {
@@ -33,6 +37,12 @@ async function searchAds(params = {}) {
   const container = document.getElementById('results');
   const noResults = document.getElementById('no-results');
   if (container) container.innerHTML = '';
+
+  if (error) {
+    console.error('Error al buscar anuncios:', error);
+    if (noResults) noResults.style.display = 'block';
+    return;
+  }
 
   if (!data || data.length === 0) {
     if (noResults) noResults.style.display = 'block';
