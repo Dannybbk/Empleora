@@ -26,7 +26,6 @@
               500: '#22c55e',
               600: '#16a34a',
               700: '#15803d',
-              dark: '#0f172a',
             }
           }
         }
@@ -71,14 +70,14 @@
           <a href="login.html" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-600 transition-colors">
             Iniciar sesión
           </a>
-          <a href="login.html" class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 transition-all transform hover:-translate-y-0.5">
+          <a href="login.html" class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-lg shadow-brand-500/25 transition-all">
             Registrarse
           </a>
         </div>
 
         <!-- Mobile menu button -->
         <div class="md:hidden">
-          <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none">
+          <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100">
             <i class="fa-solid fa-bars text-xl"></i>
           </button>
         </div>
@@ -97,7 +96,7 @@
     </div>
   </header>
 
-  <!-- HERO SECTION -->
+  <!-- HERO SECTION WITH MULTI-LEVEL LOCATION SEARCH -->
   <section class="relative bg-gradient-to-b from-brand-50/60 via-slate-50 to-slate-50 pt-12 pb-16 px-4 sm:px-6 lg:px-8">
     <div class="max-w-4xl mx-auto text-center space-y-6">
       
@@ -110,243 +109,231 @@
       </h1>
       
       <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto">
-        Conectamos a profesionales con empresas e particulares en toda España de forma rápida, sencilla y sin intermediarios.
+        Conectamos a profesionales con empresas y particulares en toda España de forma rápida y directa.
       </p>
 
-      <!-- SEARCH BAR FORM -->
-      <div class="bg-white p-3 sm:p-4 rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200/80 mt-8 max-w-3xl mx-auto">
-        <form class="flex flex-col sm:flex-row gap-3">
-          <!-- Keyword input -->
-          <div class="flex-1 relative flex items-center">
-            <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-slate-400"></i>
-            <input type="text" placeholder="Puesto, oficio o palabra clave..." class="w-full pl-10 pr-4 py-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all">
-          </div>
+      <!-- SEARCH FORM WITH ANNESTED LOCATIONS -->
+      <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200/80 mt-8 max-w-3xl mx-auto">
+        <form class="flex flex-col gap-3">
           
-          <!-- Location select -->
-          <div class="sm:w-48 relative flex items-center">
-            <i class="fa-solid fa-location-dot absolute left-3.5 text-slate-400"></i>
-            <select class="w-full pl-10 pr-4 py-3 bg-slate-50 rounded-xl text-sm text-slate-700 border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer">
-              <option value="">Toda España</option>
-              <option value="madrid">Madrid</option>
-              <option value="barcelona">Barcelona</option>
-              <option value="valencia">Valencia</option>
-              <option value="sevilla">Sevilla</option>
-              <option value="zaragoza">Zaragoza</option>
-            </select>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <!-- Keyword input -->
+            <div class="flex-1 relative flex items-center">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-slate-400"></i>
+              <input type="text" placeholder="Puesto, oficio o palabra clave..." class="w-full pl-10 pr-4 py-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all">
+            </div>
+
+            <!-- Provincia / Ciudad Principal -->
+            <div class="sm:w-1/3 relative flex items-center">
+              <i class="fa-solid fa-location-dot absolute left-3.5 text-slate-400"></i>
+              <select id="select-provincia" class="w-full pl-10 pr-4 py-3 bg-slate-50 rounded-xl text-sm text-slate-700 border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer">
+                <option value="">Toda España</option>
+                <option value="madrid">Madrid</option>
+                <option value="barcelona">Barcelona</option>
+                <option value="valencia">Valencia</option>
+                <option value="sevilla">Sevilla</option>
+                <option value="malaga">Málaga</option>
+                <option value="zaragoza">Zaragoza</option>
+              </select>
+            </div>
           </div>
 
-          <!-- Submit button -->
-          <button type="button" class="w-full sm:w-auto px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
-            <span>Buscar</span>
-            <i class="fa-solid fa-arrow-right"></i>
-          </button>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <!-- Municipio / Zona (Aparece al seleccionar provincia o está activo) -->
+            <div id="container-municipio" class="flex-1 relative hidden flex items-center">
+              <i class="fa-solid fa-map-pin absolute left-3.5 text-slate-400"></i>
+              <select id="select-municipio" class="w-full pl-10 pr-4 py-3 bg-brand-50/50 border border-brand-200 rounded-xl text-sm text-slate-800 focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer">
+                <option value="">Todas las zonas / municipios</option>
+              </select>
+            </div>
+
+            <!-- Submit button -->
+            <button type="button" class="w-full sm:w-auto px-8 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 ml-auto">
+              <span>Buscar ofertas</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
         </form>
       </div>
 
     </div>
   </section>
 
-  <!-- CATEGORIES SECTION -->
+  <!-- CATEGORIES SECTION WITH COLLAPSE / EXPAND -->
   <section id="categorias" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-2">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-2">
       <div>
         <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Categorías profesionales</h2>
-        <p class="text-slate-500 text-sm mt-1">Explora las ofertas organizadas por sector de actividad</p>
+        <p class="text-slate-500 text-sm mt-1">Explora las áreas de empleo disponibles</p>
       </div>
+
+      <!-- BOTÓN PARA MOSTRAR / OCULTAR TODAS -->
+      <button id="btn-toggle-categorias" class="px-4 py-2 bg-white border border-slate-200 hover:border-brand-500 text-brand-700 font-bold text-sm rounded-xl shadow-sm hover:shadow transition-all flex items-center gap-2">
+        <span id="txt-toggle">Ver todas las categorías</span>
+        <i id="icon-toggle" class="fa-solid fa-chevron-down transition-transform"></i>
+      </button>
     </div>
 
-    <!-- 19 CATEGORIES GRID -->
+    <!-- GRID DE CATEGORÍAS -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       
-      <!-- 1. Construcción -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+      <!-- 1. Construcción (Siempre visible) -->
+      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shrink-0">
           <i class="fa-solid fa-helmet-safety"></i>
         </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Construcción y reformas</h3>
-        </div>
+        <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Construcción y reformas</h3>
       </a>
 
-      <!-- 2. Limpieza -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+      <!-- 2. Limpieza (Siempre visible) -->
+      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-xl shrink-0">
           <i class="fa-solid fa-broom"></i>
         </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Limpieza</h3>
-        </div>
+        <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Limpieza</h3>
       </a>
 
-      <!-- 3. Hostelería -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+      <!-- 3. Hostelería (Siempre visible) -->
+      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl shrink-0">
           <i class="fa-solid fa-utensils"></i>
         </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Hostelería y turismo</h3>
-        </div>
+        <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Hostelería y turismo</h3>
       </a>
 
-      <!-- 4. Transporte -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
+      <!-- 4. Transporte (Siempre visible) -->
+      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0">
           <i class="fa-solid fa-truck-fast"></i>
         </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Transporte y conducción</h3>
-        </div>
+        <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Transporte y conducción</h3>
       </a>
 
-      <!-- 5. Logística -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-boxes-packing"></i>
-        </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Logística y almacén</h3>
-        </div>
-      </a>
+      <!-- CATEGORÍAS OCULTAS INICIALMENTE -->
+      <div id="categorias-extra" class="contents hidden">
+        
+        <!-- 5. Logística -->
+        <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-boxes-packing"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Logística y almacén</h3>
+        </a>
 
-      <!-- 6. Administración -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-clipboard-check"></i>
-        </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Administración y oficina</h3>
-        </div>
-      </a>
+        <!-- 6. Administración -->
+        <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-clipboard-check"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Administración y oficina</h3>
+        </a>
 
-      <!-- 7. Comercio -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-bag-shopping"></i>
-        </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Comercio y ventas</h3>
-        </div>
-      </a>
+        <!-- 7. Comercio -->
+        <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-pink-50 text-pink-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-bag-shopping"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Comercio y ventas</h3>
+        </a>
 
-      <!-- 8. Atención al cliente -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-headset"></i>
-        </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Atención al cliente</h3>
-        </div>
-      </a>
+        <!-- 8. Atención al cliente -->
+        <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-headset"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Atención al cliente</h3>
+        </a>
 
-      <!-- 9. Informática -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-laptop-code"></i>
-        </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Informática y tecnología</h3>
-        </div>
-      </a>
+        <!-- 9. Informática -->
+        <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-laptop-code"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Informática y tecnología</h3>
+        </a>
 
-      <!-- 10. Sanidad -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-hospital"></i>
-        </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Sanidad</h3>
-        </div>
-      </a>
+        <!-- 10. Sanidad -->
+        <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-hospital"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Sanidad</h3>
+        </a>
 
-      <!-- 11. Educación -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-graduation-cap"></i>
-        </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Educación</h3>
-        </div>
-      </a>
+        <!-- 11. Educación -->
+        <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Educación</h3>
+        </a>
 
-      <!-- 12. Mantenimiento -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-wrench"></i>
-        </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Mantenimiento</h3>
-        </div>
-      </a>
+        <!-- 12. Mantenimiento -->
+        <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-wrench"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Mantenimiento</h3>
+        </a>
 
-      <!-- 13. Agricultura -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-lime-50 text-lime-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-wheat-awn"></i>
-        </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Agricultura y campo</h3>
-        </div>
-      </a>
+        <!-- 13. Agricultura -->
+        <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-lime-50 text-lime-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-wheat-awn"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Agricultura y campo</h3>
+        </a>
 
-      <!-- 14. Industria -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-zinc-100 text-zinc-700 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-industry"></i>
-        </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Industria</h3>
-        </div>
-      </a>
+        <!-- 14. Industria -->
+        <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-zinc-100 text-zinc-700 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-industry"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Industria</h3>
+        </a>
 
-      <!-- 15. Peluquería -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-fuchsia-50 text-fuchsia-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-scissors"></i>
-        </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Peluquería y estética</h3>
-        </div>
-      </a>
+        <!-- 15. Peluquería -->
+        <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-fuchsia-50 text-fuchsia-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-scissors"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Peluquería y estética</h3>
+        </a>
 
-      <!-- 16. Cuidado de personas -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-red-50 text-red-500 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-heart"></i>
-        </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Cuidado de personas</h3>
-        </div>
-      </a>
+        <!-- 16. Cuidado de personas -->
+        <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-red-50 text-red-500 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-heart"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Cuidado de personas</h3>
+        </a>
 
-      <!-- 17. Marketing -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-yellow-50 text-yellow-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-bullhorn"></i>
-        </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Marketing</h3>
-        </div>
-      </a>
+        <!-- 17. Marketing -->
+        <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-yellow-50 text-yellow-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-bullhorn"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Marketing</h3>
+        </a>
 
-      <!-- 18. Trabajo doméstico -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg hover:shadow-brand-500/5 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-house-user"></i>
-        </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 transition-colors text-sm sm:text-base truncate">Trabajo doméstico</h3>
-        </div>
-      </a>
+        <!-- 18. Trabajo doméstico -->
+        <a href="#" class="group p-4 bg-white rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-lg transition-all flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-house-user"></i>
+          </div>
+          <h3 class="font-bold text-slate-800 group-hover:text-brand-600 text-sm sm:text-base">Trabajo doméstico</h3>
+        </a>
 
-      <!-- 19. Otros sectores -->
-      <a href="#" class="group p-4 bg-white rounded-2xl border-2 border-dashed border-brand-500/40 hover:border-brand-500 hover:bg-brand-50/30 transition-all flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform">
-          <i class="fa-solid fa-plus"></i>
-        </div>
-        <div class="overflow-hidden">
-          <h3 class="font-bold text-brand-700 transition-colors text-sm sm:text-base truncate">Otros sectores</h3>
-        </div>
-      </a>
+        <!-- 19. Otros sectores -->
+        <a href="#" class="group p-4 bg-white rounded-2xl border-2 border-dashed border-brand-500/40 hover:border-brand-500 hover:bg-brand-50/30 transition-all flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-plus"></i>
+          </div>
+          <h3 class="font-bold text-brand-700 text-sm sm:text-base">Otros sectores</h3>
+        </a>
+
+      </div>
 
     </div>
   </section>
@@ -372,7 +359,7 @@
           </div>
           <h3 class="text-lg font-bold text-slate-900">Oficial de 1ª de Albañilería para Reformas</h3>
           <p class="text-sm text-slate-600 flex items-center gap-4">
-            <span><i class="fa-solid fa-location-dot text-slate-400"></i> Madrid Centro</span>
+            <span><i class="fa-solid fa-location-dot text-slate-400"></i> Madrid (Pozuelo de Alarcón)</span>
             <span><i class="fa-solid fa-euro-sign text-slate-400"></i> 1.800€ - 2.200€ / mes</span>
           </p>
         </div>
@@ -418,13 +405,84 @@
     </div>
   </footer>
 
-  <!-- Script para menú móvil -->
+  <!-- SCRIPTS DE INTERACTIVIDAD -->
   <script>
-    const btn = document.getElementById('mobile-menu-btn');
-    const menu = document.getElementById('mobile-menu');
+    // 1. DICCIONARIO DE MUNICIPIOS POR PROVINCIA
+    const municipiosPorProvincia = {
+      madrid: [
+        "Madrid Centro", "Majadahonda", "Pozuelo de Alarcón", "Aravaca", 
+        "Alcorcón", "Móstoles", "Fuenlabrada", "Getafe", "Leganés", 
+        "Las Rozas", "Alcobendas", "San Sebastián de los Reyes", "Alcalá de Henares"
+      ],
+      barcelona: [
+        "Barcelona Capital", "Hospitalet de Llobregat", "Badalona", 
+        "Sabadell", "Terrassa", "Sant Cugat del Vallès", "Mataró"
+      ],
+      valencia: [
+        "Valencia Capital", "Torrent", "Gandía", "Paterna", "Sagunto", "Mislata"
+      ],
+      sevilla: [
+        "Sevilla Capital", "Dos Hermanas", "Alcalá de Guadaíra", "Utrera", "Mairena del Aljarafe"
+      ],
+      malaga: [
+        "Málaga Capital", "Marbella", "Mijas", "Fuengirola", "Torremolinos", "Estepona"
+      ],
+      zaragoza: [
+        "Zaragoza Capital", "Calatayud", "Utebo", "Ejea de los Caballeros"
+      ]
+    };
 
-    btn.addEventListener('click', () => {
-      menu.classList.toggle('hidden');
+    const selectProvincia = document.getElementById('select-provincia');
+    const containerMunicipio = document.getElementById('container-municipio');
+    const selectMunicipio = document.getElementById('select-municipio');
+
+    // Escuchar cambio de provincia
+    selectProvincia.addEventListener('change', (e) => {
+      const provincia = e.target.value;
+      
+      if (provincia && municipiosPorProvincia[provincia]) {
+        // Limpiar opciones previas
+        selectMunicipio.innerHTML = '<option value="">Todas las zonas / municipios</option>';
+        
+        // Agregar zonas/municipios
+        municipiosPorProvincia[provincia].forEach(muni => {
+          const opt = document.createElement('option');
+          opt.value = muni.toLowerCase().replace(/\s+/g, '-');
+          opt.textContent = muni;
+          selectMunicipio.appendChild(opt);
+        });
+
+        // Mostrar selector de municipios
+        containerMunicipio.classList.remove('hidden');
+      } else {
+        containerMunicipio.classList.add('hidden');
+      }
+    });
+
+    // 2. MOSTRAR / OCULTAR CATEGORÍAS
+    const btnToggleCat = document.getElementById('btn-toggle-categorias');
+    const catExtra = document.getElementById('categorias-extra');
+    const txtToggle = document.getElementById('txt-toggle');
+    const iconToggle = document.getElementById('icon-toggle');
+
+    btnToggleCat.addEventListener('click', () => {
+      const hidden = catExtra.classList.contains('hidden');
+      if (hidden) {
+        catExtra.classList.remove('hidden');
+        txtToggle.textContent = 'Ocultar categorías';
+        iconToggle.classList.add('rotate-180');
+      } else {
+        catExtra.classList.add('hidden');
+        txtToggle.textContent = 'Ver todas las categorías';
+        iconToggle.classList.remove('rotate-180');
+      }
+    });
+
+    // 3. MENÚ MÓVIL
+    const btnMobile = document.getElementById('mobile-menu-btn');
+    const menuMobile = document.getElementById('mobile-menu');
+    btnMobile.addEventListener('click', () => {
+      menuMobile.classList.toggle('hidden');
     });
   </script>
 </body>
