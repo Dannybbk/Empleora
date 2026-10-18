@@ -124,7 +124,7 @@
               <input type="text" id="input-keyword" placeholder="¿Qué trabajo buscas?" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all">
             </div>
 
-            <!-- 2. CATEGORÍAS INTEGRADO EN EL BUSCADOR -->
+            <!-- 2. TODAS LAS CATEGORÍAS INTEGRADO EN EL BUSCADOR -->
             <div class="relative flex items-center">
               <i class="fa-solid fa-layer-group absolute left-3.5 text-slate-400"></i>
               <select id="select-categoria" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm text-slate-700 border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer font-medium">
@@ -156,26 +156,26 @@
               <i class="fa-solid fa-location-dot absolute left-3.5 text-slate-400"></i>
               <select id="select-provincia" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm text-slate-700 border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer font-medium">
                 <option value="">Toda España</option>
-                <option value="madrid">Madrid</option>
-                <option value="barcelona">Barcelona</option>
-                <option value="valencia">Valencia</option>
-                <option value="sevilla">Sevilla</option>
-                <option value="zaragoza">Zaragoza</option>
-                <option value="malaga">Málaga</option>
-                <option value="murcia">Murcia</option>
-                <option value="palma">Palma de Mallorca</option>
-                <option value="las-palmas">Las Palmas de Gran Canaria</option>
-                <option value="bilbao">Bilbao</option>
-                <option value="alicante">Alicante</option>
-                <option value="cordoba">Córdoba</option>
-                <option value="valladolid">Valladolid</option>
-                <option value="vigo">Vigo</option>
-                <option value="gijon">Gijón</option>
-                <option value="granada">Granada</option>
-                <option value="coruna">A Coruña</option>
-                <option value="san-sebastian">San Sebastián</option>
-                <option value="santander">Santander</option>
-                <option value="toledo">Toledo</option>
+                <option value="madrid">1. Madrid</option>
+                <option value="toledo">2. Toledo</option>
+                <option value="barcelona">3. Barcelona</option>
+                <option value="valencia">4. Valencia</option>
+                <option value="sevilla">5. Sevilla</option>
+                <option value="zaragoza">6. Zaragoza</option>
+                <option value="malaga">7. Málaga</option>
+                <option value="murcia">8. Murcia</option>
+                <option value="palma">9. Palma de Mallorca</option>
+                <option value="bilbao">10. Bilbao</option>
+                <option value="alicante">11. Alicante</option>
+                <option value="cordoba">12. Córdoba</option>
+                <option value="valladolid">13. Valladolid</option>
+                <option value="vigo">14. Vigo</option>
+                <option value="gijon">15. Gijón</option>
+                <option value="granada">16. Granada</option>
+                <option value="coruna">17. A Coruña</option>
+                <option value="san-sebastian">18. San Sebastián</option>
+                <option value="santander">19. Santander</option>
+                <option value="las-palmas">20. Las Palmas de Gran Canaria</option>
               </select>
             </div>
 
@@ -324,7 +324,7 @@
       </div>
 
       <!-- Card 2 -->
-      <div class="p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4" data-provincia="barcelona" data-categoria="hosteleria" data-municipio="barcelona-capital">
+      <div class="p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4" data-provincia="barcelona" data-categoria="hosteleria" data-municipio="hospitalet-de-llobregat">
         <div class="space-y-2">
           <div class="flex items-center gap-2">
             <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-rose-100 text-rose-800">Hostelería</span>
@@ -332,7 +332,7 @@
           </div>
           <h3 class="text-lg font-bold text-slate-900">Camarero/a de Sala para Restaurante</h3>
           <p class="text-sm text-slate-600 flex items-center gap-4">
-            <span><i class="fa-solid fa-location-dot text-slate-400"></i> Barcelona (Eixample)</span>
+            <span><i class="fa-solid fa-location-dot text-slate-400"></i> Barcelona (L'Hospitalet)</span>
             <span><i class="fa-solid fa-clock text-slate-400"></i> Jornada Completa</span>
           </p>
         </div>
@@ -360,72 +360,95 @@
     </div>
   </footer>
 
-  <!-- SCRIPTS DE INTERACTIVIDAD Y MUNICIPIOS DE LAS 20 CIUDADES -->
+  <!-- SCRIPTS DE INTERACTIVIDAD CON LAS 20 CIUDADES Y SUS MUNICIPIOS EXACTOS -->
   <script>
-    // DICCIONARIO COMPLETO DE LAS 20 CIUDADES PRINCIPALES Y SUS MUNICIPIOS/ALREDEDORES
     const municipiosPorProvincia = {
       madrid: [
-        "Madrid Centro", "Majadahonda", "Pozuelo de Alarcón", "Aravaca", 
-        "Alcorcón", "Móstoles", "Fuenlabrada", "Getafe", "Leganés", 
-        "Las Rozas", "Alcobendas", "San Sebastián de los Reyes", "Alcalá de Henares", "Parla"
-      ],
-      barcelona: [
-        "Barcelona Capital", "Hospitalet de Llobregat", "Badalona", 
-        "Sabadell", "Terrassa", "Sant Cugat del Vallès", "Mataró", "Cornellà de Llobregat", "Santa Coloma"
-      ],
-      valencia: [
-        "Valencia Capital", "Torrent", "Gandía", "Paterna", "Sagunto", "Mislata", "Alzira", "Burjassot"
-      ],
-      sevilla: [
-        "Sevilla Capital", "Dos Hermanas", "Alcalá de Guadaíra", "Utrera", "Mairena del Aljarafe", "Écija"
-      ],
-      zaragoza: [
-        "Zaragoza Capital", "Calatayud", "Utebo", "Ejea de los Caballeros", "Tarazona"
-      ],
-      malaga: [
-        "Málaga Capital", "Marbella", "Mijas", "Fuengirola", "Torremolinos", "Estepona", "Benalmádena", "Antequera"
-      ],
-      murcia: [
-        "Murcia Capital", "Cartagena", "Lorca", "Molina de Segura", "Alcantarilla", "Cieza"
-      ],
-      palma: [
-        "Palma de Mallorca", "Calvià", "Manacor", "Llucmajor", "Marratxí", "Inca"
-      ],
-      "las-palmas": [
-        "Las Palmas de Gran Canaria", "Telde", "Santa Lucía de Tirajana", "Arrecife", "Puerto del Rosario", "Arucas"
-      ],
-      bilbao: [
-        "Bilbao Capital", "Barakaldo", "Getxo", "Portugalete", "Santurtzi", "Basauri", "Leioa"
-      ],
-      alicante: [
-        "Alicante Capital", "Elche", "Torrevieja", "Orihuela", "Benidorm", "Elda", "Alcoy", "San Vicente del Raspeig"
-      ],
-      cordoba: [
-        "Córdoba Capital", "Lucena", "Puente Genil", "Montilla", "Priego de Córdoba", "Palma del Río"
-      ],
-      valladolid: [
-        "Valladolid Capital", "Laguna de Duero", "Medina del Campo", "Arroyo de la Encomienda", "Tordesillas"
-      ],
-      vigo: [
-        "Vigo Capital", "Pontevedra", "Vilagarcía de Arousa", "Redondela", "Cangas", "Marín"
-      ],
-      gijon: [
-        "Gijón", "Oviedo", "Avilés", "Siero", "Langreo", "Mieres"
-      ],
-      granada: [
-        "Granada Capital", "Motril", "Almuñécar", "Armilla", "Maracena", "Baza", "Loja"
-      ],
-      coruna: [
-        "A Coruña Capital", "Santiago de Compostela", "Ferrol", "Narón", "Oleiros", "Carballo"
-      ],
-      "san-sebastian": [
-        "San Sebastián (Donostia)", "Irun", "Rentería (Errenteria)", "Eibar", "Zarautz", "Mondragón (Arrasate)"
-      ],
-      santander: [
-        "Santander Capital", "Torrelavega", "Castro-Urdiales", "Camargo", "Piélagos"
+        "Alcobendas", "San Sebastián de los Reyes", "Pozuelo de Alarcón", "Majadahonda", 
+        "Las Rozas de Madrid", "Boadilla del Monte", "Alcorcón", "Móstoles", "Fuenlabrada", 
+        "Leganés", "Getafe", "Parla", "Pinto", "Valdemoro", "Aranjuez", "Coslada", 
+        "San Fernando de Henares", "Torrejón de Ardoz", "Alcalá de Henares", "Rivas-Vaciamadrid", 
+        "Tres Cantos", "Colmenar Viejo", "Collado Villalba"
       ],
       toledo: [
-        "Toledo Capital", "Talavera de la Reina", "Illescas", "Seseña", "Torrijos", "Quintanar de la Orden"
+        "Olías del Rey", "Bargas", "Cobisa", "Argés", "Nambroca", "Burguillos de Toledo", 
+        "Mocejón", "Magán", "Guadamur", "Polán", "Sonseca", "Torrijos", "Illescas", 
+        "Seseña", "Yuncos", "Ocaña", "Talavera de la Reina", "Consuegra"
+      ],
+      barcelona: [
+        "L'Hospitalet de Llobregat", "Badalona", "Santa Coloma de Gramenet", "Sant Adrià de Besòs", 
+        "Cornellà de Llobregat", "El Prat de Llobregat", "Esplugues de Llobregat", "Sant Just Desvern", 
+        "Sant Cugat del Vallès", "Cerdanyola del Vallès", "Sabadell", "Terrassa", "Granollers", "Mataró"
+      ],
+      valencia: [
+        "Torrent", "Paterna", "Mislata", "Burjassot", "Quart de Poblet", "Manises", 
+        "Aldaia", "Alaquàs", "Xirivella", "Catarroja", "Alfafar", "Silla", "Paiporta", 
+        "Picanya", "Moncada", "Bétera", "Sagunto"
+      ],
+      sevilla: [
+        "Dos Hermanas", "Alcalá de Guadaíra", "Mairena del Aljarafe", "Tomares", "Camas", 
+        "San Juan de Aznalfarache", "Bormujos", "La Rinconada", "Coria del Río", "Gelves", 
+        "Gines", "Espartinas", "Utrera", "Carmona"
+      ],
+      zaragoza: [
+        "Utebo", "Cuarte de Huerva", "María de Huerva", "La Puebla de Alfindén", 
+        "Villanueva de Gállego", "Zuera", "Cadrete", "La Muela", "Pinseque", "Épila", "La Almunia de Doña Godina"
+      ],
+      malaga: [
+        "Torremolinos", "Benalmádena", "Fuengirola", "Mijas", "Marbella", "Estepona", 
+        "Rincón de la Victoria", "Vélez-Málaga", "Alhaurín de la Torre", "Alhaurín el Grande", "Cártama", "Antequera"
+      ],
+      murcia: [
+        "Alcantarilla", "Molina de Segura", "Las Torres de Cotillas", "Santomera", 
+        "Beniel", "Archena", "Ceutí", "Lorquí", "Alguazas", "Cieza", "Cartagena", "San Javier"
+      ],
+      palma: [
+        "Marratxí", "Calvià", "Llucmajor", "Bunyola", "Esporles", "Valldemossa", 
+        "Andratx", "Santa María del Camí", "Algaida", "Sóller"
+      ],
+      bilbao: [
+        "Barakaldo", "Getxo", "Portugalete", "Santurtzi", "Sestao", "Basauri", 
+        "Galdakao", "Leioa", "Erandio", "Sondika", "Derio", "Durango"
+      ],
+      alicante: [
+        "San Vicente del Raspeig", "Sant Joan d'Alacant", "Mutxamel", "El Campello", 
+        "Elche", "Santa Pola", "San Juan de Alicante", "Villajoyosa", "Benidorm", "Elda", "Petrer", "Novelda"
+      ],
+      cordoba: [
+        "Almodóvar del Río", "La Carlota", "Villafranca de Córdoba", "El Carpio", 
+        "Montoro", "Palma del Río", "Posadas", "Fernán-Núñez", "Montilla", "Puente Genil"
+      ],
+      valladolid: [
+        "Laguna de Duero", "Arroyo de la Encomienda", "La Cistérniga", "Zaratán", 
+        "Simancas", "Tudela de Duero", "Cigales", "Santovenia de Pisuerga", "Cabezón de Pisuerga", "Medina del Campo"
+      ],
+      vigo: [
+        "Redondela", "Mos", "O Porriño", "Nigrán", "Baiona", "Gondomar", 
+        "Cangas", "Moaña", "Ponteareas", "Tui"
+      ],
+      gijon: [
+        "Avilés", "Villaviciosa", "Carreño", "Gozón", "Siero", "Llanera", 
+        "Corvera de Asturias", "Langreo", "Mieres"
+      ],
+      granada: [
+        "Armilla", "Maracena", "La Zubia", "Ogíjares", "Huétor Vega", "Albolote", 
+        "Atarfe", "Peligros", "Churriana de la Vega", "Las Gabias", "Santa Fe", "Cúllar Vega"
+      ],
+      coruna: [
+        "Oleiros", "Arteixo", "Culleredo", "Cambre", "Bergondo", "Sada", 
+        "Betanzos", "Carral", "Abegondo"
+      ],
+      "san-sebastian": [
+        "Pasaia", "Errenteria", "Hernani", "Astigarraga", "Lasarte-Oria", 
+        "Usurbil", "Oiartzun", "Hondarribia", "Irun", "Zarautz"
+      ],
+      santander: [
+        "Camargo", "El Astillero", "Santa Cruz de Bezana", "Piélagos", 
+        "Marina de Cudeyo", "Villaescusa", "Miengo", "Torrelavega", "Santoña", "Laredo"
+      ],
+      "las-palmas": [
+        "Telde", "Arucas", "Santa Brígida", "Teror", "Firgas", "Valsequillo", 
+        "Ingenio", "Agüimes", "Gáldar", "Santa María de Guía"
       ]
     };
 
@@ -433,7 +456,7 @@
     const containerMunicipio = document.getElementById('container-municipio');
     const selectMunicipio = document.getElementById('select-municipio');
 
-    // Cargar municipios de la ciudad elegida
+    // Cargar los municipios correspondientes a la ciudad elegida
     selectProvincia.addEventListener('change', (e) => {
       const provincia = e.target.value;
       
