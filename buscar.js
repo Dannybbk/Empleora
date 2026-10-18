@@ -1,12 +1,7 @@
-// 1. Inicializar el cliente de Supabase correctamente usando la librería de la CDN
-const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
-
-// Creamos la instancia oficial del cliente
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
 async function loadCategories() {
-  const { data, error } = await supabaseClient.from('categories').select('*').order('name');
+  const cliente = window.supabaseClient || window.supabase.createClient('https://ctkiiimazwpztekwfnrn.supabase.co', 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87');
+  
+  const { data, error } = await cliente.from('categories').select('*').order('name');
   if (error) {
     console.error('Error al cargar categorías:', error);
     return;
@@ -23,7 +18,9 @@ async function loadCategories() {
 }
 
 async function searchAds(params = {}) {
-  let query = supabaseClient.from('ads')
+  const cliente = window.supabaseClient || window.supabase.createClient('https://ctkiiimazwpztekwfnrn.supabase.co', 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87');
+
+  let query = cliente.from('ads')
     .select('id, title, profession, city, province, description, created_at, categories(name)')
     .eq('status', 'approved')
     .order('created_at', { ascending: false })
