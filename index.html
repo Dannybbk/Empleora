@@ -124,7 +124,7 @@
               <input type="text" id="input-keyword" placeholder="¿Qué trabajo buscas?" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all">
             </div>
 
-            <!-- 2. TODAS LAS CATEGORÍAS INTEGRADO EN EL BUSCADOR -->
+            <!-- 2. CATEGORÍAS INTEGRADO EN EL BUSCADOR -->
             <div class="relative flex items-center">
               <i class="fa-solid fa-layer-group absolute left-3.5 text-slate-400"></i>
               <select id="select-categoria" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm text-slate-700 border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer font-medium">
@@ -151,7 +151,7 @@
               </select>
             </div>
 
-            <!-- 3. CIUDADES DE ESPAÑA (AMPLIADO CON CIUDADES SOLICITADAS) -->
+            <!-- 3. LAS 20 CIUDADES MÁS IMPORTANTES DE ESPAÑA -->
             <div class="relative flex items-center">
               <i class="fa-solid fa-location-dot absolute left-3.5 text-slate-400"></i>
               <select id="select-provincia" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm text-slate-700 border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer font-medium">
@@ -160,16 +160,22 @@
                 <option value="barcelona">Barcelona</option>
                 <option value="valencia">Valencia</option>
                 <option value="sevilla">Sevilla</option>
-                <option value="malaga">Málaga</option>
                 <option value="zaragoza">Zaragoza</option>
-                <option value="almeria">Almería</option>
-                <option value="huelva">Huelva</option>
-                <option value="toledo">Toledo</option>
-                <option value="salamanca">Salamanca</option>
+                <option value="malaga">Málaga</option>
+                <option value="murcia">Murcia</option>
+                <option value="palma">Palma de Mallorca</option>
+                <option value="las-palmas">Las Palmas de Gran Canaria</option>
+                <option value="bilbao">Bilbao</option>
+                <option value="alicante">Alicante</option>
+                <option value="cordoba">Córdoba</option>
                 <option value="valladolid">Valladolid</option>
-                <option value="caceres">Cáceres</option>
-                <option value="badajoz">Badajoz</option>
-                <option value="castellon">Castellón</option>
+                <option value="vigo">Vigo</option>
+                <option value="gijon">Gijón</option>
+                <option value="granada">Granada</option>
+                <option value="coruna">A Coruña</option>
+                <option value="san-sebastian">San Sebastián</option>
+                <option value="santander">Santander</option>
+                <option value="toledo">Toledo</option>
               </select>
             </div>
 
@@ -178,10 +184,10 @@
           <!-- Fila Secundaria: Municipios y Alrededores -->
           <div class="flex flex-col sm:flex-row gap-3 pt-1">
             
-            <!-- Municipio / Alrededores -->
+            <!-- Municipio / Alrededores (Aparece al seleccionar la ciudad) -->
             <div id="container-municipio" class="flex-1 relative hidden flex items-center">
               <i class="fa-solid fa-map-pin absolute left-3.5 text-slate-400"></i>
-              <select id="select-municipio" class="w-full pl-10 pr-4 py-3 bg-brand-50/50 border border-brand-200 rounded-xl text-sm text-slate-800 focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer">
+              <select id="select-municipio" class="w-full pl-10 pr-4 py-3 bg-brand-50/50 border border-brand-200 rounded-xl text-sm text-slate-800 focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer font-medium">
                 <option value="">Todos los municipios y alrededores</option>
               </select>
             </div>
@@ -354,9 +360,9 @@
     </div>
   </footer>
 
-  <!-- SCRIPTS DE INTERACTIVIDAD Y MUNICIPIOS DE ESPAÑA -->
+  <!-- SCRIPTS DE INTERACTIVIDAD Y MUNICIPIOS DE LAS 20 CIUDADES -->
   <script>
-    // DICCIONARIO COMPLETO DE PROVINCIAS Y SUS MUNICIPIOS PRINCIPALES / ALREDEDORES
+    // DICCIONARIO COMPLETO DE LAS 20 CIUDADES PRINCIPALES Y SUS MUNICIPIOS/ALREDEDORES
     const municipiosPorProvincia = {
       madrid: [
         "Madrid Centro", "Majadahonda", "Pozuelo de Alarcón", "Aravaca", 
@@ -365,43 +371,61 @@
       ],
       barcelona: [
         "Barcelona Capital", "Hospitalet de Llobregat", "Badalona", 
-        "Sabadell", "Terrassa", "Sant Cugat del Vallès", "Mataró", "Cornella"
+        "Sabadell", "Terrassa", "Sant Cugat del Vallès", "Mataró", "Cornellà de Llobregat", "Santa Coloma"
       ],
       valencia: [
-        "Valencia Capital", "Torrent", "Gandía", "Paterna", "Sagunto", "Mislata", "Alzira"
+        "Valencia Capital", "Torrent", "Gandía", "Paterna", "Sagunto", "Mislata", "Alzira", "Burjassot"
       ],
       sevilla: [
-        "Sevilla Capital", "Dos Hermanas", "Alcalá de Guadaíra", "Utrera", "Mairena del Aljarafe"
-      ],
-      malaga: [
-        "Málaga Capital", "Marbella", "Mijas", "Fuengirola", "Torremolinos", "Estepona", "Benalmádena"
+        "Sevilla Capital", "Dos Hermanas", "Alcalá de Guadaíra", "Utrera", "Mairena del Aljarafe", "Écija"
       ],
       zaragoza: [
-        "Zaragoza Capital", "Calatayud", "Utebo", "Ejea de los Caballeros"
+        "Zaragoza Capital", "Calatayud", "Utebo", "Ejea de los Caballeros", "Tarazona"
       ],
-      almeria: [
-        "Almería Capital", "Roquetas de Mar", "El Ejido", "Níjar", "Vícar", "Adra"
+      malaga: [
+        "Málaga Capital", "Marbella", "Mijas", "Fuengirola", "Torremolinos", "Estepona", "Benalmádena", "Antequera"
       ],
-      huelva: [
-        "Huelva Capital", "Lepe", "Almonte", "Moguer", "Isla Cristina", "Ayamonte"
+      murcia: [
+        "Murcia Capital", "Cartagena", "Lorca", "Molina de Segura", "Alcantarilla", "Cieza"
       ],
-      toledo: [
-        "Toledo Capital", "Talavera de la Reina", "Illescas", "Seseña", "Torrijos", "Quintanar de la Orden"
+      palma: [
+        "Palma de Mallorca", "Calvià", "Manacor", "Llucmajor", "Marratxí", "Inca"
       ],
-      salamanca: [
-        "Salamanca Capital", "Béjar", "Ciudad Rodrigo", "Santa Marta de Tormes", "Peñaranda de Bracamonte"
+      "las-palmas": [
+        "Las Palmas de Gran Canaria", "Telde", "Santa Lucía de Tirajana", "Arrecife", "Puerto del Rosario", "Arucas"
+      ],
+      bilbao: [
+        "Bilbao Capital", "Barakaldo", "Getxo", "Portugalete", "Santurtzi", "Basauri", "Leioa"
+      ],
+      alicante: [
+        "Alicante Capital", "Elche", "Torrevieja", "Orihuela", "Benidorm", "Elda", "Alcoy", "San Vicente del Raspeig"
+      ],
+      cordoba: [
+        "Córdoba Capital", "Lucena", "Puente Genil", "Montilla", "Priego de Córdoba", "Palma del Río"
       ],
       valladolid: [
         "Valladolid Capital", "Laguna de Duero", "Medina del Campo", "Arroyo de la Encomienda", "Tordesillas"
       ],
-      caceres: [
-        "Cáceres Capital", "Plasencia", "Navalmoral de la Mata", "Trujillo", "Coria"
+      vigo: [
+        "Vigo Capital", "Pontevedra", "Vilagarcía de Arousa", "Redondela", "Cangas", "Marín"
       ],
-      badajoz: [
-        "Badajoz Capital", "Mérida", "Don Benito", "Almendralejo", "Villanueva de la Serena", "Zafra"
+      gijon: [
+        "Gijón", "Oviedo", "Avilés", "Siero", "Langreo", "Mieres"
       ],
-      castellon: [
-        "Castellón de la Plana", "Vila-real", "Burriana", "Vall de Uixó", "Vinaròs", "Benicàssim"
+      granada: [
+        "Granada Capital", "Motril", "Almuñécar", "Armilla", "Maracena", "Baza", "Loja"
+      ],
+      coruna: [
+        "A Coruña Capital", "Santiago de Compostela", "Ferrol", "Narón", "Oleiros", "Carballo"
+      ],
+      "san-sebastian": [
+        "San Sebastián (Donostia)", "Irun", "Rentería (Errenteria)", "Eibar", "Zarautz", "Mondragón (Arrasate)"
+      ],
+      santander: [
+        "Santander Capital", "Torrelavega", "Castro-Urdiales", "Camargo", "Piélagos"
+      ],
+      toledo: [
+        "Toledo Capital", "Talavera de la Reina", "Illescas", "Seseña", "Torrijos", "Quintanar de la Orden"
       ]
     };
 
@@ -409,7 +433,7 @@
     const containerMunicipio = document.getElementById('container-municipio');
     const selectMunicipio = document.getElementById('select-municipio');
 
-    // Cargar municipios de la ciudad/provincia elegida
+    // Cargar municipios de la ciudad elegida
     selectProvincia.addEventListener('change', (e) => {
       const provincia = e.target.value;
       
