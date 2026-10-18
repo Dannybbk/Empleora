@@ -6,11 +6,72 @@
   <title>Empleora - Encuentra trabajo y profesionales</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: #f8fafc;
+      color: #1e293b;
+    }
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .nav-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 15px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: #1e293b;
+      text-decoration: none;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .logo-area img {
+      height: 28px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #334155;
+      font-weight: 500;
+      font-size: 14px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+    }
+    .nav-links a:hover {
+      background: #2563eb;
+      color: #ffffff;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <div class="container nav">
-      <a href="index.html" class="logo"><img src="logo.jpg" alt="Empleora"> EMPLEORA</a>
+    <div class="nav-container">
+      <a href="index.html" class="logo-area">
+        <img src="logo.jpg" alt="Empleora"> EMPLEORA
+      </a>
       <ul class="nav-links">
         <li><a href="index.html">Inicio</a></li>
         <li><a href="buscar.html">Buscar</a></li>
@@ -20,17 +81,19 @@
     </div>
   </header>
 
-  <main class="container" style="padding: 40px 0;">
-    <h1 style="color: var(--primary); margin-bottom: 24px;">Últimos anuncios publicados</h1>
+  <main style="padding: 20px 15px; max-width: 800px; margin: 0 auto;">
+    <div style="margin-bottom: 20px;">
+      <h1 style="color: #1e293b; font-size: 22px; font-weight: 700; margin-bottom: 6px;">Últimos anuncios publicados</h1>
+      <p style="color: #64748b; font-size: 14px;">Encuentra oportunidades de empleo y servicios de confianza.</p>
+    </div>
     
-    <div id="ads-container" style="display: grid; gap: 20px;">
-      <p>Cargando anuncios...</p>
+    <div id="ads-container" style="display: grid; gap: 15px;">
+      <p style="color: #64748b; text-align: center;">Cargando anuncios...</p>
     </div>
   </main>
 
-  <!-- Scripts necesarios -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/main.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       const container = document.getElementById('ads-container');
@@ -47,24 +110,24 @@
           .limit(10);
 
         if (error || !ads || ads.length === 0) {
-          container.innerHTML = '<p>No hay anuncios publicados todavía.</p>';
+          container.innerHTML = '<p style="color:#64748b; text-align:center;">No hay anuncios publicados todavía.</p>';
           return;
         }
 
         container.innerHTML = ads.map(ad => `
-          <div class="ad-card" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:20px; text-align:left;">
-            <h3 style="margin-bottom:8px; color:#1e293b;">${ad.title || ad.profession || 'Anuncio'}</h3>
-            <div class="ad-meta" style="color:#64748b; font-size:14px; margin-bottom:12px;">
+          <div class="ad-card" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:15px; text-align:left; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+            <h3 style="margin:0 0 6px 0; color:#1e293b; font-size:17px;">${ad.title || ad.profession || 'Anuncio'}</h3>
+            <div class="ad-meta" style="color:#64748b; font-size:13px; margin-bottom:10px;">
               ${ad.city || ad.province || 'España'} &bull; ${new Date(ad.created_at).toLocaleDateString('es-ES')}
             </div>
-            <p class="ad-desc" style="color:#334155; margin-bottom:16px;">${ad.description ? ad.description.substring(0, 140) : ''}...</p>
-            <a href="anuncio.html?id=${ad.id}" class="btn btn-outline">Ver anuncio</a>
+            <p class="ad-desc" style="color:#334155; margin:0 0 12px 0; font-size:13px; line-height:1.4;">${ad.description ? ad.description.substring(0, 120) : ''}...</p>
+            <a href="anuncio.html?id=${ad.id}" style="display:inline-block; padding:6px 14px; background:#2563eb; color:#ffffff; text-decoration:none; border-radius:6px; font-size:13px; font-weight:500;">Ver anuncio</a>
           </div>
         `).join('');
 
       } catch (err) {
         console.error('Error:', err);
-        container.innerHTML = '<p>Error al cargar los anuncios.</p>';
+        container.innerHTML = '<p style="color:#ef4444; text-align:center;">Error al cargar los anuncios.</p>';
       }
     });
   </script>
