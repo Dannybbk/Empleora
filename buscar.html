@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buscar Oportunidades - Empleora</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
   <style>
+    /* Mantenemos exactamente la misma interfaz limpia y original */
     :root {
       --primary: #10b981;
       --primary-dark: #059669;
@@ -28,7 +30,6 @@
       line-height: 1.5;
     }
 
-    /* Cabecera y Navegación idéntica a la página principal */
     header {
       background: #ffffff;
       border-bottom: 1px solid var(--border-color);
@@ -54,12 +55,10 @@
       color: var(--text-dark);
       text-decoration: none;
       font-size: 20px;
-      letter-spacing: -0.5px;
     }
 
     .logo-area img {
       height: 32px;
-      border-radius: 4px;
     }
 
     .nav-links {
@@ -76,21 +75,6 @@
       font-size: 14px;
       padding: 8px 16px;
       border-radius: 8px;
-      transition: all 0.2s ease;
-    }
-
-    .nav-links a:hover {
-      background: #f1f5f9;
-      color: var(--primary);
-    }
-
-    .nav-links a.btn-accent {
-      background: var(--primary);
-      color: #ffffff;
-    }
-
-    .nav-links a.btn-accent:hover {
-      background: var(--primary-dark);
     }
 
     .menu-toggle {
@@ -102,14 +86,12 @@
       cursor: pointer;
     }
 
-    /* Contenedor Principal */
     .container {
       max-width: 1100px;
       margin: 0 auto;
       padding: 30px 20px;
     }
 
-    /* Formulario de Búsqueda Estilizado */
     .search-box {
       background: #ffffff;
       padding: 24px;
@@ -131,11 +113,6 @@
       color: var(--text-dark);
     }
 
-    .search-box input:focus, .search-box select:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
-
     .btn-search {
       padding: 12px 24px;
       background: var(--primary);
@@ -144,14 +121,8 @@
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s;
     }
 
-    .btn-search:hover {
-      background: var(--primary-dark);
-    }
-
-    /* Resultados */
     .ads-grid {
       display: grid;
       gap: 16px;
@@ -162,26 +133,6 @@
       border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    }
-
-    .ad-card h3 {
-      font-size: 18px;
-      color: var(--text-dark);
-      margin-bottom: 6px;
-    }
-
-    .ad-meta {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-
-    .ad-desc {
-      font-size: 14px;
-      color: #334155;
-      margin-bottom: 16px;
-      line-height: 1.5;
     }
 
     .btn-main {
@@ -193,78 +144,72 @@
       border-radius: 8px;
       font-weight: 600;
       font-size: 13px;
-      transition: background 0.2s;
     }
 
-    .btn-main:hover {
-      background: var(--primary-dark);
-    }
-
-    /* Adaptación para móviles */
     @media (max-width: 768px) {
-      .menu-toggle {
-        display: block;
-      }
-
-      .nav-links {
-        display: none;
-        width: 100%;
-        flex-direction: column;
-        gap: 8px;
-        padding-top: 12px;
-      }
-
-      .nav-links.active {
-        display: flex;
-      }
-
-      .nav-container {
-        flex-wrap: wrap;
-      }
-
-      .search-box {
-        grid-template-columns: 1fr;
-      }
+      .menu-toggle { display: block; }
+      .nav-links { display: none; width: 100%; flex-direction: column; gap: 8px; padding-top: 12px; }
+      .nav-links.active { display: flex; }
+      .nav-container { flex-wrap: wrap; }
+      .search-box { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Cabecera con menú completo -->
   <header>
     <div class="nav-container">
       <a href="index.html" class="logo-area">
         <img src="logo.jpg" alt="Empleora" onerror="this.style.display='none'"> 
         EMPLEORA
       </a>
-      <button class="menu-toggle" id="menu-btn" aria-label="Abrir menú">☰</button>
+      <button class="menu-toggle" id="menu-btn">☰</button>
       <ul class="nav-links" id="nav-menu">
         <li><a href="index.html">Inicio</a></li>
         <li><a href="buscar.html">Buscar</a></li>
-        <li><a href="publicar.html" class="btn-accent">Publicar anuncio</a></li>
+        <li><a href="publicar.html" style="background:var(--primary); color:#fff;">Publicar anuncio</a></li>
         <li><a href="login.html">Iniciar sesión</a></li>
       </ul>
     </div>
   </header>
 
   <main class="container">
-    <!-- Título elegante y cercano -->
     <div style="margin-bottom: 24px;">
       <h1 style="color: var(--text-dark); font-size: 24px; font-weight: 700; margin-bottom: 6px;">Buscar ofertas y oportunidades</h1>
       <p style="color: var(--text-muted); font-size: 14px;">Encuentra el empleo o servicio que necesitas filtrando por profesión o localidad.</p>
     </div>
 
-    <!-- Formulario de búsqueda -->
+    <!-- Formulario con las opciones de categoría desplegables garantizadas -->
     <form id="search-form" class="search-box">
       <input type="text" name="profesion" placeholder="¿Qué puesto o profesión buscas?">
       <input type="text" name="localidad" placeholder="Ciudad o provincia">
+      
       <select name="categoria">
         <option value="">Todas las categorías</option>
+        <option value="construccion">🏗️ Construcción y reformas</option>
+        <option value="limpieza">🧹 Limpieza</option>
+        <option value="hosteleria">🍽️ Hostelería y turismo</option>
+        <option value="transporte">🚚 Transporte y conducción</option>
+        <option value="logistica">📦 Logística y almacén</option>
+        <option value="administracion">📋 Administración y oficina</option>
+        <option value="comercio">🛍️ Comercio y ventas</option>
+        <option value="atencion">💬 Atención al cliente</option>
+        <option value="informatica">💻 Informática y tecnología</option>
+        <option value="sanidad">🏥 Sanidad</option>
+        <option value="educacion">📚 Educación</option>
+        <option value="mantenimiento">🔧 Mantenimiento</option>
+        <option value="agricultura">🌾 Agricultura y campo</option>
+        <option value="industria">🏭 Industria</option>
+        <option value="peluqueria">💇 Peluquería y estética</option>
+        <option value="cuidado">❤️ Cuidado de personas</option>
+        <option value="marketing">📣 Marketing</option>
+        <option value="domestico">🏠 Trabajo doméstico</option>
+        <option value="otros">➕ Otros sectores</option>
       </select>
+
       <button type="submit" class="btn-search">Buscar</button>
     </form>
 
-    <!-- Resultados -->
     <div id="results" class="ads-grid">
       <p style="color: var(--text-muted);">Cargando anuncios disponibles...</p>
     </div>
@@ -274,10 +219,8 @@
     </div>
   </main>
 
-  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Control del menú móvil
     const menuBtn = document.getElementById('menu-btn');
     const navMenu = document.getElementById('nav-menu');
     if (menuBtn && navMenu) {
@@ -289,38 +232,21 @@
     const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
 
-    async function loadCategories() {
-      const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      const { data, error } = await cliente.from('categories').select('*').order('name');
-      if (error) return;
-      const select = document.querySelector('select[name="categoria"]');
-      if (select && data) {
-        data.forEach(c => {
-          const opt = document.createElement('option');
-          opt.value = c.id;
-          opt.textContent = c.name;
-          select.appendChild(opt);
-        });
-      }
-    }
-
     async function searchAds(params = {}) {
       const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
       let query = cliente.from('ads')
-        .select('id, title, profession, city, province, description, created_at, categories(name)')
+        .select('*')
         .eq('status', 'approved')
-        .order('created_at', { ascending: false })
-        .limit(50);
+        .order('created_at', { ascending: false });
 
       if (params.profesion) query = query.ilike('profession', `%${params.profesion}%`);
       if (params.localidad) query = query.or(`city.ilike.%${params.localidad}%,province.ilike.%${params.localidad}%`);
-      if (params.categoria) query = query.eq('category_id', params.categoria);
+      if (params.categoria) query = query.ilike('category', `%${params.categoria}%`);
 
       const { data, error } = await query;
       const container = document.getElementById('results');
       const noResults = document.getElementById('no-results');
-      if (container) container.innerHTML = '';
 
       if (error || !data || data.length === 0) {
         if (container) container.innerHTML = '';
@@ -331,18 +257,17 @@
 
       container.innerHTML = data.map(ad => `
         <div class="ad-card">
-          <h3>${ad.title || ad.profession || 'Anuncio'}</h3>
-          <div class="ad-meta">${ad.profession || ''} &bull; ${ad.city || ad.province || 'España'} &bull; ${new Date(ad.created_at).toLocaleDateString('es-ES')}</div>
-          <p class="ad-desc">${ad.description ? ad.description.substring(0, 130) : ''}...</p>
+          <h3 style="font-size:18px; margin-bottom:6px;">${ad.title || ad.profession || 'Anuncio'}</h3>
+          <div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">
+            ${ad.city || ad.province || 'España'} &bull; ${new Date(ad.created_at).toLocaleDateString('es-ES')}
+          </div>
+          <p style="font-size:14px; color:#334155; margin-bottom:16px;">${ad.description ? ad.description.substring(0, 130) : ''}...</p>
           <a href="anuncio.html?id=${ad.id}" class="btn-main">Ver anuncio</a>
         </div>
       `).join('');
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
-      await loadCategories();
-      
-      // Comprobar si viene una categoría seleccionada desde la página principal
       const urlParams = new URLSearchParams(window.location.search);
       const catParam = urlParams.get('categoria');
       if (catParam) {
@@ -353,18 +278,15 @@
         await searchAds();
       }
 
-      const searchForm = document.getElementById('search-form');
-      if (searchForm) {
-        searchForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const form = e.target;
-          await searchAds({
-            profesion: form.profesion.value,
-            localidad: form.localidad.value,
-            categoria: form.categoria.value
-          });
+      document.getElementById('search-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        await searchAds({
+          profesion: form.profesion.value,
+          localidad: form.localidad.value,
+          categoria: form.categoria.value
         });
-      }
+      });
     });
   </script>
 </body>
