@@ -33,6 +33,8 @@
     .btn:hover { background: var(--primary-dark); }
     .toggle-text { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text-muted); }
     .toggle-text a { color: var(--primary); font-weight: 600; text-decoration: none; cursor: pointer; }
+    .forgot-link { display: block; text-align: right; font-size: 12px; color: var(--text-muted); margin-top: 6px; text-decoration: none; }
+    .forgot-link:hover { color: var(--primary); }
     .alert { padding: 12px; border-radius: 6px; font-size: 13px; margin-bottom: 16px; display: none; text-align: center; }
     .alert-error { background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5; }
     .alert-success { background: #f0fdf4; color: #166534; border: 1px solid #86efac; }
@@ -65,12 +67,13 @@
           <div class="form-group">
             <label>Contraseña</label>
             <input type="password" id="login-password" placeholder="••••••••" required>
+            <a href="#" class="forgot-link" onclick="showResetForm(true)">¿Olvidaste tu contraseña?</a>
           </div>
           <button type="submit" class="btn">Entrar a mi panel</button>
         </form>
 
         <div class="toggle-text">
-          ¿No tienes cuenta? <a onclick="toggleForms(true)">Regístrate gratis</a>
+          ¿No tienes cuenta? <a onclick="toggleForms('register')">Regístrate gratis</a>
         </div>
       </div>
 
@@ -105,9 +108,30 @@
         </form>
 
         <div class="toggle-text">
-          ¿Ya tienes cuenta? <a onclick="toggleForms(false)">Inicia sesión</a>
+          ¿Ya tienes cuenta? <a onclick="toggleForms('login')">Inicia sesión</a>
         </div>
       </div>
+
+      <!-- Recuperar Contraseña -->
+      <div id="reset-form-wrapper" style="display: none;">
+        <h1>Restablecer contraseña</h1>
+        <p class="subtitle">Escribe tu correo y te enviaremos un enlace de restauración.</p>
+        
+        <div id="reset-alert" class="alert"></div>
+
+        <form id="reset-form">
+          <div class="form-group">
+            <label>Correo electrónico</label>
+            <input type="email" id="reset-email" placeholder="tu@email.com" required>
+          </div>
+          <button type="submit" id="btn-reset" class="btn">Enviar enlace al correo</button>
+        </form>
+
+        <div class="toggle-text">
+          <a onclick="toggleForms('login')">← Volver al inicio de sesión</a>
+        </div>
+      </div>
+
     </div>
   </main>
 
@@ -117,9 +141,14 @@
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
     const ADMIN_EMAIL = 'danny10bbk@gmail.com';
 
-    function toggleForms(showRegister) {
-      document.getElementById('login-form-wrapper').style.display = showRegister ? 'none' : 'block';
-      document.getElementById('register-form-wrapper').style.display = showRegister ? 'block' : 'none';
+    function toggleForms(formType) {
+      document.getElementById('login-form-wrapper').style.display = formType === 'login' ? 'block' : 'none';
+      document.getElementById('register-form-wrapper').style.display = formType === 'register' ? 'block' : 'none';
+      document.getElementById('reset-form-wrapper').style.display = formType === 'reset' ? 'block' : 'none';
+    }
+
+    function showResetForm(show) {
+      toggleForms(show ? 'reset' : 'login');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -164,7 +193,6 @@
 
         let avatarUrl = '';
 
-        // Subir foto si seleccionó alguna
         if (avatarInput.files && avatarInput.files[0]) {
           const file = avatarInput.files[0];
           const fileExt = file.name.split('.').pop();
@@ -180,7 +208,6 @@
           }
         }
 
-        // Crear usuario guardando rol y foto
         const { data, error } = await cliente.auth.signUp({
           email,
           password,
@@ -203,7 +230,36 @@
           alertBox.className = 'alert alert-success';
           alertBox.innerText = '¡Cuenta creada con éxito! Ya puedes iniciar sesión.';
           alertBox.style.display = 'block';
-          setTimeout(() => toggleForms(false), 2000);
+          setTimeout(() => toggleForms('login'), 2000);
+        }
+      });
+
+      // Recuperar Contraseña
+      document.getElementById('reset-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const alertBox = document.getElementById('reset-alert');
+        const submitBtn = document.getElementById('btn-reset');
+        alertBox.style.display = 'none';
+        submitBtn.innerText = 'Enviando...';
+        submitBtn.disabled = true;
+
+        const email = document.getElementById('reset-email').value;
+
+        const { error } = await cliente.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin + '/login.html',
+        });
+
+        submitBtn.innerText = 'Enviar enlace al correo';
+        submitBtn.disabled = false;
+
+        if (error) {
+          alertBox.className = 'alert alert-error';
+          alertBox.innerText = 'Error al enviar el correo. Verifica la dirección.';
+          alertBox.style.display = 'block';
+        } else {
+          alertBox.className = 'alert alert-success';
+          alertBox.innerText = '¡Correo enviado! Revisa tu bandeja de entrada o spam.';
+          alertBox.style.display = 'block';
         }
       });
     });
