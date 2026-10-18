@@ -50,7 +50,6 @@
       try {
         const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Seleccionamos todos los campos posibles para asegurar que capturamos el contacto
         const { data: ad, error } = await cliente
           .from('ads')
           .select('*, categories(name)')
@@ -63,7 +62,6 @@
           return;
         }
 
-        // Detectar cualquier variante de campos de contacto que pueda tener tu base de datos
         const emailContacto = ad.contact_email || ad.email || ad.user_email;
         const telefonoContacto = ad.contact_phone || ad.phone || ad.telefono;
 
@@ -80,17 +78,49 @@
             <p style="color:#475569; line-height:1.6; white-space: pre-line;">${ad.description || ad.experience || 'Sin descripción detallada.'}</p>
           </div>
 
-          <div style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0;">
-            <h3 style="color:#334155; margin-bottom:12px; font-size:16px;">Forma de contacto</h3>
+          <div style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom: 24px;">
+            <h3 style="color:#334155; margin-bottom:12px; font-size:16px;">Forma de contacto directa</h3>
             ${emailContacto || telefonoContacto ? `
               ${emailContacto ? `<p style="margin:6px 0;"><strong>Correo electrónico:</strong> <a href="mailto:${emailContacto}" style="color:#2563eb;">${emailContacto}</a></p>` : ''}
               ${telefonoContacto ? `<p style="margin:6px 0;"><strong>Teléfono / WhatsApp:</strong> <a href="tel:${telefonoContacto}" style="color:#2563eb;">${telefonoContacto}</a></p>` : ''}
             ` : `
-              <p style="color:#64748b; margin:0;">Este anunciante no ha indicado un teléfono o correo directo en este anuncio.</p>
-              <p style="color:#64748b; font-size:14px; margin-top:8px;"><em>Próximamente podrás contactar a través del sistema de mensajería interna de Empleora.</em></p>
+              <p style="color:#64748b; margin:0;">Este anunciante no ha indicado un teléfono o correo directo.</p>
             `}
           </div>
+
+          <!-- Formulario de contacto para interesados -->
+          <div style="background:#eff6ff; padding:20px; border-radius:8px; border:1px solid #bfdbfe;">
+            <h3 style="color:#1e40af; margin-bottom:10px; font-size:18px;">¿Te interesa este anuncio? ¡Contacta ahora!</h3>
+            <p style="color:#3b82f6; font-size:14px; margin-bottom:15px;">Rellena tus datos y tu mensaje para enviar tu candidatura o consulta.</p>
+            
+            <form id="contact-form" style="display:grid; gap:12px;">
+              <div>
+                <label style="display:block; font-size:14px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Nombre</label>
+                <input type="text" id="contact-name" required placeholder="Ej. María Pérez" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
+              </div>
+              <div>
+                <label style="display:block; font-size:14px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Teléfono o Correo de contacto</label>
+                <input type="text" id="contact-info" required placeholder="Ej. 600123456 o correo@email.com" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
+              </div>
+              <div>
+                <label style="display:block; font-size:14px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Mensaje</label>
+                <textarea id="contact-msg" rows="4" required placeholder="Hola, estoy muy interesado/a en este puesto..." style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;"></textarea>
+              </div>
+              <button type="submit" class="btn" style="background:#2563eb; color:#fff; padding:12px; border:none; border-radius:6px; font-weight:600; cursor:pointer;">Enviar mensaje al anunciante</button>
+            </form>
+            <div id="form-success" style="display:none; margin-top:12px; color:#166534; font-weight:600; text-align:center;">¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.</div>
+          </div>
         `;
+
+        // Lógica al enviar el formulario
+        const form = document.getElementById('contact-form');
+        if (form) {
+          form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            form.style.display = 'none';
+            document.getElementById('form-success').style.display = 'block';
+          });
+        }
 
       } catch (err) {
         console.error('Error inesperado:', err);
