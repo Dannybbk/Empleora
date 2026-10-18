@@ -396,9 +396,9 @@
                 <span><i class="fa-solid fa-euro-sign text-slate-400"></i> ${ad.sueldo || ad.salario || 'A convenir'}</span>
               </p>
             </div>
-            <a href="detalles.html?id=${ad.id}" class="px-4 py-2 bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-700 font-semibold text-sm rounded-xl transition-colors text-center shrink-0">
+            <button onclick='verDetalleAnuncio(${JSON.stringify(ad)})' class="px-4 py-2 bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-700 font-semibold text-sm rounded-xl transition-colors text-center shrink-0 cursor-pointer">
               Ver oferta
-            </a>
+            </button>
           `;
           contenedor.appendChild(card);
         });
@@ -406,6 +406,95 @@
         console.error('Error al cargar anuncios:', err);
         contenedor.innerHTML = '<p class="text-center text-red-500 py-8">Hubo un error al cargar los anuncios.</p>';
       }
+    }
+
+    // FUNCIÓN PARA ABRIR EL MODAL CON DETALLES Y FORMULARIO DE CONTACTO
+    function verDetalleAnuncio(ad) {
+      const modalAnterior = document.getElementById('modal-detalle-oferta');
+      if (modalAnterior) modalAnterior.remove();
+
+      const modal = document.createElement('div');
+      modal.id = 'modal-detalle-oferta';
+      modal.className = "fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn";
+      
+      const tituloAnuncio = ad.titulo || ad.title || 'Oferta de empleo';
+
+      modal.innerHTML = `
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100 max-h-[90vh] overflow-y-auto">
+          <button onclick="document.getElementById('modal-detalle-oferta').remove()" class="absolute top-5 right-5 w-10 h-10 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center text-slate-600 transition-colors">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+
+          <div class="space-y-2">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-brand-100 text-brand-800 uppercase tracking-wider">${ad.categoria || 'Empleo'}</span>
+            <h2 class="text-2xl font-black text-slate-900 leading-snug">${tituloAnuncio}</h2>
+            <p class="text-xs text-slate-400">Publicado el ${ad.created_at ? new Date(ad.created_at).toLocaleDateString() : 'Reciente'}</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+            <div>
+              <span class="block text-xs font-bold text-slate-400 uppercase">Ubicación</span>
+              <span class="text-sm font-semibold text-slate-800"><i class="fa-solid fa-location-dot text-brand-600 mr-1"></i> ${ad.provincia || 'España'} ${ad.municipio ? '(' + ad.municipio + ')' : ''}</span>
+            </div>
+            <div>
+              <span class="block text-xs font-bold text-slate-400 uppercase">Salario / Sueldo</span>
+              <span class="text-sm font-semibold text-slate-800"><i class="fa-solid fa-euro-sign text-brand-600 mr-1"></i> ${ad.sueldo || ad.salario || 'A convenir'}</span>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="font-bold text-slate-900 text-sm uppercase tracking-wide">Descripción del puesto</h4>
+            <div class="text-slate-600 text-sm leading-relaxed bg-slate-50/50 p-4 rounded-2xl border border-slate-100 whitespace-pre-line">
+              ${ad.descripcion || ad.description || 'No hay descripción detallada para esta oferta.'}
+            </div>
+          </div>
+
+          <!-- FORMULARIO DE CONTACTO PARA LA OFERTA -->
+          <div class="border-t border-slate-100 pt-4 space-y-3">
+            <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <i class="fa-solid fa-paper-plane text-brand-600"></i> Contactar sobre este anuncio
+            </h4>
+            
+            <form action="mailto:info@rodatrabajo.com" method="POST" enctype="text/plain" class="space-y-3">
+              <input type="hidden" name="Anuncio" value="${tituloAnuncio}">
+              
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Tu Nombre</label>
+                <input type="text" name="Nombre" required placeholder="Ej: Juan Pérez" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500">
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 mb-1">Teléfono</label>
+                  <input type="tel" name="Telefono" required placeholder="Ej: 600000000" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 mb-1">Correo Electrónico (Email)</label>
+                  <input type="email" name="Email" required placeholder="tucorreo@gmail.com" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Mensaje</label>
+                <textarea name="Mensaje" rows="3" required placeholder="Hola, estoy interesado en este puesto..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500"></textarea>
+              </div>
+
+              <div class="flex gap-2 pt-2">
+                <button type="submit" class="flex-1 py-3 px-4 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl text-center shadow-lg shadow-brand-500/20 transition-all flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-envelope"></i>
+                  <span>Enviar mensaje</span>
+                </button>
+                <button type="button" onclick="document.getElementById('modal-detalle-oferta').remove()" class="py-3 px-5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-xl transition-colors">
+                  Cerrar
+                </button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      `;
+
+      document.body.appendChild(modal);
     }
 
     document.addEventListener('DOMContentLoaded', cargarAnuncios);
