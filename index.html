@@ -62,7 +62,7 @@
           <a href="index.html" class="text-brand-600 transition-colors">Inicio</a>
           <a href="#categorias" class="hover:text-brand-600 transition-colors">Categorías</a>
           <a href="#anuncios" class="hover:text-brand-600 transition-colors">Ofertas de Empleo</a>
-          <a href="#publicar" class="hover:text-brand-600 transition-colors">Publicar Anuncio</a>
+          <a href="#" onclick="checkAuthAndRedirect(event)" class="hover:text-brand-600 transition-colors">Publicar Anuncio</a>
         </nav>
 
         <!-- Right Buttons -->
@@ -70,7 +70,7 @@
           <a href="login.html" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-600 transition-colors">
             Iniciar sesión
           </a>
-          <a href="#publicar" class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-lg shadow-brand-500/25 transition-all">
+          <a href="#" onclick="checkAuthAndRedirect(event)" class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-lg shadow-brand-500/25 transition-all">
             + Publicar Anuncio
           </a>
         </div>
@@ -91,7 +91,7 @@
       <a href="#anuncios" class="block px-3 py-2 rounded-md font-medium text-slate-700 hover:bg-slate-50">Ofertas de Empleo</a>
       <div class="pt-2 border-t border-slate-100 flex flex-col gap-2">
         <a href="login.html" class="w-full text-center px-4 py-2 font-semibold text-slate-700 bg-slate-100 rounded-lg">Iniciar sesión</a>
-        <a href="#publicar" class="w-full text-center px-4 py-2 font-semibold text-white bg-brand-600 rounded-lg">+ Publicar Anuncio</a>
+        <a href="#" onclick="checkAuthAndRedirect(event)" class="w-full text-center px-4 py-2 font-semibold text-white bg-brand-600 rounded-lg">+ Publicar Anuncio</a>
       </div>
     </div>
   </header>
@@ -124,7 +124,7 @@
               <input type="text" id="input-keyword" placeholder="¿Qué trabajo buscas?" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all">
             </div>
 
-            <!-- 2. TODAS LAS CATEGORÍAS INTEGRADO EN EL BUSCADOR -->
+            <!-- 2. CATEGORÍAS INTEGRADO EN EL BUSCADOR -->
             <div class="relative flex items-center">
               <i class="fa-solid fa-layer-group absolute left-3.5 text-slate-400"></i>
               <select id="select-categoria" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm text-slate-700 border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer font-medium">
@@ -156,26 +156,26 @@
               <i class="fa-solid fa-location-dot absolute left-3.5 text-slate-400"></i>
               <select id="select-provincia" class="w-full pl-10 pr-3 py-3 bg-slate-50 rounded-xl text-sm text-slate-700 border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer font-medium">
                 <option value="">Toda España</option>
-                <option value="madrid">1. Madrid</option>
-                <option value="toledo">2. Toledo</option>
-                <option value="barcelona">3. Barcelona</option>
-                <option value="valencia">4. Valencia</option>
-                <option value="sevilla">5. Sevilla</option>
-                <option value="zaragoza">6. Zaragoza</option>
-                <option value="malaga">7. Málaga</option>
-                <option value="murcia">8. Murcia</option>
-                <option value="palma">9. Palma de Mallorca</option>
-                <option value="bilbao">10. Bilbao</option>
-                <option value="alicante">11. Alicante</option>
-                <option value="cordoba">12. Córdoba</option>
-                <option value="valladolid">13. Valladolid</option>
-                <option value="vigo">14. Vigo</option>
-                <option value="gijon">15. Gijón</option>
-                <option value="granada">16. Granada</option>
-                <option value="coruna">17. A Coruña</option>
-                <option value="san-sebastian">18. San Sebastián</option>
-                <option value="santander">19. Santander</option>
-                <option value="las-palmas">20. Las Palmas de Gran Canaria</option>
+                <option value="madrid">Madrid</option>
+                <option value="toledo">Toledo</option>
+                <option value="barcelona">Barcelona</option>
+                <option value="valencia">Valencia</option>
+                <option value="sevilla">Sevilla</option>
+                <option value="zaragoza">Zaragoza</option>
+                <option value="malaga">Málaga</option>
+                <option value="murcia">Murcia</option>
+                <option value="palma">Palma de Mallorca</option>
+                <option value="bilbao">Bilbao</option>
+                <option value="alicante">Alicante</option>
+                <option value="cordoba">Córdoba</option>
+                <option value="valladolid">Valladolid</option>
+                <option value="vigo">Vigo</option>
+                <option value="gijon">Gijón</option>
+                <option value="granada">Granada</option>
+                <option value="coruna">A Coruña</option>
+                <option value="san-sebastian">San Sebastián</option>
+                <option value="santander">Santander</option>
+                <option value="las-palmas">Las Palmas de Gran Canaria</option>
               </select>
             </div>
 
@@ -184,7 +184,7 @@
           <!-- Fila Secundaria: Municipios y Alrededores -->
           <div class="flex flex-col sm:flex-row gap-3 pt-1">
             
-            <!-- Municipio / Alrededores (Aparece al seleccionar la ciudad) -->
+            <!-- Municipio / Alrededores -->
             <div id="container-municipio" class="flex-1 relative hidden flex items-center">
               <i class="fa-solid fa-map-pin absolute left-3.5 text-slate-400"></i>
               <select id="select-municipio" class="w-full pl-10 pr-4 py-3 bg-brand-50/50 border border-brand-200 rounded-xl text-sm text-slate-800 focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer font-medium">
@@ -222,7 +222,7 @@
           </p>
         </div>
         <div class="pt-6 relative z-10">
-          <a href="login.html" class="inline-flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5">
+          <a href="#" onclick="checkAuthAndRedirect(event)" class="inline-flex items-center gap-2 px-6 py-3 bg-brand-600 hover:bg-brand-500 text-white font-bold text-sm rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5">
             <span>Publicar anuncio gratis</span>
             <i class="fa-solid fa-plus"></i>
           </a>
@@ -360,8 +360,28 @@
     </div>
   </footer>
 
-  <!-- SCRIPTS DE INTERACTIVIDAD CON LAS 20 CIUDADES Y SUS MUNICIPIOS EXACTOS -->
+  <!-- SUPABASE JS Y SCRIPT DE VERIFICACIÓN DE SESIÓN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
+
+    // Función para verificar si el usuario ha iniciado sesión al pulsar publicar
+    async function checkAuthAndRedirect(e) {
+      e.preventDefault();
+      const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const { data: { session } } = await cliente.auth.getSession();
+
+      if (!session) {
+        // Si no ha iniciado sesión, lo mandamos a login/registro
+        window.location.href = 'login.html';
+      } else {
+        // Si ya ha iniciado sesión, lo mandamos directamente a publicar
+        window.location.href = 'publicar.html';
+      }
+    }
+
+    // DICCIONARIO DE MUNICIPIOS
     const municipiosPorProvincia = {
       madrid: [
         "Alcobendas", "San Sebastián de los Reyes", "Pozuelo de Alarcón", "Majadahonda", 
@@ -456,27 +476,23 @@
     const containerMunicipio = document.getElementById('container-municipio');
     const selectMunicipio = document.getElementById('select-municipio');
 
-    // Cargar los municipios correspondientes a la ciudad elegida
     selectProvincia.addEventListener('change', (e) => {
       const provincia = e.target.value;
-      
       if (provincia && municipiosPorProvincia[provincia]) {
         selectMunicipio.innerHTML = '<option value="">Todos los municipios y alrededores</option>';
-        
         municipiosPorProvincia[provincia].forEach(muni => {
           const opt = document.createElement('option');
           opt.value = muni.toLowerCase().replace(/\s+/g, '-');
           opt.textContent = muni;
           selectMunicipio.appendChild(opt);
         });
-
         containerMunicipio.classList.remove('hidden');
       } else {
         containerMunicipio.classList.add('hidden');
       }
     });
 
-    // BUSCADOR INTERACTIVO
+    // BUSCADOR
     document.getElementById('btn-buscar').addEventListener('click', () => {
       const provinciaVal = selectProvincia.value;
       const categoriaVal = document.getElementById('select-categoria').value;
@@ -484,7 +500,6 @@
       const keyword = document.getElementById('input-keyword').value.toLowerCase().trim();
 
       const cards = document.querySelectorAll('#contenedor-anuncios > div');
-      
       cards.forEach(card => {
         const cardProv = card.getAttribute('data-provincia');
         const cardCat = card.getAttribute('data-categoria');
@@ -502,7 +517,6 @@
           card.classList.add('hidden');
         }
       });
-
       document.getElementById('anuncios').scrollIntoView({ behavior: 'smooth' });
     });
 
