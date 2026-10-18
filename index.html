@@ -47,8 +47,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         
-        <!-- Logo -->
-        <a href="#" class="flex items-center gap-2 group">
+        <!-- Logo (AHORA VUELVE A INICIO CORRECTAMENTE) -->
+        <a href="index.html" class="flex items-center gap-2 group cursor-pointer">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white font-black text-xl shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
             E
           </div>
@@ -59,7 +59,7 @@
 
         <!-- Desktop Nav Links -->
         <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-          <a href="#" class="text-brand-600 transition-colors">Inicio</a>
+          <a href="index.html" class="text-brand-600 transition-colors">Inicio</a>
           <a href="#categorias" class="hover:text-brand-600 transition-colors">Categorías</a>
           <a href="#anuncios" class="hover:text-brand-600 transition-colors">Ofertas de Empleo</a>
           <a href="#" class="hover:text-brand-600 transition-colors">Publicar Anuncio</a>
@@ -86,7 +86,7 @@
 
     <!-- Mobile Menu Dropdown -->
     <div id="mobile-menu" class="hidden md:hidden border-b border-slate-200 bg-white px-4 pt-2 pb-4 space-y-2">
-      <a href="#" class="block px-3 py-2 rounded-md font-medium text-brand-600 bg-brand-50">Inicio</a>
+      <a href="index.html" class="block px-3 py-2 rounded-md font-medium text-brand-600 bg-brand-50">Inicio</a>
       <a href="#categorias" class="block px-3 py-2 rounded-md font-medium text-slate-700 hover:bg-slate-50">Categorías</a>
       <a href="#anuncios" class="block px-3 py-2 rounded-md font-medium text-slate-700 hover:bg-slate-50">Ofertas de Empleo</a>
       <div class="pt-2 border-t border-slate-100 flex flex-col gap-2">
@@ -114,13 +114,13 @@
 
       <!-- SEARCH FORM WITH ANNESTED LOCATIONS -->
       <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200/80 mt-8 max-w-3xl mx-auto">
-        <form class="flex flex-col gap-3">
+        <form id="search-form" class="flex flex-col gap-3">
           
           <div class="flex flex-col sm:flex-row gap-3">
             <!-- Keyword input -->
             <div class="flex-1 relative flex items-center">
               <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-slate-400"></i>
-              <input type="text" placeholder="Puesto, oficio o palabra clave..." class="w-full pl-10 pr-4 py-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all">
+              <input type="text" id="input-keyword" placeholder="Puesto, oficio o palabra clave..." class="w-full pl-10 pr-4 py-3 bg-slate-50 rounded-xl text-sm border border-transparent focus:border-brand-500 focus:bg-white focus:outline-none transition-all">
             </div>
 
             <!-- Provincia / Ciudad Principal -->
@@ -139,16 +139,16 @@
           </div>
 
           <div class="flex flex-col sm:flex-row gap-3">
-            <!-- Municipio / Zona (Aparece al seleccionar provincia o está activo) -->
+            <!-- Municipio / Zona -->
             <div id="container-municipio" class="flex-1 relative hidden flex items-center">
               <i class="fa-solid fa-map-pin absolute left-3.5 text-slate-400"></i>
               <select id="select-municipio" class="w-full pl-10 pr-4 py-3 bg-brand-50/50 border border-brand-200 rounded-xl text-sm text-slate-800 focus:border-brand-500 focus:bg-white focus:outline-none transition-all appearance-none cursor-pointer">
-                <option value="">Todas las zonas / municipios</option>
+                <option value="">Todos los municipios de la provincia</option>
               </select>
             </div>
 
             <!-- Submit button -->
-            <button type="button" class="w-full sm:w-auto px-8 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 ml-auto">
+            <button type="button" id="btn-buscar" class="w-full sm:w-auto px-8 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center justify-center gap-2 ml-auto">
               <span>Buscar ofertas</span>
               <i class="fa-solid fa-arrow-right"></i>
             </button>
@@ -348,10 +348,10 @@
     </div>
 
     <!-- Job Cards -->
-    <div class="space-y-4">
+    <div id="contenedor-anuncios" class="space-y-4">
       
       <!-- Card 1 -->
-      <div class="p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4" data-provincia="madrid" data-municipio="pozuelo-de-alarcón">
         <div class="space-y-2">
           <div class="flex items-center gap-2">
             <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-amber-100 text-amber-800">Construcción</span>
@@ -369,7 +369,7 @@
       </div>
 
       <!-- Card 2 -->
-      <div class="p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4" data-provincia="barcelona" data-municipio="barcelona-capital">
         <div class="space-y-2">
           <div class="flex items-center gap-2">
             <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-rose-100 text-rose-800">Hostelería</span>
@@ -407,12 +407,14 @@
 
   <!-- SCRIPTS DE INTERACTIVIDAD -->
   <script>
-    // 1. DICCIONARIO DE MUNICIPIOS POR PROVINCIA
+    // 1. LISTADO COMPLETO DE MUNICIPIOS POR PROVINCIA (MADRID EXPANDIDO)
     const municipiosPorProvincia = {
       madrid: [
         "Madrid Centro", "Majadahonda", "Pozuelo de Alarcón", "Aravaca", 
         "Alcorcón", "Móstoles", "Fuenlabrada", "Getafe", "Leganés", 
-        "Las Rozas", "Alcobendas", "San Sebastián de los Reyes", "Alcalá de Henares"
+        "Las Rozas", "Alcobendas", "San Sebastián de los Reyes", "Alcalá de Henares",
+        "Torrejón de Ardoz", "Parla", "Rivas-Vaciamadrid", "Coslada", "Valdemoro",
+        "Pinto", "Arganda del Rey", "Collado Villalba", "Boadilla del Monte", "Villaviciosa de Odón"
       ],
       barcelona: [
         "Barcelona Capital", "Hospitalet de Llobregat", "Badalona", 
@@ -436,15 +438,13 @@
     const containerMunicipio = document.getElementById('container-municipio');
     const selectMunicipio = document.getElementById('select-municipio');
 
-    // Escuchar cambio de provincia
+    // Cambiar lista de municipios al elegir provincia
     selectProvincia.addEventListener('change', (e) => {
       const provincia = e.target.value;
       
       if (provincia && municipiosPorProvincia[provincia]) {
-        // Limpiar opciones previas
-        selectMunicipio.innerHTML = '<option value="">Todas las zonas / municipios</option>';
+        selectMunicipio.innerHTML = '<option value="">Todos los municipios de la provincia</option>';
         
-        // Agregar zonas/municipios
         municipiosPorProvincia[provincia].forEach(muni => {
           const opt = document.createElement('option');
           opt.value = muni.toLowerCase().replace(/\s+/g, '-');
@@ -452,14 +452,41 @@
           selectMunicipio.appendChild(opt);
         });
 
-        // Mostrar selector de municipios
         containerMunicipio.classList.remove('hidden');
       } else {
         containerMunicipio.classList.add('hidden');
       }
     });
 
-    // 2. MOSTRAR / OCULTAR CATEGORÍAS
+    // 2. BUSCADOR INTERACTIVO
+    document.getElementById('btn-buscar').addEventListener('click', () => {
+      const provinciaVal = selectProvincia.value;
+      const municipioVal = selectMunicipio.value;
+      const keyword = document.getElementById('input-keyword').value.toLowerCase().trim();
+
+      const cards = document.querySelectorAll('#contenedor-anuncios > div');
+      
+      cards.forEach(card => {
+        const cardProv = card.getAttribute('data-provincia');
+        const cardMuni = card.getAttribute('data-municipio');
+        const text = card.textContent.toLowerCase();
+
+        let matchProv = !provinciaVal || cardProv === provinciaVal;
+        let matchMuni = !municipioVal || cardMuni === municipioVal;
+        let matchKw = !keyword || text.includes(keyword);
+
+        if (matchProv && matchMuni && matchKw) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      // Mover suavemente hacia la sección de anuncios
+      document.getElementById('anuncios').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // 3. MOSTRAR / OCULTAR CATEGORÍAS
     const btnToggleCat = document.getElementById('btn-toggle-categorias');
     const catExtra = document.getElementById('categorias-extra');
     const txtToggle = document.getElementById('txt-toggle');
@@ -478,7 +505,7 @@
       }
     });
 
-    // 3. MENÚ MÓVIL
+    // 4. MENÚ MÓVIL
     const btnMobile = document.getElementById('mobile-menu-btn');
     const menuMobile = document.getElementById('mobile-menu');
     btnMobile.addEventListener('click', () => {
