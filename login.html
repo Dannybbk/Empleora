@@ -50,7 +50,7 @@
 
   <main class="container">
     <div class="auth-box">
-      <!-- Formulario Iniciar Sesión -->
+      <!-- Iniciar Sesión -->
       <div id="login-form-wrapper">
         <h1>Iniciar sesión</h1>
         <p class="subtitle">Accede a tu panel para gestionar tus anuncios.</p>
@@ -74,10 +74,10 @@
         </div>
       </div>
 
-      <!-- Formulario Registro -->
+      <!-- Registro -->
       <div id="register-form-wrapper" style="display: none;">
         <h1>Crear cuenta gratis</h1>
-        <p class="subtitle">Elige tu tipo de perfil y publica tus anuncios.</p>
+        <p class="subtitle">Elige tu perfil, sube tu foto y publica tus anuncios.</p>
         
         <div id="register-alert" class="alert"></div>
 
@@ -90,6 +90,10 @@
             </select>
           </div>
           <div class="form-group">
+            <label>Foto de perfil (Opcional)</label>
+            <input type="file" id="reg-avatar" accept="image/*" style="padding: 8px;">
+          </div>
+          <div class="form-group">
             <label>Correo electrónico</label>
             <input type="email" id="reg-email" placeholder="tu@email.com" required>
           </div>
@@ -97,7 +101,7 @@
             <label>Contraseña</label>
             <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" required minlength="6">
           </div>
-          <button type="submit" class="btn">Crear mi cuenta</button>
+          <button type="submit" id="btn-reg" class="btn">Crear mi cuenta</button>
         </form>
 
         <div class="toggle-text">
@@ -148,19 +152,48 @@
       document.getElementById('register-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const alertBox = document.getElementById('register-alert');
+        const submitBtn = document.getElementById('btn-reg');
         alertBox.style.display = 'none';
+        submitBtn.innerText = 'Creando cuenta...';
+        submitBtn.disabled = true;
 
         const role = document.getElementById('reg-role').value;
         const email = document.getElementById('reg-email').value;
         const password = document.getElementById('reg-password').value;
+        const avatarInput = document.getElementById('reg-avatar');
 
+        let avatarUrl = '';
+
+        // Subir foto si seleccionó alguna
+        if (avatarInput.files && avatarInput.files[0]) {
+          const file = avatarInput.files[0];
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${Date.now()}_${Math.random().toString(36).substring(2,7)}.${fileExt}`;
+
+          const { data: uploadData, error: uploadError } = await cliente.storage
+            .from('avatars')
+            .upload(fileName, file);
+
+          if (!uploadError) {
+            const { data: publicUrlData } = cliente.storage.from('avatars').getPublicUrl(fileName);
+            avatarUrl = publicUrlData.publicUrl;
+          }
+        }
+
+        // Crear usuario guardando rol y foto
         const { data, error } = await cliente.auth.signUp({
           email,
           password,
           options: {
-            data: { user_role: role }
+            data: { 
+              user_role: role,
+              avatar_url: avatarUrl
+            }
           }
         });
+
+        submitBtn.innerText = 'Crear mi cuenta';
+        submitBtn.disabled = false;
 
         if (error) {
           alertBox.className = 'alert alert-error';
