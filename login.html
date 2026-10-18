@@ -3,57 +3,162 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Iniciar sesión - Empleora</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>Acceso / Registro - Empleora</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      --bg-light: #f8fafc;
+      --border-color: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.5; }
+    header { background: #ffffff; border-bottom: 1px solid var(--border-color); }
+    .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; max-width: 1100px; margin: 0 auto; }
+    .logo-area { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--text-dark); text-decoration: none; font-size: 20px; }
+    .logo-area img { height: 32px; border-radius: 4px; }
+    .container { max-width: 450px; margin: 40px auto; padding: 0 20px; }
+    .auth-box { background: #ffffff; border: 1px solid var(--border-color); border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; text-align: center; }
+    p.subtitle { color: var(--text-muted); font-size: 14px; text-align: center; margin-bottom: 24px; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-dark); }
+    input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; }
+    input:focus { outline: none; border-color: var(--primary); }
+    .btn { width: 100%; padding: 12px; background: var(--primary); color: #ffffff; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
+    .btn:hover { background: var(--primary-dark); }
+    .toggle-text { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text-muted); }
+    .toggle-text a { color: var(--primary); font-weight: 600; text-decoration: none; cursor: pointer; }
+    .alert { padding: 12px; border-radius: 6px; font-size: 13px; margin-bottom: 16px; display: none; text-align: center; }
+    .alert-error { background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5; }
+    .alert-success { background: #f0fdf4; color: #166534; border: 1px solid #86efac; }
+  </style>
 </head>
 <body>
+
   <header>
-    <div class="container nav">
-      <a href="index.html" class="logo"><img src="logo.jpg" alt="Empleora"> EMPLEORA</a>
+    <div class="nav-container">
+      <a href="index.html" class="logo-area">
+        <img src="logo.jpg" alt="Empleora" onerror="this.style.display='none'"> EMPLEORA
+      </a>
     </div>
   </header>
 
-  <main class="container" style="max-width:400px; padding:60px 0;">
-    <h1 style="color:var(--primary); text-align:center;">Iniciar sesión</h1>
-    <form id="login-form" style="margin-top:24px;">
-      <input type="email" name="email" placeholder="Email" required style="width:100%; padding:12px; margin-bottom:12px; border:1px solid #ddd; border-radius:8px;">
-      <input type="password" name="password" placeholder="Contraseña" required style="width:100%; padding:12px; margin-bottom:16px; border:1px solid #ddd; border-radius:8px;">
-      <button type="submit" class="btn btn-primary" style="width:100%;">Iniciar sesión</button>
-    </form>
-    <p style="text-align:center; margin-top:16px;">¿No tienes cuenta? <a href="registro.html">Regístrate</a></p>
-    <p id="message" style="text-align:center; margin-top:12px;"></p>
+  <main class="container">
+    <div class="auth-box">
+      <!-- Iniciar Sesión -->
+      <div id="login-form-wrapper">
+        <h1>Iniciar sesión</h1>
+        <p class="subtitle">Gestiona, renueva o edita tus anuncios de empleo.</p>
+        
+        <div id="login-alert" class="alert alert-error"></div>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label>Correo electrónico</label>
+            <input type="email" id="login-email" placeholder="tu@email.com" required>
+          </div>
+          <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" id="login-password" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn">Entrar a mi panel</button>
+        </form>
+
+        <div class="toggle-text">
+          ¿No tienes cuenta? <a onclick="toggleForms(true)">Regístrate gratis</a>
+        </div>
+      </div>
+
+      <!-- Registro -->
+      <div id="register-form-wrapper" style="display: none;">
+        <h1>Crear cuenta gratis</h1>
+        <p class="subtitle">Regístrate para publicar y administrar tus anuncios.</p>
+        
+        <div id="register-alert" class="alert"></div>
+
+        <form id="register-form">
+          <div class="form-group">
+            <label>Correo electrónico</label>
+            <input type="email" id="reg-email" placeholder="tu@email.com" required>
+          </div>
+          <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" required minlength="6">
+          </div>
+          <button type="submit" class="btn">Crear mi cuenta</button>
+        </form>
+
+        <div class="toggle-text">
+          ¿Ya tienes cuenta? <a onclick="toggleForms(false)">Inicia sesión</a>
+        </div>
+      </div>
+    </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
-    
-    // Usamos supabaseClient para evitar conflictos de nombres
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const ADMIN_EMAIL = 'danny10bbk@gmail.com';
 
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = e.target.email.value;
-      const password = e.target.password.value;
-      
-      const msg = document.getElementById('message');
-      msg.style.color = '#666';
-      msg.textContent = 'Iniciando sesión...';
+    function toggleForms(showRegister) {
+      document.getElementById('login-form-wrapper').style.display = showRegister ? 'none' : 'block';
+      document.getElementById('register-form-wrapper').style.display = showRegister ? 'block' : 'none';
+    }
 
-      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-      
-      if (error) {
-        msg.style.color = 'red';
-        msg.textContent = error.message;
-      } else {
-        msg.style.color = 'green';
-        msg.textContent = '¡Acceso exitoso! Redirigiendo...';
-        setTimeout(() => {
-          window.location.href = 'admin.html';
-        }, 1000);
-      }
+    document.addEventListener('DOMContentLoaded', () => {
+      const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      // Login
+      document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const alertBox = document.getElementById('login-alert');
+        alertBox.style.display = 'none';
+
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+
+        const { data, error } = await cliente.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          alertBox.innerText = 'Correo o contraseña incorrectos.';
+          alertBox.style.display = 'block';
+        } else {
+          // Redirección segura
+          if (email === ADMIN_EMAIL) {
+            window.location.href = 'admin.html';
+          } else {
+            window.location.href = 'mis-anuncios.html';
+          }
+        }
+      });
+
+      // Registro
+      document.getElementById('register-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const alertBox = document.getElementById('register-alert');
+        alertBox.style.display = 'none';
+
+        const email = document.getElementById('reg-email').value;
+        const password = document.getElementById('reg-password').value;
+
+        const { data, error } = await cliente.auth.signUp({ email, password });
+
+        if (error) {
+          alertBox.className = 'alert alert-error';
+          alertBox.innerText = error.message || 'Error al crear la cuenta.';
+          alertBox.style.display = 'block';
+        } else {
+          alertBox.className = 'alert alert-success';
+          alertBox.innerText = '¡Cuenta creada! Ya puedes iniciar sesión.';
+          alertBox.style.display = 'block';
+          setTimeout(() => toggleForms(false), 2000);
+        }
+      });
     });
   </script>
 </body>
