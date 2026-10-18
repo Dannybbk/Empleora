@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="css/styles.css">
   <style>
-    /* Mantenemos exactamente la misma interfaz limpia y original */
     :root {
       --primary: #10b981;
       --primary-dark: #059669;
@@ -179,7 +178,6 @@
       <p style="color: var(--text-muted); font-size: 14px;">Encuentra el empleo o servicio que necesitas filtrando por profesión o localidad.</p>
     </div>
 
-    <!-- Formulario con las opciones de categoría desplegables garantizadas -->
     <form id="search-form" class="search-box">
       <input type="text" name="profesion" placeholder="¿Qué puesto o profesión buscas?">
       <input type="text" name="localidad" placeholder="Ciudad o provincia">
@@ -240,9 +238,20 @@
         .eq('status', 'approved')
         .order('created_at', { ascending: false });
 
-      if (params.profesion) query = query.ilike('profession', `%${params.profesion}%`);
-      if (params.localidad) query = query.or(`city.ilike.%${params.localidad}%,province.ilike.%${params.localidad}%`);
-      if (params.categoria) query = query.ilike('category', `%${params.categoria}%`);
+      // Ahora busca tanto en el título, en la profesión como en la descripción
+      if (params.profesion && params.profesion.trim() !== '') {
+        const val = `%${params.profesion.trim()}%`;
+        query = query.or(`title.ilike.${val},profession.ilike.${val},description.ilike.${val}`);
+      }
+
+      if (params.localidad && params.localidad.trim() !== '') {
+        const loc = `%${params.localidad.trim()}%`;
+        query = query.or(`city.ilike.${loc},province.ilike.${loc}`);
+      }
+
+      if (params.categoria && params.categoria.trim() !== '') {
+        query = query.ilike('category', `%${params.categoria.trim()}%`);
+      }
 
       const { data, error } = await query;
       const container = document.getElementById('results');
