@@ -1,5 +1,8 @@
+const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
+
 async function loadCategories() {
-  const cliente = window.supabaseClient || window.supabase.createClient('https://ctkiiimazwpztekwfnrn.supabase.co', 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87');
+  const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   
   const { data, error } = await cliente.from('categories').select('*').order('name');
   if (error) {
@@ -8,6 +11,7 @@ async function loadCategories() {
   }
   const select = document.querySelector('select[name="categoria"]');
   if (select && data) {
+    select.innerHTML = '<option value="">Todas las categorías</option>';
     data.forEach(c => {
       const opt = document.createElement('option');
       opt.value = c.id;
@@ -18,7 +22,7 @@ async function loadCategories() {
 }
 
 async function searchAds(params = {}) {
-  const cliente = window.supabaseClient || window.supabase.createClient('https://ctkiiimazwpztekwfnrn.supabase.co', 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87');
+  const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   let query = cliente.from('ads')
     .select('id, title, profession, city, province, description, created_at, categories(name)')
@@ -52,7 +56,7 @@ async function searchAds(params = {}) {
     card.className = 'ad-card';
     card.innerHTML = `
       <h3>${ad.title}</h3>
-      <div class="ad-meta">${ad.profession} • ${ad.city || ad.province} • ${new Date(ad.created_at).toLocaleDateString('es-ES')}</div>
+      <div class="ad-meta">${ad.profession} &bull; ${ad.city || ad.province} &bull; ${new Date(ad.created_at).toLocaleDateString('es-ES')}</div>
       <p class="ad-desc">${ad.description ? ad.description.substring(0, 140) : ''}...</p>
       <a href="anuncio.html?id=${ad.id}" class="btn btn-outline">Ver anuncio</a>
     `;
