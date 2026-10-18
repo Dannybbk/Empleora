@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Acceso / Registro - Empleora</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
   <style>
     :root {
       --primary: #10b981;
@@ -26,8 +27,8 @@
     p.subtitle { color: var(--text-muted); font-size: 14px; text-align: center; margin-bottom: 24px; }
     .form-group { margin-bottom: 16px; }
     label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-dark); }
-    input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; }
-    input:focus { outline: none; border-color: var(--primary); }
+    input, select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; background: #fff; }
+    input:focus, select:focus { outline: none; border-color: var(--primary); }
     .btn { width: 100%; padding: 12px; background: var(--primary); color: #ffffff; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
     .btn:hover { background: var(--primary-dark); }
     .toggle-text { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text-muted); }
@@ -49,10 +50,10 @@
 
   <main class="container">
     <div class="auth-box">
-      <!-- Iniciar Sesión -->
+      <!-- Formulario Iniciar Sesión -->
       <div id="login-form-wrapper">
         <h1>Iniciar sesión</h1>
-        <p class="subtitle">Gestiona, renueva o edita tus anuncios de empleo.</p>
+        <p class="subtitle">Accede a tu panel para gestionar tus anuncios.</p>
         
         <div id="login-alert" class="alert alert-error"></div>
 
@@ -73,14 +74,21 @@
         </div>
       </div>
 
-      <!-- Registro -->
+      <!-- Formulario Registro -->
       <div id="register-form-wrapper" style="display: none;">
         <h1>Crear cuenta gratis</h1>
-        <p class="subtitle">Regístrate para publicar y administrar tus anuncios.</p>
+        <p class="subtitle">Elige tu tipo de perfil y publica tus anuncios.</p>
         
         <div id="register-alert" class="alert"></div>
 
         <form id="register-form">
+          <div class="form-group">
+            <label>Tipo de Perfil</label>
+            <select id="reg-role" required>
+              <option value="particular">👤 Particular (Busco trabajo o servicio puntual)</option>
+              <option value="profesional">💼 Profesional / Empresa / Autónomo</option>
+            </select>
+          </div>
           <div class="form-group">
             <label>Correo electrónico</label>
             <input type="email" id="reg-email" placeholder="tu@email.com" required>
@@ -128,7 +136,6 @@
           alertBox.innerText = 'Correo o contraseña incorrectos.';
           alertBox.style.display = 'block';
         } else {
-          // Redirección segura
           if (email === ADMIN_EMAIL) {
             window.location.href = 'admin.html';
           } else {
@@ -143,10 +150,17 @@
         const alertBox = document.getElementById('register-alert');
         alertBox.style.display = 'none';
 
+        const role = document.getElementById('reg-role').value;
         const email = document.getElementById('reg-email').value;
         const password = document.getElementById('reg-password').value;
 
-        const { data, error } = await cliente.auth.signUp({ email, password });
+        const { data, error } = await cliente.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { user_role: role }
+          }
+        });
 
         if (error) {
           alertBox.className = 'alert alert-error';
@@ -154,7 +168,7 @@
           alertBox.style.display = 'block';
         } else {
           alertBox.className = 'alert alert-success';
-          alertBox.innerText = '¡Cuenta creada! Ya puedes iniciar sesión.';
+          alertBox.innerText = '¡Cuenta creada con éxito! Ya puedes iniciar sesión.';
           alertBox.style.display = 'block';
           setTimeout(() => toggleForms(false), 2000);
         }
