@@ -3,71 +3,96 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Anuncio - Empleora</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Detalle del Anuncio - Empleora</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="css/styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <header>
     <div class="container nav">
       <a href="index.html" class="logo"><img src="logo.jpg" alt="Empleora"> EMPLEORA</a>
       <ul class="nav-links">
-        <li><a href="buscar.html">Volver a buscar</a></li>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="buscar.html">Buscar</a></li>
+        <li><a href="publicar.html">Publicar</a></li>
       </ul>
     </div>
   </header>
 
-  <main class="container" style="padding:40px 0; max-width:800px;" id="ad-detail">
-    <p>Cargando anuncio...</p>
+  <main class="container" style="padding: 40px 0; max-width: 800px;">
+    <!-- Contenedor principal del anuncio -->
+    <div id="ad-detail" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:30px; box-shadow:0 4px 6px rgba(0,0,0,0.05);">
+      <p style="text-align:center; color:#64748b;">Cargando anuncio...</p>
+    </div>
+    
+    <div style="margin-top: 20px;">
+      <a href="buscar.html" class="btn" style="background:#64748b; color:#fff; text-decoration:none; padding:10px 20px; border-radius:6px; display:inline-block;">&larr; Volver a la búsqueda</a>
+    </div>
   </main>
 
-  <script src="js/config.js"></script>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    async function loadAd() {
-      const id = new URLSearchParams(window.location.search).get('id');
-      if (!id) return;
-      const { data, error } = await supabase.from('ads')
-        .select('*, categories(name)')
-        .eq('id', id)
-        .eq('status', 'approved')
-        .single();
+    const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
 
+    document.addEventListener('DOMContentLoaded', async () => {
       const container = document.getElementById('ad-detail');
-      if (error || !data) {
-        container.innerHTML = '<p>Anuncio no encontrado o no aprobado.</p>';
+      
+      // Leer el ID de la URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const adId = urlParams.get('id') || urlParams.get('anuncio');
+
+      if (!adId) {
+        container.innerHTML = '<h2 style="color:#ef4444;">Anuncio no encontrado</h2><p>No se ha especificado ningún identificador válido en el enlace.</p>';
         return;
       }
 
-      container.innerHTML = `
-        <h1 style="color:var(--primary);">${data.title}</h1>
-        <p style="color:var(--text-muted); margin:8px 0 24px;">${data.profession} • ${data.city}, ${data.province} • ${data.categories?.name || ''}</p>
-        <div style="background:#f8f9fa; padding:20px; border-radius:12px; margin-bottom:20px;">
-          <h3>Descripción</h3>
-          <p>${data.description}</p>
-        </div>
-        ${data.experience ? `<div style="margin-bottom:16px;"><strong>Experiencia:</strong> ${data.experience}</div>` : ''}
-        ${data.skills ? `<div style="margin-bottom:16px;"><strong>Habilidades:</strong> ${data.skills}</div>` : ''}
-        ${data.jornada ? `<div style="margin-bottom:16px;"><strong>Jornada:</strong> ${data.jornada}</div>` : ''}
-        ${data.disponibilidad ? `<div style="margin-bottom:16px;"><strong>Disponibilidad:</strong> ${data.disponibilidad}</div>` : ''}
-        <p style="margin-top:24px; color:var(--text-muted);">Publicado el ${new Date(data.created_at).toLocaleDateString('es-ES')}</p>
-        <button onclick="reportAd('${data.id}')" class="btn btn-outline" style="margin-top:16px;">Denunciar anuncio</button>
-      `;
-    }
+      try {
+        // Inicializar cliente correctamente de forma segura
+        const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    async function reportAd(id) {
-      const reason = prompt('Motivo de la denuncia:');
-      if (!reason) return;
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        alert('Debes iniciar sesión para denunciar.');
-        return;
+        // Buscar el anuncio en Supabase
+        const { data: ad, error } = await cliente
+          .from('ads')
+          .select('*, categories(name)')
+          .eq('id', adId)
+          .single();
+
+        if (error || !ad) {
+          console.error('Error al cargar:', error);
+          container.innerHTML = '<h2 style="color:#ef4444;">No disponible</h2><p>El anuncio no existe o ha sido eliminado.</p>';
+          return;
+        }
+
+        // Pintar los datos del anuncio
+        container.innerHTML = `
+          <h1 style="color:#1e293b; margin-bottom:12px;">${ad.title || ad.profession || 'Detalle del puesto'}</h1>
+          <div style="color:#64748b; font-size:15px; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;">
+            <strong>Categoría:</strong> ${ad.categories?.name || 'General'} &bull; 
+            <strong>Ubicación:</strong> ${ad.city || ad.province || 'España'} &bull; 
+            <strong>Publicado:</strong> ${new Date(ad.created_at).toLocaleDateString('es-ES')}
+          </div>
+          
+          <div style="margin-bottom:24px;">
+            <h3 style="color:#334155; margin-bottom:8px;">Descripción del puesto</h3>
+            <p style="color:#475569; line-height:1.6; white-space: pre-line;">${ad.description || 'Sin descripción detallada.'}</p>
+          </div>
+
+          ${ad.contact_email || ad.contact_phone ? `
+            <div style="background:#f8fafc; padding:15px; border-radius:8px; border:1px solid #e2e8f0;">
+              <h3 style="color:#334155; margin-bottom:8px; font-size:16px;">Información de contacto</h3>
+              ${ad.contact_email ? `<p style="margin:4px 0;"><strong>Email:</strong> <a href="mailto:${ad.contact_email}" style="color:#2563eb;">${ad.contact_email}</a></p>` : ''}
+              ${ad.contact_phone ? `<p style="margin:4px 0;"><strong>Teléfono:</strong> <a href="tel:${ad.contact_phone}" style="color:#2563eb;">${ad.contact_phone}</a></p>` : ''}
+            </div>
+          ` : ''}
+        `;
+
+      } catch (err) {
+        console.error('Error inesperado:', err);
+        container.innerHTML = '<p style="color:#ef4444;">Ocurrió un error al cargar los detalles del anuncio.</p>';
       }
-      await supabase.from('reports').insert([{ ad_id: id, reporter_id: session.user.id, reason }]);
-      alert('Denuncia enviada. Gracias.');
-    }
-
-    loadAd();
+    });
   </script>
 </body>
 </html>
