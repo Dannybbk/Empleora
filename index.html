@@ -25,6 +25,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
+  <!-- CABECERA DE NAVEGACIÓN -->
   <header class="sticky top-0 z-50 glass-nav border-b border-slate-200/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
@@ -36,30 +37,40 @@
           </div>
           <span class="text-xl font-black tracking-tight text-slate-900">RODA TRABAJO</span>
         </a>
+
+        <!-- Menú Escritorio -->
         <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
           <a href="index.html" class="text-brand-600">Inicio</a>
           <a href="#anuncios" class="hover:text-brand-600">Ofertas de Empleo</a>
           <a href="#" onclick="checkAuthAndRedirect(event)" class="hover:text-brand-600">Publicar Anuncio</a>
         </nav>
-        <div class="hidden md:flex items-center gap-3">
-          <a href="login.html" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-600">Iniciar sesión</a>
+
+        <div class="hidden md:flex items-center gap-3" id="desktop-auth-container">
+          <a href="login.html" id="btn-login-desktop" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-600">Iniciar sesión</a>
           <a href="#" onclick="checkAuthAndRedirect(event)" class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-lg">+ Publicar Anuncio</a>
         </div>
+
+        <!-- Botón Menú Hamburguesa Móvil -->
         <div class="md:hidden">
-          <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-600 cursor-pointer"><i class="fa-solid fa-bars text-xl"></i></button>
+          <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-600 cursor-pointer hover:bg-slate-100">
+            <i class="fa-solid fa-bars text-xl"></i>
+          </button>
         </div>
       </div>
     </div>
+
+    <!-- Menú Desplegable Móvil -->
     <div id="mobile-menu" class="hidden md:hidden border-b border-slate-200 bg-white px-4 pt-2 pb-4 space-y-2">
       <a href="index.html" class="block px-3 py-2 rounded-md font-medium text-brand-600 bg-brand-50">Inicio</a>
-      <a href="#anuncios" class="block px-3 py-2 rounded-md font-medium text-slate-700">Ofertas de Empleo</a>
-      <div class="pt-2 border-t border-slate-100 flex flex-col gap-2">
-        <a href="login.html" class="w-full text-center px-4 py-2 font-semibold text-slate-700 bg-slate-100 rounded-lg">Iniciar sesión</a>
+      <a href="#anuncios" class="block px-3 py-2 rounded-md font-medium text-slate-700 hover:bg-slate-50">Ofertas de Empleo</a>
+      <div class="pt-2 border-t border-slate-100 flex flex-col gap-2" id="mobile-auth-container">
+        <a href="login.html" id="btn-login-mobile" class="w-full text-center px-4 py-2 font-semibold text-slate-700 bg-slate-100 rounded-lg">Iniciar sesión</a>
         <a href="#" onclick="checkAuthAndRedirect(event)" class="w-full text-center px-4 py-2 font-semibold text-white bg-brand-600 rounded-lg">+ Publicar Anuncio</a>
       </div>
     </div>
   </header>
 
+  <!-- SECCIÓN PRINCIPAL HERO CON BUSCADOR RESTAURADO -->
   <section class="relative bg-gradient-to-b from-brand-50/60 via-slate-50 to-slate-50 pt-10 pb-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-4xl mx-auto text-center space-y-6">
       <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-bold uppercase tracking-wider">
@@ -68,14 +79,48 @@
       <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
         Encuentra tu próximo empleo en <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-emerald-500">Roda Trabajo</span>
       </h1>
+
+      <!-- CAJA DE BÚSQUEDA RESTAURADA -->
+      <div class="bg-white p-3 sm:p-4 rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200 mt-6 text-left max-w-3xl mx-auto">
+        <form onsubmit="filtrarAnuncios(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          
+          <!-- Buscador por palabra clave -->
+          <div class="relative flex items-center">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 text-slate-400"></i>
+            <input type="text" id="search-keyword" placeholder="Puesto o empleo..." class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+          </div>
+
+          <!-- Selector Provincias / Ciudades -->
+          <div class="relative flex items-center">
+            <i class="fa-solid fa-location-dot absolute left-3 text-slate-400"></i>
+            <input type="text" id="search-city" placeholder="Ciudad o provincia..." class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+          </div>
+
+          <!-- Botón de Búsqueda -->
+          <div>
+            <button type="submit" class="w-full h-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl transition-colors shadow-md flex items-center justify-center gap-2">
+              <i class="fa-solid fa-magnifying-glass"></i> Buscar empleo
+            </button>
+          </div>
+
+        </form>
+      </div>
+
     </div>
   </section>
 
+  <!-- LISTADO DE ANUNCIOS -->
   <section id="anuncios" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="mb-6">
-      <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Últimos anuncios publicados</h2>
-      <p class="text-slate-500 text-sm mt-1">Pulsa en "Ver oferta" para ver todos los detalles y contactar</p>
+    <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Últimos anuncios publicados</h2>
+        <p class="text-slate-500 text-sm mt-1">Pulsa en "Ver oferta" para ver todos los detalles y contactar</p>
+      </div>
+      <button onclick="limpiarFiltros()" id="btn-limpiar" class="hidden text-xs font-semibold text-brand-600 hover:underline">
+        <i class="fa-solid fa-rotate-right"></i> Mostrar todas las ofertas
+      </button>
     </div>
+
     <div id="contenedor-anuncios" class="space-y-4">
       <div class="text-center py-8 text-slate-500">
         <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
@@ -84,20 +129,24 @@
     </div>
   </section>
 
+  <!-- PIE DE PÁGINA -->
   <footer class="bg-slate-900 text-slate-400 text-sm mt-16 border-t border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
       <span class="text-white font-bold">RODA TRABAJO © 2026. Todos los derechos reservados.</span>
     </div>
   </footer>
 
+  <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
     const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    let todosLosAnuncios = [];
+
     async function checkAuthAndRedirect(e) {
-      e.preventDefault();
+      if (e) e.preventDefault();
       const { data: { session } } = await cliente.auth.getSession();
       if (!session) {
         window.location.href = 'login.html';
@@ -106,47 +155,109 @@
       }
     }
 
+    async function gestionarEstadoSesion() {
+      const { data: { session } } = await cliente.auth.getSession();
+      if (session) {
+        const btnLoginDesktop = document.getElementById('btn-login-desktop');
+        const btnLoginMobile = document.getElementById('btn-login-mobile');
+        if (btnLoginDesktop) {
+          btnLoginDesktop.textContent = 'Mi Cuenta / Cerrar Sesión';
+          btnLoginDesktop.href = '#';
+          btnLoginDesktop.onclick = async (e) => {
+            e.preventDefault();
+            await cliente.auth.signOut();
+            window.location.reload();
+          };
+        }
+        if (btnLoginMobile) {
+          btnLoginMobile.textContent = 'Mi Cuenta / Cerrar Sesión';
+          btnLoginMobile.href = '#';
+          btnLoginMobile.onclick = async (e) => {
+            e.preventDefault();
+            await cliente.auth.signOut();
+            window.location.reload();
+          };
+        }
+      }
+    }
+
     async function cargarAnuncios() {
       const contenedor = document.getElementById('contenedor-anuncios');
       try {
         const { data: anuncios, error } = await cliente.from('ads').select('*').order('created_at', { ascending: false });
         if (error) throw error;
-        if (!anuncios || anuncios.length === 0) {
-          contenedor.innerHTML = '<p class="text-center text-slate-500 py-8">No hay anuncios publicados en este momento.</p>';
-          return;
-        }
-        contenedor.innerHTML = '';
-        anuncios.forEach(ad => {
-          if (ad.status && ad.status !== 'approved') return;
-          const card = document.createElement('div');
-          card.className = "p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4";
-          
-          card.innerHTML = `
-            <div class="space-y-2">
-              <div class="flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-brand-100 text-brand-800">${ad.categoria || 'Empleo'}</span>
-                <span class="text-xs text-slate-400">• ${ad.created_at ? new Date(ad.created_at).toLocaleDateString() : 'Reciente'}</span>
-              </div>
-              <h3 class="text-lg font-bold text-slate-900">${ad.titulo || ad.title || 'Oferta'}</h3>
-              <p class="text-sm text-slate-600 flex items-center gap-4">
-                <span><i class="fa-solid fa-location-dot text-slate-400"></i> ${ad.city || ad.provincia || 'España'}</span>
-                <span><i class="fa-solid fa-euro-sign text-slate-400"></i> ${ad.sueldo || 'A convenir'}</span>
-              </p>
-            </div>
-          `;
-
-          const btnVer = document.createElement('button');
-          btnVer.className = "px-4 py-2 bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer shrink-0";
-          btnVer.textContent = "Ver oferta";
-          btnVer.onclick = () => verDetalleAnuncio(ad);
-
-          card.appendChild(btnVer);
-          contenedor.appendChild(card);
-        });
+        
+        todosLosAnuncios = anuncios || [];
+        renderizarAnuncios(todosLosAnuncios);
       } catch (err) {
         console.error(err);
         contenedor.innerHTML = '<p class="text-center text-red-500 py-8">Error al cargar anuncios.</p>';
       }
+    }
+
+    function renderizarAnuncios(anuncios) {
+      const contenedor = document.getElementById('contenedor-anuncios');
+      const anunciosAprobados = anuncios.filter(ad => !ad.status || ad.status === 'approved');
+
+      if (anunciosAprobados.length === 0) {
+        contenedor.innerHTML = '<p class="text-center text-slate-500 py-8">No se encontraron ofertas de empleo.</p>';
+        return;
+      }
+
+      contenedor.innerHTML = '';
+      anunciosAprobados.forEach(ad => {
+        const card = document.createElement('div');
+        card.className = "p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4";
+        
+        card.innerHTML = `
+          <div class="space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-brand-100 text-brand-800">${ad.categoria || 'Empleo'}</span>
+              <span class="text-xs text-slate-400">• ${ad.created_at ? new Date(ad.created_at).toLocaleDateString() : 'Reciente'}</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">${ad.titulo || ad.title || 'Oferta'}</h3>
+            <p class="text-sm text-slate-600 flex flex-wrap items-center gap-4">
+              <span><i class="fa-solid fa-location-dot text-slate-400"></i> ${ad.city || ad.provincia || ad.municipio || 'España'}</span>
+              <span><i class="fa-solid fa-euro-sign text-slate-400"></i> ${ad.sueldo || 'A convenir'}</span>
+            </p>
+          </div>
+        `;
+
+        const btnVer = document.createElement('button');
+        btnVer.className = "px-4 py-2 bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer shrink-0";
+        btnVer.textContent = "Ver oferta";
+        btnVer.onclick = () => verDetalleAnuncio(ad);
+
+        card.appendChild(btnVer);
+        contenedor.appendChild(card);
+      });
+    }
+
+    function filtrarAnuncios(e) {
+      e.preventDefault();
+      const kw = document.getElementById('search-keyword').value.toLowerCase().trim();
+      const city = document.getElementById('search-city').value.toLowerCase().trim();
+
+      const filtrados = todosLosAnuncios.filter(ad => {
+        const titulo = (ad.titulo || ad.title || '').toLowerCase();
+        const desc = (ad.descripcion || ad.description || '').toLowerCase();
+        const ubicacion = (ad.city || ad.provincia || ad.municipio || '').toLowerCase();
+
+        const coincideKW = !kw || titulo.includes(kw) || desc.includes(kw);
+        const coincideCity = !city || ubicacion.includes(city);
+
+        return coincideKW && coincideCity;
+      });
+
+      document.getElementById('btn-limpiar').classList.remove('hidden');
+      renderizarAnuncios(filtrados);
+    }
+
+    function limpiarFiltros() {
+      document.getElementById('search-keyword').value = '';
+      document.getElementById('search-city').value = '';
+      document.getElementById('btn-limpiar').classList.add('hidden');
+      renderizarAnuncios(todosLosAnuncios);
     }
 
     function verDetalleAnuncio(ad) {
@@ -160,13 +271,13 @@
       const titulo = ad.titulo || ad.title || 'Oferta';
       modal.innerHTML = `
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100 max-h-[90vh] overflow-y-auto">
-          <button onclick="document.getElementById('modal-detalle-oferta').remove()" class="absolute top-5 right-5 w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+          <button onclick="document.getElementById('modal-detalle-oferta').remove()" class="absolute top-5 right-5 w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 cursor-pointer hover:bg-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
           <div class="space-y-2">
             <span class="px-3 py-1 rounded-full text-xs font-bold bg-brand-100 text-brand-800 uppercase">${ad.categoria || 'Empleo'}</span>
             <h2 class="text-2xl font-black text-slate-900">${titulo}</h2>
           </div>
           <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl">
-            <div><span class="block text-xs font-bold text-slate-400 uppercase">Ubicación</span><span class="text-sm font-semibold text-slate-800">${ad.city || ad.provincia || 'España'}</span></div>
+            <div><span class="block text-xs font-bold text-slate-400 uppercase">Ubicación</span><span class="text-sm font-semibold text-slate-800">${ad.city || ad.provincia || ad.municipio || 'España'}</span></div>
             <div><span class="block text-xs font-bold text-slate-400 uppercase">Sueldo</span><span class="text-sm font-semibold text-slate-800">${ad.sueldo || 'A convenir'}</span></div>
           </div>
           <div class="space-y-2">
@@ -194,9 +305,16 @@
       document.body.appendChild(modal);
     }
 
-    document.addEventListener('DOMContentLoaded', cargarAnuncios);
-    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
-      document.getElementById('mobile-menu').classList.toggle('hidden');
+    document.addEventListener('DOMContentLoaded', () => {
+      cargarAnuncios();
+      gestionarEstadoSesion();
+      
+      const mobileBtn = document.getElementById('mobile-menu-btn');
+      if (mobileBtn) {
+        mobileBtn.addEventListener('click', () => {
+          document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+      }
     });
   </script>
 </body>
