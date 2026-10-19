@@ -61,43 +61,52 @@
       </div>
     </div>
 
-    <!-- MENÚ DESPLEGABLE MÓVIL CON INICIO, INICIAR SESIÓN Y REGISTRARTE -->
+    <!-- MENÚ DESPLEGABLE MÓVIL ACTUALIZADO -->
     <div id="mobile-menu" class="hidden md:hidden border-b border-slate-200 bg-white px-4 pt-3 pb-5 space-y-2">
       <a href="index.html" class="block px-3 py-2.5 rounded-xl font-semibold text-brand-600 bg-brand-50">
         <i class="fa-solid fa-house mr-2"></i> Inicio
       </a>
-      <a href="#anuncios" class="block px-3 py-2.5 rounded-xl font-semibold text-slate-700 hover:bg-slate-50">
-        <i class="fa-solid fa-briefcase mr-2"></i> Ofertas de Empleo
+      <a href="login.html" id="btn-login-mobile" class="block px-3 py-2.5 rounded-xl font-semibold text-slate-700 hover:bg-slate-50">
+        <i class="fa-solid fa-right-to-bracket mr-2"></i> Iniciar sesión
       </a>
-      
-      <div class="pt-3 border-t border-slate-100 flex flex-col gap-2" id="mobile-auth-container">
-        <a href="login.html" id="btn-login-mobile" class="w-full text-center px-4 py-2.5 font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
-          <i class="fa-solid fa-right-to-bracket mr-1"></i> Iniciar sesión
-        </a>
-        <a href="login.html" class="w-full text-center px-4 py-2.5 font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 rounded-xl transition-colors">
-          <i class="fa-solid fa-user-plus mr-1"></i> Registrarte
-        </a>
-        <a href="#" onclick="checkAuthAndRedirect(event)" class="w-full text-center px-4 py-2.5 font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md transition-colors">
-          <i class="fa-solid fa-plus mr-1"></i> + Publicar Anuncio
-        </a>
-      </div>
+      <a href="login.html" class="block px-3 py-2.5 rounded-xl font-semibold text-slate-700 hover:bg-slate-50">
+        <i class="fa-solid fa-user-plus mr-2"></i> Registrarte
+      </a>
+      <button onclick="abrirModalInfo()" class="w-full text-left px-3 py-2.5 rounded-xl font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer">
+        <i class="fa-solid fa-circle-info mr-2 text-brand-600"></i> Info
+      </button>
     </div>
   </header>
 
-  <!-- HERO & BUSCADOR CON LAS 20 CIUDADES Y MUNICIPIOS -->
-  <section class="relative bg-gradient-to-b from-brand-50/40 via-slate-50 to-slate-50 pt-8 pb-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-xl mx-auto text-center space-y-5">
+  <!-- HERO & BUSCADOR CON EL TEXTO SOLICITADO Y LAS 20 CIUDADES -->
+  <section class="relative bg-gradient-to-b from-brand-50/40 via-slate-50 to-slate-50 pt-10 pb-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto text-center space-y-6">
       
-      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-extrabold uppercase tracking-wider">
-        <i class="fa-solid fa-bolt"></i> TU PORTAL DE EMPLEO LOCAL Y NACIONAL
-      </span>
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-100 text-brand-700 text-xs font-extrabold uppercase tracking-wider shadow-sm">
+        <span class="text-amber-500">✨</span> NUEVO PORTAL DE EMPLEO · 2026[cite: 3]
+      </div>
 
-      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-        Encuentra tu próximo empleo en <span class="text-brand-600">Roda Trabajo</span>
+      <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+        Todas las personas merecen una <span class="text-brand-600">oportunidad</span>[cite: 3]
       </h1>
 
+      <div class="space-y-4 text-slate-600 text-sm sm:text-base leading-relaxed font-normal">
+        <p class="text-slate-700 font-medium">
+          Detrás de cada persona hay un sueño por cumplir, una familia que sacar adelante y un futuro por construir[cite: 3].
+        </p>
+        <p>
+          Nace Roda Trabajo, un proyecto que comienza con humildad y mucha ilusión, con ganas de acercar oportunidades laborales a las personas de toda España[cite: 3].
+        </p>
+      </div>
+
+      <div class="pt-2 pb-2 border-t border-b border-slate-200/60 max-w-lg mx-auto">
+        <p class="text-brand-700 font-bold text-sm sm:text-base tracking-wide">
+          Roda Trabajo · Oportunidades que acercan futuros[cite: 3].
+        </p>
+      </div>
+
       <!-- FORMULARIO DE BÚSQUEDA -->
-      <div class="bg-white p-4 sm:p-5 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 text-left mt-6">
+      <div class="bg-white p-4 sm:p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 text-left mt-8">
         <form onsubmit="filtrarAnuncios(event)" class="space-y-3">
           
           <!-- Campo 1: ¿Qué trabajo buscas? -->
@@ -210,6 +219,26 @@
     </div>
   </footer>
 
+  <!-- MODAL DE INFORMACIÓN (INFO) -->
+  <div id="modal-info" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 relative border border-slate-100 text-center">
+      <button onclick="cerrarModalInfo()" class="absolute top-4 right-4 w-9 h-9 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 cursor-pointer hover:bg-slate-200">
+        <i class="fa-solid fa-xmark text-base"></i>
+      </button>
+      <div class="w-12 h-12 bg-brand-100 text-brand-700 rounded-2xl flex items-center justify-center mx-auto text-xl mb-2">
+        <i class="fa-solid fa-envelope"></i>
+      </div>
+      <h3 class="text-xl font-black text-slate-900">Información de Contacto</h3>
+      <p class="text-sm text-slate-600">Para cualquier consulta o soporte, puedes escribirnos directamente a nuestro correo oficial:</p>
+      <div class="p-3 bg-brand-50 border border-brand-200 rounded-2xl text-brand-800 font-bold text-base select-all">
+        info@rodatrabajo.com[cite: 3]
+      </div>
+      <button onclick="cerrarModalInfo()" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl transition-colors cursor-pointer">
+        Entendido
+      </button>
+    </div>
+  </div>
+
   <!-- SCRIPTS Y LÓGICA -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -262,6 +291,15 @@
       }
     }
 
+    function abrirModalInfo() {
+      document.getElementById('modal-info').classList.remove('hidden');
+      document.getElementById('mobile-menu').classList.add('hidden');
+    }
+
+    function cerrarModalInfo() {
+      document.getElementById('modal-info').classList.add('hidden');
+    }
+
     async function checkAuthAndRedirect(e) {
       if (e) e.preventDefault();
       const { data: { session } } = await cliente.auth.getSession();
@@ -287,7 +325,7 @@
           };
         }
         if (btnLoginMobile) {
-          btnLoginMobile.innerHTML = '<i class="fa-solid fa-right-from-bracket mr-1"></i> Cerrar Sesión';
+          btnLoginMobile.innerHTML = '<i class="fa-solid fa-right-from-bracket mr-2"></i> Cerrar Sesión';
           btnLoginMobile.href = '#';
           btnLoginMobile.onclick = async (e) => {
             e.preventDefault();
