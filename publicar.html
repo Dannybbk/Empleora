@@ -5,73 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Publicar anuncio gratis - Roda Trabajo</title>
   
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts: Plus Jakarta Sans -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['Plus Jakarta Sans', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#15803d',
-            }
-          }
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+          colors: { brand: { 50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e', 600: '#16a34a', 700: '#15803d' } }
         }
       }
     }
   </script>
   <style>
-    .glass-nav {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
+    .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-  <!-- HEADER MODERNO CON BANDERA DE ESPAÑA -->
+  <!-- HEADER -->
   <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/85">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        
-        <a href="index.html" class="flex items-center gap-2.5 group">
-          <div class="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-brand-500/20 flex flex-col border border-slate-200">
-            <div class="h-1/4 bg-red-600 w-full"></div>
-            <div class="h-2/4 bg-yellow-500 w-full"></div>
-            <div class="h-1/4 bg-red-600 w-full"></div>
-          </div>
-          <span class="text-xl font-black tracking-tight text-slate-900">
-            RODA TRABAJO
-          </span>
-        </a>
-
-        <div class="flex items-center gap-3">
-          <a href="index.html" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-600 transition-colors flex items-center gap-1.5">
-            <i class="fa-solid fa-arrow-left"></i>
-            <span>Volver al inicio</span>
-          </a>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-brand-500/20 flex flex-col border border-slate-200">
+          <div class="h-1/4 bg-red-600 w-full"></div>
+          <div class="h-2/4 bg-yellow-500 w-full"></div>
+          <div class="h-1/4 bg-red-600 w-full"></div>
         </div>
-
-      </div>
+        <span class="text-xl font-black tracking-tight text-slate-900">RODA TRABAJO</span>
+      </a>
+      <a href="index.html" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-600 flex items-center gap-1.5">
+        <i class="fa-solid fa-arrow-left"></i> <span>Volver al inicio</span>
+      </a>
     </div>
   </header>
 
   <!-- CONTENIDO PRINCIPAL -->
   <main class="max-w-2xl mx-auto px-4 py-10 w-full flex-1">
-    
     <div class="bg-white p-6 sm:p-10 rounded-3xl shadow-xl border border-slate-200/80 space-y-8">
       
       <div class="space-y-2 border-b border-slate-100 pb-6">
@@ -86,17 +58,12 @@
         
         <div class="space-y-1">
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Título del anuncio *</label>
-          <input type="text" name="title" required placeholder="Ej: Se busca repartidor con carnet B" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
-        </div>
-
-        <div class="space-y-1">
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Profesión o trabajo que buscas *</label>
-          <input type="text" name="profession" required placeholder="Ej: Repartidor / Mozo de almacén" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
+          <input type="text" name="title" required placeholder="Ej: Se busca repartidor con carnet B" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white">
         </div>
 
         <div class="space-y-1">
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Sector profesional *</label>
-          <select name="category" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:border-brand-500 focus:bg-white transition-all cursor-pointer">
+          <select name="category" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:border-brand-500 focus:bg-white cursor-pointer">
             <option value="" disabled selected>Selecciona un sector...</option>
             <option value="Construcción y reformas">🏗️ Construcción y reformas</option>
             <option value="Limpieza">🧹 Limpieza</option>
@@ -123,59 +90,17 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="space-y-1">
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Provincia *</label>
-            <input type="text" name="province" required placeholder="Ej: Madrid" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
+            <input type="text" name="city" required placeholder="Ej: Madrid" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white">
           </div>
           <div class="space-y-1">
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Localidad *</label>
-            <input type="text" name="city" required placeholder="Ej: Pozuelo de Alarcón" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Sueldo / Salario</label>
+            <input type="text" name="sueldo" placeholder="Ej: 1.200€ / A convenir" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white">
           </div>
         </div>
 
         <div class="space-y-1">
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Descripción *</label>
-          <textarea name="description" rows="5" required placeholder="Detalla las condiciones, requisitos y detalles del puesto..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-all"></textarea>
-        </div>
-
-        <div class="space-y-1">
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Experiencia laboral</label>
-          <textarea name="experience" rows="3" placeholder="Experiencia previa requerida o valorable..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-all"></textarea>
-        </div>
-
-        <div class="space-y-1">
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Habilidades</label>
-          <input type="text" name="skills" placeholder="Ej: Carnet B, manejo de carretilla..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="space-y-1">
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Tipo de jornada</label>
-            <select name="jornada" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:border-brand-500 focus:bg-white transition-all cursor-pointer">
-              <option value="">Selecciona...</option>
-              <option>Completa</option>
-              <option>Parcial</option>
-              <option>Por horas</option>
-              <option>Fines de semana</option>
-            </select>
-          </div>
-          <div class="space-y-1">
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Disponibilidad</label>
-            <input type="text" name="disponibilidad" placeholder="Inmediata, a partir de..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
-          </div>
-        </div>
-
-        <div class="space-y-1">
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Método de contacto preferido *</label>
-          <select name="contact_method" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:border-brand-500 focus:bg-white transition-all cursor-pointer">
-            <option value="">Selecciona...</option>
-            <option value="email">Email</option>
-            <option value="telefono">Teléfono</option>
-            <option value="whatsapp">WhatsApp</option>
-          </select>
-        </div>
-
-        <div class="space-y-1">
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Dato de contacto (solo se mostrará a quien tú elijas) *</label>
-          <input type="text" name="contact_info" required placeholder="Tu email o teléfono de contacto" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Descripción del puesto *</label>
+          <textarea name="description" rows="5" required placeholder="Detalla las condiciones, requisitos y detalles del puesto..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white"></textarea>
         </div>
 
         <button type="submit" id="btn-submit" class="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-brand-500/20 transition-all flex items-center justify-center gap-2 cursor-pointer mt-6">
@@ -188,36 +113,17 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="bg-slate-900 text-slate-400 text-sm border-t border-slate-800 py-6 mt-16">
-    <div class="max-w-7xl mx-auto px-4 text-center">
-      <p>© 2026 Roda Trabajo. Todos los derechos reservados.</p>
-    </div>
+  <footer class="bg-slate-900 text-slate-400 text-sm border-t border-slate-800 py-6 mt-16 text-center">
+    <p>© 2026 Roda Trabajo. Todos los derechos reservados.</p>
   </footer>
 
-  <!-- SUPABASE & SCRIPT DE LÓGICA -->
+  <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
     const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // 1. VERIFICACIÓN DE SESIÓN CON RETARDO PARA EVITAR FALSOS REBOTES
-    async function verificarSesion() {
-      const { data: { session } } = await cliente.auth.getSession();
-      if (!session) {
-        // Damos un pequeño margen por si el navegador está cargando el token de sesión
-        setTimeout(async () => {
-          const { data: { session: retrySession } } = await cliente.auth.getSession();
-          if (!retrySession) {
-            window.location.href = 'login.html';
-          }
-        }, 800);
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', verificarSesion);
-
-    // 2. ENVÍO DEL FORMULARIO A SUPABASE CON RESPUESTA VISUAL
     document.getElementById('ad-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const msgBox = document.getElementById('message');
@@ -231,7 +137,7 @@
       const { data: { session } } = await cliente.auth.getSession();
       if (!session) {
         msgBox.className = 'p-4 rounded-xl text-sm font-medium bg-red-50 text-red-600 border border-red-100 block';
-        msgBox.textContent = 'Sesión expirada o no iniciada. Redirigiendo al login...';
+        msgBox.textContent = 'Debes iniciar sesión para publicar.';
         setTimeout(() => { window.location.href = 'login.html'; }, 1500);
         return;
       }
@@ -239,20 +145,10 @@
       const formData = new FormData(e.target);
       const adData = {
         title: formData.get('title'),
-        titulo: formData.get('title'),
-        profession: formData.get('profession'),
         category: formData.get('category'),
-        categoria: formData.get('category'),
-        province: formData.get('province'),
         city: formData.get('city'),
+        sueldo: formData.get('sueldo') || 'A convenir',
         description: formData.get('description'),
-        descripcion: formData.get('description'),
-        experience: formData.get('experience'),
-        skills: formData.get('skills'),
-        jornada: formData.get('jornada'),
-        disponibilidad: formData.get('disponibilidad'),
-        contact_method: formData.get('contact_method'),
-        contact_info: formData.get('contact_info'),
         status: 'pending',
         user_id: session.user.id
       };
@@ -261,15 +157,13 @@
 
       if (error) {
         msgBox.className = 'p-4 rounded-xl text-sm font-medium bg-red-50 text-red-600 border border-red-100 block';
-        msgBox.textContent = 'Hubo un error al publicar el anuncio: ' + error.message;
+        msgBox.textContent = 'Error: ' + error.message;
         btn.disabled = false;
       } else {
         msgBox.className = 'p-4 rounded-xl text-sm font-medium bg-emerald-50 text-emerald-700 border border-emerald-100 block';
-        msgBox.textContent = '¡Anuncio publicado con éxito! Será revisado y aprobado en breve.';
+        msgBox.textContent = '¡Anuncio publicado con éxito! Redirigiendo...';
         e.target.reset();
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 2000);
+        setTimeout(() => { window.location.href = 'index.html'; }, 2000);
       }
     });
   </script>
