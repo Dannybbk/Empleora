@@ -44,12 +44,12 @@
         <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
           <a href="index.html" class="text-brand-600">Inicio</a>
           <a href="#anuncios" class="hover:text-brand-600">Ofertas de Empleo</a>
-          <a href="login.html" class="hover:text-brand-600">Publicar Anuncio</a>
+          <a href="publicar.html" class="hover:text-brand-600">Publicar Anuncio</a>
         </nav>
 
         <div class="hidden md:flex items-center gap-3" id="desktop-auth-container">
           <a href="login.html" id="btn-login-desktop" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-600">Iniciar sesión</a>
-          <a href="login.html" class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-lg">+ Publicar Anuncio</a>
+          <a href="publicar.html" class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-lg">+ Publicar Anuncio</a>
         </div>
 
         <!-- TRES RAYAS (MENÚ HAMBURGUESA MÓVIL) -->
@@ -66,12 +66,11 @@
       <a href="index.html" class="block px-3 py-2.5 rounded-xl font-semibold text-brand-600 bg-brand-50">
         <i class="fa-solid fa-house mr-2"></i> Inicio
       </a>
-      <a href="login.html" id="btn-login-mobile" class="block px-3 py-2.5 rounded-xl font-semibold text-slate-700 hover:bg-slate-50">
-        <i class="fa-solid fa-right-to-bracket mr-2"></i> Iniciar sesión
-      </a>
-      <a href="login.html" class="block px-3 py-2.5 rounded-xl font-semibold text-slate-700 hover:bg-slate-50">
-        <i class="fa-solid fa-user-plus mr-2"></i> Registrarte
-      </a>
+      <div id="mobile-auth-links" class="space-y-2">
+        <a href="login.html" id="btn-login-mobile" class="block px-3 py-2.5 rounded-xl font-semibold text-slate-700 hover:bg-slate-50">
+          <i class="fa-solid fa-right-to-bracket mr-2"></i> Iniciar sesión
+        </a>
+      </div>
       <button onclick="abrirModalInfo()" class="w-full text-left px-3 py-2.5 rounded-xl font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer">
         <i class="fa-solid fa-circle-info mr-2 text-brand-600"></i> Info
       </button>
@@ -87,12 +86,12 @@
         <span class="text-amber-500">✨</span> NUEVO PORTAL DE EMPLEO • 2026
       </div>
 
-      <!-- Título principal más pequeño y elegante -->
+      <!-- Título principal -->
       <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
         Todas las personas merecen una <span class="text-brand-600">oportunidad</span>
       </h1>
 
-      <!-- Párrafo descriptivo corto -->
+      <!-- Párrafo descriptivo -->
       <p class="text-slate-600 text-sm sm:text-base leading-relaxed font-normal max-w-xl mx-auto px-2">
         Nace Roda Trabajo, un proyecto que comienza con humildad y mucha ilusión, con ganas de acercar oportunidades laborales a las personas de toda España.
       </p>
@@ -104,7 +103,7 @@
         </p>
       </div>
 
-      <!-- FORMULARIO DE BÚSQUEDA AVANZADO -->
+      <!-- FORMULARIO DE BÚSQUEDA -->
       <div class="bg-white p-4 sm:p-6 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 text-left mt-6 space-y-4">
         <form onsubmit="filtrarAnuncios(event)" class="space-y-3">
           
@@ -117,25 +116,25 @@
             <i class="fa-solid fa-layer-group absolute left-4 text-slate-400"></i>
             <select id="search-category" class="w-full pl-11 pr-8 py-3 bg-slate-50 border border-transparent rounded-2xl text-slate-700 text-sm focus:bg-white focus:border-brand-500 focus:outline-none transition-all font-medium appearance-none cursor-pointer">
               <option value="">Ver todas las categorías</option>
-              <option value="construccion">🏗️ Construcción y reformas</option>
-              <option value="limpieza">🧹 Limpieza</option>
-              <option value="hosteleria">🍽️ Hostelería y turismo</option>
-              <option value="transporte">🚚 Transporte y conducción</option>
-              <option value="logistica">📦 Logística y almacén</option>
-              <option value="administracion">📋 Administración y oficina</option>
-              <option value="comercio">🛍️ Comercio y ventas</option>
-              <option value="atencion-cliente">🎧 Atención al cliente</option>
-              <option value="informatica">💻 Informática y tecnología</option>
-              <option value="sanidad">🏥 Sanidad</option>
-              <option value="educacion">🎓 Educación</option>
-              <option value="mantenimiento">🔧 Mantenimiento</option>
-              <option value="agricultura">🌾 Agricultura y campo</option>
-              <option value="industria">🏭 Industria</option>
-              <option value="peluqueria">✂️ Peluquería y estética</option>
-              <option value="cuidado">❤️ Cuidado de personas</option>
-              <option value="marketing">📣 Marketing</option>
-              <option value="domestico">🏠 Trabajo doméstico</option>
-              <option value="otros">➕ Otros sectores</option>
+              <option value="Construcción y reformas">🏗️ Construcción y reformas</option>
+              <option value="Limpieza">🧹 Limpieza</option>
+              <option value="Hostelería y turismo">🍽️ Hostelería y turismo</option>
+              <option value="Transporte y conducción">🚚 Transporte y conducción</option>
+              <option value="Logística y almacén">📦 Logística y almacén</option>
+              <option value="Administración y oficina">📋 Administración y oficina</option>
+              <option value="Comercio y ventas">🛍️ Comercio y ventas</option>
+              <option value="Atención al cliente">🎧 Atención al cliente</option>
+              <option value="Informática y tecnología">💻 Informática y tecnología</option>
+              <option value="Sanidad">🏥 Sanidad</option>
+              <option value="Educación">🎓 Educación</option>
+              <option value="Mantenimiento y reparaciones">🔧 Mantenimiento y reparaciones</option>
+              <option value="Agricultura y campo">🌾 Agricultura y campo</option>
+              <option value="Industria">🏭 Industria</option>
+              <option value="Peluquería y estética">✂️ Peluquería y estética</option>
+              <option value="Cuidado de personas">❤️ Cuidado de personas</option>
+              <option value="Marketing y comunicación">📣 Marketing y comunicación</option>
+              <option value="Trabajo doméstico">🏠 Trabajo doméstico</option>
+              <option value="Otros sectores">➕ Otros sectores</option>
             </select>
             <i class="fa-solid fa-chevron-down absolute right-4 text-slate-400 text-xs pointer-events-none"></i>
           </div>
@@ -144,26 +143,26 @@
             <i class="fa-solid fa-location-dot absolute left-4 text-slate-400"></i>
             <select id="search-province" onchange="actualizarMunicipios()" class="w-full pl-11 pr-8 py-3 bg-slate-50 border border-transparent rounded-2xl text-slate-700 text-sm focus:bg-white focus:border-brand-500 focus:outline-none transition-all font-medium appearance-none cursor-pointer">
               <option value="">Toda España</option>
-              <option value="Madrid">1. Madrid</option>
-              <option value="Toledo">2. Toledo</option>
-              <option value="Barcelona">3. Barcelona</option>
-              <option value="Valencia">4. Valencia</option>
-              <option value="Sevilla">5. Sevilla</option>
-              <option value="Zaragoza">6. Zaragoza</option>
-              <option value="Málaga">7. Málaga</option>
-              <option value="Murcia">8. Murcia</option>
-              <option value="Palma de Mallorca">9. Palma de Mallorca</option>
-              <option value="Bilbao">10. Bilbao</option>
-              <option value="Alicante">11. Alicante</option>
-              <option value="Córdoba">12. Córdoba</option>
-              <option value="Valladolid">13. Valladolid</option>
-              <option value="Vigo">14. Vigo</option>
-              <option value="Gijón">15. Gijón</option>
-              <option value="Granada">16. Granada</option>
-              <option value="A Coruña">17. A Coruña</option>
-              <option value="San Sebastián">18. San Sebastián</option>
-              <option value="Santander">19. Santander</option>
-              <option value="Las Palmas de Gran Canaria">20. Las Palmas de Gran Canaria</option>
+              <option value="Madrid">Madrid</option>
+              <option value="Toledo">Toledo</option>
+              <option value="Barcelona">Barcelona</option>
+              <option value="Valencia">Valencia</option>
+              <option value="Sevilla">Sevilla</option>
+              <option value="Zaragoza">Zaragoza</option>
+              <option value="Málaga">Málaga</option>
+              <option value="Murcia">Murcia</option>
+              <option value="Palma de Mallorca">Palma de Mallorca</option>
+              <option value="Bilbao">Bilbao</option>
+              <option value="Alicante">Alicante</option>
+              <option value="Córdoba">Córdoba</option>
+              <option value="Valladolid">Valladolid</option>
+              <option value="Vigo">Vigo</option>
+              <option value="Gijón">Gijón</option>
+              <option value="Granada">Granada</option>
+              <option value="A Coruña">A Coruña</option>
+              <option value="San Sebastián">San Sebastián</option>
+              <option value="Santander">Santander</option>
+              <option value="Las Palmas de Gran Canaria">Las Palmas de Gran Canaria</option>
             </select>
             <i class="fa-solid fa-chevron-down absolute right-4 text-slate-400 text-xs pointer-events-none"></i>
           </div>
@@ -176,7 +175,6 @@
             <i class="fa-solid fa-chevron-down absolute right-4 text-slate-400 text-xs pointer-events-none"></i>
           </div>
 
-          <!-- Botón Buscar reducido -->
           <div class="pt-1">
             <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-2xl transition-all shadow-md shadow-brand-600/20 flex items-center justify-center gap-2 cursor-pointer">
               Buscar <i class="fa-solid fa-magnifying-glass text-xs"></i>
@@ -185,9 +183,8 @@
 
         </form>
 
-        <!-- Botón para Publicar tu anuncio gratis (lleva a registro) -->
         <div class="pt-3 border-t border-slate-100 text-center">
-          <a href="login.html" class="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-emerald-50 hover:bg-emerald-100 text-brand-700 font-bold text-sm rounded-2xl transition-all border border-brand-200 cursor-pointer">
+          <a href="publicar.html" class="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-emerald-50 hover:bg-emerald-100 text-brand-700 font-bold text-sm rounded-2xl transition-all border border-brand-200 cursor-pointer">
             <i class="fa-solid fa-circle-plus text-brand-600"></i> Publicar tu anuncio gratis
           </a>
         </div>
@@ -306,23 +303,38 @@
 
     async function gestionarEstadoSesion() {
       const { data: { session } } = await cliente.auth.getSession();
+      const containerDesktop = document.getElementById('desktop-auth-container');
+      const containerMobile = document.getElementById('mobile-auth-links');
+
       if (session) {
-        const btnLoginDesktop = document.getElementById('btn-login-desktop');
-        const btnLoginMobile = document.getElementById('btn-login-mobile');
-        if (btnLoginDesktop) {
-          btnLoginDesktop.textContent = 'Mi Cuenta / Cerrar Sesión';
-          btnLoginDesktop.href = '#';
-          btnLoginDesktop.onclick = async (e) => {
-            e.preventDefault();
+        // Escritorio: Dos botones separados (Mi Cuenta y Cerrar Sesión)
+        if (containerDesktop) {
+          containerDesktop.innerHTML = `
+            <a href="mis-anuncios.html" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-600 transition-colors flex items-center gap-1.5">
+              <i class="fa-solid fa-user-gear"></i> Mi Cuenta
+            </a>
+            <button id="btn-logout-desktop" class="px-4 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-xl transition-all cursor-pointer">
+              Cerrar Sesión
+            </button>
+            <a href="publicar.html" class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-lg">+ Publicar Anuncio</a>
+          `;
+          document.getElementById('btn-logout-desktop').onclick = async () => {
             await cliente.auth.signOut();
             window.location.reload();
           };
         }
-        if (btnLoginMobile) {
-          btnLoginMobile.innerHTML = '<i class="fa-solid fa-right-from-bracket mr-2"></i> Cerrar Sesión';
-          btnLoginMobile.href = '#';
-          btnLoginMobile.onclick = async (e) => {
-            e.preventDefault();
+
+        // Móvil: Opciones separadas
+        if (containerMobile) {
+          containerMobile.innerHTML = `
+            <a href="mis-anuncios.html" class="block px-3 py-2.5 rounded-xl font-semibold text-slate-700 hover:bg-slate-50">
+              <i class="fa-solid fa-user-gear mr-2 text-brand-600"></i> Mi Cuenta
+            </a>
+            <button id="btn-logout-mobile" class="w-full text-left px-3 py-2.5 rounded-xl font-semibold text-red-600 hover:bg-red-50 cursor-pointer">
+              <i class="fa-solid fa-right-from-bracket mr-2"></i> Cerrar Sesión
+            </button>
+          `;
+          document.getElementById('btn-logout-mobile').onclick = async () => {
             await cliente.auth.signOut();
             window.location.reload();
           };
@@ -361,7 +373,7 @@
         card.innerHTML = `
           <div class="space-y-2">
             <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-brand-100 text-brand-800">${ad.categoria || 'Empleo'}</span>
+              <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-brand-100 text-brand-800">${ad.categoria || ad.category || 'Empleo'}</span>
               <span class="text-xs text-slate-400">• ${ad.created_at ? new Date(ad.created_at).toLocaleDateString() : 'Reciente'}</span>
             </div>
             <h3 class="text-lg font-bold text-slate-900">${ad.titulo || ad.title || 'Oferta'}</h3>
@@ -392,7 +404,7 @@
       const filtrados = todosLosAnuncios.filter(ad => {
         const titulo = (ad.titulo || ad.title || '').toLowerCase();
         const desc = (ad.descripcion || ad.description || '').toLowerCase();
-        const categoria = (ad.categoria || '').toLowerCase();
+        const categoria = (ad.categoria || ad.category || '').toLowerCase();
         const ubicacion = (ad.city || ad.provincia || ad.municipio || '').toLowerCase();
 
         const coincideKW = !kw || titulo.includes(kw) || desc.includes(kw);
@@ -430,7 +442,7 @@
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6 relative border border-slate-100 max-h-[90vh] overflow-y-auto">
           <button onclick="document.getElementById('modal-detalle-oferta').remove()" class="absolute top-5 right-5 w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 cursor-pointer hover:bg-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
           <div class="space-y-2">
-            <span class="px-3 py-1 rounded-full text-xs font-bold bg-brand-100 text-brand-800 uppercase">${ad.categoria || 'Empleo'}</span>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-brand-100 text-brand-800 uppercase">${ad.categoria || ad.category || 'Empleo'}</span>
             <h2 class="text-2xl font-black text-slate-900">${titulo}</h2>
           </div>
           <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl">
