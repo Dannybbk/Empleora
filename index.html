@@ -20,25 +20,27 @@
     }
   </script>
   <style>
-    .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); }
+    .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
   <!-- CABECERA DE NAVEGACIÓN -->
-  <header class="sticky top-0 z-50 glass-nav border-b border-slate-200/80">
+  <header class="sticky top-0 z-50 glass-nav border-b border-slate-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
-        <a href="index.html" class="flex items-center gap-2.5 group cursor-pointer">
-          <div class="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-brand-500/20 flex flex-col border border-slate-200">
+        
+        <!-- LOGO RODA TRABAJO CON BANDERA DE ESPAÑA -->
+        <a href="index.html" class="flex items-center gap-2.5 cursor-pointer">
+          <div class="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-brand-500/20 flex flex-col border border-slate-200 shrink-0">
             <div class="h-1/4 bg-red-600 w-full"></div>
             <div class="h-2/4 bg-yellow-500 w-full"></div>
             <div class="h-1/4 bg-red-600 w-full"></div>
           </div>
-          <span class="text-xl font-black tracking-tight text-slate-900">RODA TRABAJO</span>
+          <span class="text-xl sm:text-2xl font-black tracking-tight text-slate-900">RODA TRABAJO</span>
         </a>
 
-        <!-- Menú Escritorio -->
+        <!-- MENÚ ESCRITORIO -->
         <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
           <a href="index.html" class="text-brand-600">Inicio</a>
           <a href="#anuncios" class="hover:text-brand-600">Ofertas de Empleo</a>
@@ -50,58 +52,95 @@
           <a href="#" onclick="checkAuthAndRedirect(event)" class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-lg">+ Publicar Anuncio</a>
         </div>
 
-        <!-- Botón Menú Hamburguesa Móvil -->
+        <!-- TRES RAYAS (MENÚ HAMBURGUESA MÓVIL) -->
         <div class="md:hidden">
-          <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-600 cursor-pointer hover:bg-slate-100">
-            <i class="fa-solid fa-bars text-xl"></i>
+          <button id="mobile-menu-btn" class="p-2 rounded-lg text-slate-700 cursor-pointer hover:bg-slate-100">
+            <i class="fa-solid fa-bars text-2xl"></i>
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Menú Desplegable Móvil -->
-    <div id="mobile-menu" class="hidden md:hidden border-b border-slate-200 bg-white px-4 pt-2 pb-4 space-y-2">
-      <a href="index.html" class="block px-3 py-2 rounded-md font-medium text-brand-600 bg-brand-50">Inicio</a>
-      <a href="#anuncios" class="block px-3 py-2 rounded-md font-medium text-slate-700 hover:bg-slate-50">Ofertas de Empleo</a>
+    <!-- MENÚ DESPLEGABLE MÓVIL -->
+    <div id="mobile-menu" class="hidden md:hidden border-b border-slate-200 bg-white px-4 pt-3 pb-5 space-y-3">
+      <a href="index.html" class="block px-3 py-2 rounded-xl font-semibold text-brand-600 bg-brand-50">Inicio</a>
+      <a href="#anuncios" class="block px-3 py-2 rounded-xl font-semibold text-slate-700 hover:bg-slate-50">Ofertas de Empleo</a>
       <div class="pt-2 border-t border-slate-100 flex flex-col gap-2" id="mobile-auth-container">
-        <a href="login.html" id="btn-login-mobile" class="w-full text-center px-4 py-2 font-semibold text-slate-700 bg-slate-100 rounded-lg">Iniciar sesión</a>
-        <a href="#" onclick="checkAuthAndRedirect(event)" class="w-full text-center px-4 py-2 font-semibold text-white bg-brand-600 rounded-lg">+ Publicar Anuncio</a>
+        <a href="login.html" id="btn-login-mobile" class="w-full text-center px-4 py-2.5 font-semibold text-slate-700 bg-slate-100 rounded-xl">Iniciar sesión</a>
+        <a href="#" onclick="checkAuthAndRedirect(event)" class="w-full text-center px-4 py-2.5 font-semibold text-white bg-brand-600 rounded-xl">+ Publicar Anuncio</a>
       </div>
     </div>
   </header>
 
-  <!-- SECCIÓN PRINCIPAL HERO CON BUSCADOR RESTAURADO -->
-  <section class="relative bg-gradient-to-b from-brand-50/60 via-slate-50 to-slate-50 pt-10 pb-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-4xl mx-auto text-center space-y-6">
-      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-bold uppercase tracking-wider">
-        <i class="fa-solid fa-bolt"></i> Tu portal de empleo local y nacional
+  <!-- HERO & BUSCADOR CON MUNICIPIOS -->
+  <section class="relative bg-gradient-to-b from-brand-50/40 via-slate-50 to-slate-50 pt-8 pb-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-xl mx-auto text-center space-y-5">
+      
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-extrabold uppercase tracking-wider">
+        <i class="fa-solid fa-bolt"></i> TU PORTAL DE EMPLEO LOCAL Y NACIONAL
       </span>
-      <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-        Encuentra tu próximo empleo en <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-emerald-500">Roda Trabajo</span>
+
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+        Encuentra tu próximo empleo en <span class="text-brand-600">Roda Trabajo</span>
       </h1>
 
-      <!-- CAJA DE BÚSQUEDA RESTAURADA -->
-      <div class="bg-white p-3 sm:p-4 rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200 mt-6 text-left max-w-3xl mx-auto">
-        <form onsubmit="filtrarAnuncios(event)" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <!-- FORMULARIO DE BÚSQUEDA -->
+      <div class="bg-white p-4 sm:p-5 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 text-left mt-6">
+        <form onsubmit="filtrarAnuncios(event)" class="space-y-3">
           
-          <!-- Buscador por palabra clave -->
+          <!-- Campo 1: ¿Qué trabajo buscas? -->
           <div class="relative flex items-center">
-            <i class="fa-solid fa-magnifying-glass absolute left-3 text-slate-400"></i>
-            <input type="text" id="search-keyword" placeholder="Puesto o empleo..." class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 text-slate-400"></i>
+            <input type="text" id="search-keyword" placeholder="¿Qué trabajo buscas?" class="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-transparent rounded-2xl text-slate-700 text-sm focus:bg-white focus:border-brand-500 focus:outline-none transition-all placeholder-slate-400 font-medium">
           </div>
 
-          <!-- Selector Provincias / Ciudades -->
+          <!-- Campo 2: Categorías -->
           <div class="relative flex items-center">
-            <i class="fa-solid fa-location-dot absolute left-3 text-slate-400"></i>
-            <input type="text" id="search-city" placeholder="Ciudad o provincia..." class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <i class="fa-solid fa-layer-group absolute left-4 text-slate-400"></i>
+            <select id="search-category" class="w-full pl-11 pr-8 py-3.5 bg-slate-50 border border-transparent rounded-2xl text-slate-700 text-sm focus:bg-white focus:border-brand-500 focus:outline-none transition-all font-medium appearance-none cursor-pointer">
+              <option value="">Ver todas las categorías</option>
+              <option value="Hostelería">Hostelería y Turismo</option>
+              <option value="Reparto">Reparto y Logística</option>
+              <option value="Limpieza">Limpieza y Mantenimiento</option>
+              <option value="Construcción">Construcción y Reformas</option>
+              <option value="Comercio">Comercio y Ventas</option>
+              <option value="Administración">Administración y Oficina</option>
+              <option value="Otros">Otros empleos</option>
+            </select>
+            <i class="fa-solid fa-chevron-down absolute right-4 text-slate-400 text-xs pointer-events-none"></i>
           </div>
 
-          <!-- Botón de Búsqueda -->
-          <div>
-            <button type="submit" class="w-full h-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl transition-colors shadow-md flex items-center justify-center gap-2">
-              <i class="fa-solid fa-magnifying-glass"></i> Buscar empleo
-            </button>
+          <!-- Campo 3: Provincia / Comunidad -->
+          <div class="relative flex items-center">
+            <i class="fa-solid fa-location-dot absolute left-4 text-slate-400"></i>
+            <select id="search-province" onchange="actualizarMunicipios()" class="w-full pl-11 pr-8 py-3.5 bg-slate-50 border border-transparent rounded-2xl text-slate-700 text-sm focus:bg-white focus:border-brand-500 focus:outline-none transition-all font-medium appearance-none cursor-pointer">
+              <option value="">Toda España</option>
+              <option value="Madrid">Madrid</option>
+              <option value="Barcelona">Barcelona</option>
+              <option value="Valencia">Valencia</option>
+              <option value="Sevilla">Sevilla</option>
+              <option value="Alicante">Alicante</option>
+              <option value="Málaga">Málaga</option>
+              <option value="Murcia">Murcia</option>
+              <option value="Cádiz">Cádiz</option>
+              <option value="Zaragoza">Zaragoza</option>
+            </select>
+            <i class="fa-solid fa-chevron-down absolute right-4 text-slate-400 text-xs pointer-events-none"></i>
           </div>
+
+          <!-- Campo 4 DESPLEGABLE: Municipio / Alrededores -->
+          <div id="container-municipio" class="hidden relative flex items-center">
+            <i class="fa-solid fa-city absolute left-4 text-slate-400"></i>
+            <select id="search-municipio" class="w-full pl-11 pr-8 py-3.5 bg-slate-50 border border-transparent rounded-2xl text-slate-700 text-sm focus:bg-white focus:border-brand-500 focus:outline-none transition-all font-medium appearance-none cursor-pointer">
+              <option value="">Todos los municipios y alrededores</option>
+            </select>
+            <i class="fa-solid fa-chevron-down absolute right-4 text-slate-400 text-xs pointer-events-none"></i>
+          </div>
+
+          <!-- Botón Buscar Ofertas -->
+          <button type="submit" class="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold text-base rounded-2xl transition-all shadow-lg shadow-brand-600/20 flex items-center justify-center gap-2 cursor-pointer mt-2">
+            Buscar ofertas <i class="fa-solid fa-arrow-right text-sm"></i>
+          </button>
 
         </form>
       </div>
@@ -109,15 +148,15 @@
     </div>
   </section>
 
-  <!-- LISTADO DE ANUNCIOS -->
-  <section id="anuncios" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+  <!-- SECCIÓN DE OFERTAS PUBLICADAS -->
+  <section id="anuncios" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="mb-6 flex items-center justify-between">
       <div>
-        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Últimos anuncios publicados</h2>
-        <p class="text-slate-500 text-sm mt-1">Pulsa en "Ver oferta" para ver todos los detalles y contactar</p>
+        <h2 class="text-2xl font-bold text-slate-900">Últimos anuncios publicados</h2>
+        <p class="text-slate-500 text-xs sm:text-sm mt-0.5">Pulsa en "Ver oferta" para ver todos los detalles y contactar</p>
       </div>
       <button onclick="limpiarFiltros()" id="btn-limpiar" class="hidden text-xs font-semibold text-brand-600 hover:underline">
-        <i class="fa-solid fa-rotate-right"></i> Mostrar todas las ofertas
+        <i class="fa-solid fa-rotate-right"></i> Ver todos
       </button>
     </div>
 
@@ -136,7 +175,7 @@
     </div>
   </footer>
 
-  <!-- SCRIPTS -->
+  <!-- SCRIPTS Y LÓGICA -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
@@ -144,6 +183,39 @@
     const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let todosLosAnuncios = [];
+
+    // Base de datos de municipios por provincia
+    const municipiosPorProvincia = {
+      "Madrid": ["Madrid Capital", "Coslada", "Pozuelo de Alarcón", "Alcorcón", "Getafe", "Móstoles", "Fuenlabrada", "Leganés", "Alcalá de Henares", "Las Rozas", "Majadahonda", "Torrejón de Ardoz", "San Sebastián de los Reyes", "Rivas-Vaciamadrid"],
+      "Barcelona": ["Barcelona Capital", "Hospitalet de Llobregat", "Badalona", "Terrassa", "Sabadell", "Mataró", "Santa Coloma de Gramenet", "Sant Cugat del Vallès"],
+      "Valencia": ["Valencia Capital", "Torrent", "Gandía", "Paterna", "Sagunto", "Alzira"],
+      "Sevilla": ["Sevilla Capital", "Dos Hermanas", "Alcala de Guadaíra", "Utrera", "Mairena del Aljarafe"],
+      "Alicante": ["Alicante Capital", "Elche", "Torrevieja", "Orihuela", "Benidorm", "Elda"],
+      "Málaga": ["Málaga Capital", "Marbella", "Mijas", "Fuengirola", "Vélez-Málaga", "Estepona", "Benalmádena"],
+      "Murcia": ["Murcia Capital", "Cartagena", "Lorca", "Molina de Segura"],
+      "Cádiz": ["Jerez de la Frontera", "Cádiz Capital", "Algeciras", "San Fernando", "El Puerto de Santa María", "Chiclana"],
+      "Zaragoza": ["Zaragoza Capital", "Calatayud", "Utebo", "Ejea de los Caballeros"]
+    };
+
+    function actualizarMunicipios() {
+      const provincia = document.getElementById('search-province').value;
+      const contenedorMunicipio = document.getElementById('container-municipio');
+      const selectMunicipio = document.getElementById('search-municipio');
+
+      if (provincia && municipiosPorProvincia[provincia]) {
+        selectMunicipio.innerHTML = '<option value="">Todos los municipios y alrededores</option>';
+        municipiosPorProvincia[provincia].forEach(mun => {
+          const opt = document.createElement('option');
+          opt.value = mun;
+          opt.textContent = mun;
+          selectMunicipio.appendChild(opt);
+        });
+        contenedorMunicipio.classList.remove('hidden');
+      } else {
+        contenedorMunicipio.classList.add('hidden');
+        selectMunicipio.value = "";
+      }
+    }
 
     async function checkAuthAndRedirect(e) {
       if (e) e.preventDefault();
@@ -207,7 +279,7 @@
       contenedor.innerHTML = '';
       anunciosAprobados.forEach(ad => {
         const card = document.createElement('div');
-        card.className = "p-5 bg-white rounded-2xl border border-slate-200/80 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4";
+        card.className = "p-5 bg-white rounded-2xl border border-slate-100 hover:shadow-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-4";
         
         card.innerHTML = `
           <div class="space-y-2">
@@ -224,7 +296,7 @@
         `;
 
         const btnVer = document.createElement('button');
-        btnVer.className = "px-4 py-2 bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer shrink-0";
+        btnVer.className = "px-4 py-2.5 bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-700 font-semibold text-sm rounded-xl transition-colors cursor-pointer shrink-0";
         btnVer.textContent = "Ver oferta";
         btnVer.onclick = () => verDetalleAnuncio(ad);
 
@@ -236,17 +308,22 @@
     function filtrarAnuncios(e) {
       e.preventDefault();
       const kw = document.getElementById('search-keyword').value.toLowerCase().trim();
-      const city = document.getElementById('search-city').value.toLowerCase().trim();
+      const cat = document.getElementById('search-category').value.toLowerCase().trim();
+      const prov = document.getElementById('search-province').value.toLowerCase().trim();
+      const mun = document.getElementById('search-municipio').value.toLowerCase().trim();
 
       const filtrados = todosLosAnuncios.filter(ad => {
         const titulo = (ad.titulo || ad.title || '').toLowerCase();
         const desc = (ad.descripcion || ad.description || '').toLowerCase();
+        const categoria = (ad.categoria || '').toLowerCase();
         const ubicacion = (ad.city || ad.provincia || ad.municipio || '').toLowerCase();
 
         const coincideKW = !kw || titulo.includes(kw) || desc.includes(kw);
-        const coincideCity = !city || ubicacion.includes(city);
+        const coincideCat = !cat || categoria.includes(cat);
+        const coincideProv = !prov || ubicacion.includes(prov);
+        const coincideMun = !mun || ubicacion.includes(mun);
 
-        return coincideKW && coincideCity;
+        return coincideKW && coincideCat && coincideProv && coincideMun;
       });
 
       document.getElementById('btn-limpiar').classList.remove('hidden');
@@ -255,7 +332,10 @@
 
     function limpiarFiltros() {
       document.getElementById('search-keyword').value = '';
-      document.getElementById('search-city').value = '';
+      document.getElementById('search-category').value = '';
+      document.getElementById('search-province').value = '';
+      document.getElementById('search-municipio').value = '';
+      document.getElementById('container-municipio').classList.add('hidden');
       document.getElementById('btn-limpiar').classList.add('hidden');
       renderizarAnuncios(todosLosAnuncios);
     }
