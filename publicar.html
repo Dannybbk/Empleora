@@ -178,7 +178,7 @@
           <input type="text" name="contact_info" required placeholder="Tu email o teléfono de contacto" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-all">
         </div>
 
-        <button type="submit" class="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-brand-500/20 transition-all flex items-center justify-center gap-2 cursor-pointer mt-6">
+        <button type="submit" id="btn-submit" class="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-brand-500/20 transition-all flex items-center justify-center gap-2 cursor-pointer mt-6">
           <i class="fa-solid fa-paper-plane"></i>
           <span>Publicar anuncio gratis</span>
         </button>
@@ -201,25 +201,38 @@
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
     const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // 1. SEGURIDAD: REDIRIGIR A LOGIN SI NO ESTÁ AUTENTICADO
+    // 1. VERIFICACIÓN DE SESIÓN CON RETARDO PARA EVITAR FALSOS REBOTES
     async function verificarSesion() {
       const { data: { session } } = await cliente.auth.getSession();
       if (!session) {
-        window.location.href = 'login.html';
+        // Damos un pequeño margen por si el navegador está cargando el token de sesión
+        setTimeout(async () => {
+          const { data: { session: retrySession } } = await cliente.auth.getSession();
+          if (!retrySession) {
+            window.location.href = 'login.html';
+          }
+        }, 800);
       }
     }
 
     document.addEventListener('DOMContentLoaded', verificarSesion);
 
-    // 2. ENVÍO DEL FORMULARIO A SUPABASE
+    // 2. ENVÍO DEL FORMULARIO A SUPABASE CON RESPUESTA VISUAL
     document.getElementById('ad-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const msgBox = document.getElementById('message');
-      msgBox.style.display = 'none';
+      const btn = document.getElementById('btn-submit');
+      
+      msgBox.style.display = 'block';
+      msgBox.className = 'p-4 rounded-xl text-sm font-medium bg-slate-100 text-slate-700 border border-slate-200 block';
+      msgBox.textContent = 'Enviando anuncio...';
+      btn.disabled = true;
 
       const { data: { session } } = await cliente.auth.getSession();
       if (!session) {
-        window.location.href = 'login.html';
+        msgBox.className = 'p-4 rounded-xl text-sm font-medium bg-red-50 text-red-600 border border-red-100 block';
+        msgBox.textContent = 'Sesión expirada o no iniciada. Redirigiendo al login...';
+        setTimeout(() => { window.location.href = 'login.html'; }, 1500);
         return;
       }
 
@@ -249,6 +262,7 @@
       if (error) {
         msgBox.className = 'p-4 rounded-xl text-sm font-medium bg-red-50 text-red-600 border border-red-100 block';
         msgBox.textContent = 'Hubo un error al publicar el anuncio: ' + error.message;
+        btn.disabled = false;
       } else {
         msgBox.className = 'p-4 rounded-xl text-sm font-medium bg-emerald-50 text-emerald-700 border border-emerald-100 block';
         msgBox.textContent = '¡Anuncio publicado con éxito! Será revisado y aprobado en breve.';
