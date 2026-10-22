@@ -3,137 +3,146 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mis Anuncios - Roda Trabajo</title>
-  
-  <!-- Tailwind CSS CDN -->
+  <title>Mis anuncios - Roda Trabajo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts: Plus Jakarta Sans -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
-          colors: { brand: { 50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e', 600: '#16a34a', 700: '#15803d' } }
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#faf6f1', 100: '#f0e6d8', 200: '#e0ccb0',
+              500: '#8B5E3C', 600: '#6B4423', 700: '#4A2F18',
+              800: '#3A2414', 900: '#1a1a1a'
+            }
+          }
         }
       }
     }
   </script>
-  <style>
-    .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); }
-  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-stone-50 text-stone-800 font-sans antialiased min-h-screen flex flex-col">
 
-  <!-- HEADER MODERNO CON BANDERA DE ESPAÑA -->
-  <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/85">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-2.5">
-        <div class="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-brand-500/20 flex flex-col border border-slate-200">
-          <div class="h-1/4 bg-red-600 w-full"></div>
-          <div class="h-2/4 bg-yellow-500 w-full"></div>
-          <div class="h-1/4 bg-red-600 w-full"></div>
-        </div>
-        <span class="text-xl font-black tracking-tight text-slate-900">RODA TRABAJO</span>
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-stone-200">
+    <div class="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-brand-900 text-brand-100 flex items-center justify-center text-xs font-black">RT</div>
+        <span class="font-extrabold text-brand-900 text-sm sm:text-base">Roda Trabajo</span>
       </a>
-      <ul class="flex items-center gap-4 list-none m-0 p-0">
-        <li><a href="index.html" class="text-sm font-semibold text-slate-600 hover:text-brand-600 transition-colors">Inicio</a></li>
-        <li><a href="publicar.html" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold rounded-xl shadow-md transition-all">Publicar anuncio</a></li>
-        <li><a href="#" onclick="logoutUser()" class="text-sm font-semibold text-slate-600 hover:text-red-600 transition-colors">Cerrar sesión</a></li>
-      </ul>
+      <nav class="flex items-center gap-2 sm:gap-3 text-sm font-semibold">
+        <a href="index.html" class="text-stone-600 hover:text-brand-600 hidden sm:inline">Inicio</a>
+        <a href="publicar.html" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs sm:text-sm">Publicar</a>
+        <button onclick="logoutUser()" class="text-stone-600 hover:text-red-600 text-xs sm:text-sm">Cerrar sesión</button>
+      </nav>
     </div>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="max-w-4xl mx-auto px-4 py-10 w-full flex-1 space-y-8">
-    
-    <!-- CABECERA DEL PERFIL -->
-    <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-200/80 flex flex-col sm:flex-row items-center gap-6">
-      <img id="user-avatar-img" class="w-20 h-20 rounded-2xl object-cover bg-slate-100 border-2 border-brand-500 shadow-md" src="" alt="Avatar">
-      <div class="text-center sm:text-left space-y-1">
-        <h1 class="text-xl font-black text-slate-900" id="user-email-title">Mi Panel</h1>
-        <div id="profile-tag" class="inline-block px-3 py-1 bg-brand-100 text-brand-700 text-xs font-bold rounded-full">Perfil de Usuario</div>
+  <main class="max-w-4xl mx-auto px-4 py-8 w-full flex-1 space-y-6">
+
+    <!-- PERFIL -->
+    <div class="bg-white p-5 sm:p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col sm:flex-row items-center gap-4">
+      <div class="relative">
+        <img id="user-avatar-img" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover bg-stone-100 border-2 border-brand-200" src="" alt="Avatar">
+        <label class="absolute -bottom-1 -right-1 w-7 h-7 bg-brand-600 text-white rounded-full flex items-center justify-center cursor-pointer hover:bg-brand-700 shadow">
+          <i class="fa-solid fa-camera text-xs"></i>
+          <input type="file" id="avatar-input" accept="image/*" class="hidden" onchange="uploadAvatar(event)">
+        </label>
       </div>
+      <div class="text-center sm:text-left flex-1">
+        <h1 class="text-lg font-bold text-brand-900" id="user-email-title">Mi panel</h1>
+        <p class="text-xs text-stone-500 mt-0.5" id="profile-tag">Usuario</p>
+      </div>
+      <a href="publicar.html" class="w-full sm:w-auto text-center px-4 py-2.5 bg-brand-900 hover:bg-brand-800 text-white text-sm font-bold rounded-xl">
+        + Nuevo anuncio
+      </a>
     </div>
 
-    <!-- LISTADO DE ANUNCIOS -->
-    <div class="space-y-4">
-      <h2 class="text-2xl font-black text-slate-900">Tus anuncios publicados</h2>
-      <div id="user-ads-container" class="space-y-4">
-        <p class="text-slate-500 text-sm">Cargando tus anuncios...</p>
+    <!-- ANUNCIOS -->
+    <div>
+      <h2 class="text-lg font-bold text-brand-900 mb-3">Tus anuncios</h2>
+      <div id="user-ads-container" class="space-y-3">
+        <p class="text-stone-500 text-sm py-6 text-center">Cargando...</p>
       </div>
     </div>
-
   </main>
 
-  <!-- MODAL DE EDICIÓN -->
-  <div id="edit-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-2xl w-full max-w-lg border border-slate-200 space-y-6">
-      <div class="flex justify-between items-center border-b border-slate-100 pb-4">
-        <h2 class="text-lg font-black text-slate-900">Modificar anuncio</h2>
-        <button onclick="closeEditModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+  <!-- MODAL EDITAR -->
+  <div id="edit-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-2xl w-full max-w-md border border-stone-200 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center">
+        <h2 class="font-bold text-brand-900">Editar anuncio</h2>
+        <button onclick="closeEditModal()" class="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-600"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <form id="edit-form" class="space-y-4">
+      <form id="edit-form" class="space-y-3">
         <input type="hidden" id="edit-id">
-        <div class="space-y-1">
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Título / Profesión</label>
-          <input type="text" id="edit-title" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500">
+        <div>
+          <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Título</label>
+          <input type="text" id="edit-title" required class="w-full px-3 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
         </div>
-        <div class="space-y-1">
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Ubicación (Ciudad o Provincia)</label>
-          <input type="text" id="edit-city" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500">
+        <div>
+          <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Ubicación</label>
+          <input type="text" id="edit-city" required class="w-full px-3 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
         </div>
-        <div class="space-y-1">
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Descripción</label>
-          <textarea id="edit-desc" rows="4" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500"></textarea>
+        <div>
+          <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Descripción</label>
+          <textarea id="edit-desc" rows="4" required class="w-full px-3 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
         </div>
-        <div class="flex justify-end gap-3 pt-2">
-          <button type="button" onclick="closeEditModal()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-xl transition-all">Cancelar</button>
-          <button type="submit" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-md transition-all">Guardar cambios</button>
+        <div>
+          <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Foto del anuncio (opcional)</label>
+          <input type="file" id="edit-photo" accept="image/*" class="w-full text-sm text-stone-600">
+          <img id="edit-photo-preview" class="hidden mt-2 w-full h-32 object-cover rounded-xl border border-stone-200">
+        </div>
+        <div class="flex gap-2 pt-1">
+          <button type="button" onclick="closeEditModal()" class="flex-1 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold text-sm rounded-xl">Cancelar</button>
+          <button type="submit" class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl">Guardar</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="bg-slate-900 text-slate-400 text-sm border-t border-slate-800 py-6 text-center mt-12">
-    <p>© 2026 Roda Trabajo. Todos los derechos reservados.</p>
+  <footer class="bg-brand-900 text-brand-100 text-xs text-center py-5 mt-auto">
+    Roda Trabajo © 2026 · <a href="mailto:info@rodatrabajo.com" class="underline">info@rodatrabajo.com</a>
   </footer>
 
-  <!-- SUPABASE & SCRIPT DE LÓGICA -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
+    let cliente;
+
+    function getClient() {
+      if (!cliente) cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      return cliente;
+    }
 
     async function loadUserAds() {
-      const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      const { data: { session } } = await cliente.auth.getSession();
+      const sb = getClient();
+      const { data: { session } } = await sb.auth.getSession();
       const container = document.getElementById('user-ads-container');
 
       if (!session) {
         container.innerHTML = `
-          <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 text-center space-y-4">
-            <p class="text-slate-600 text-sm">Debes iniciar sesión para ver tus anuncios.</p>
-            <a href="login.html" class="inline-block px-6 py-3 bg-brand-600 text-white font-bold text-sm rounded-xl shadow-md hover:bg-brand-700 transition-all">Iniciar sesión</a>
-          </div>
-        `;
+          <div class="bg-white p-8 rounded-2xl border border-stone-200 text-center space-y-3">
+            <p class="text-stone-600 text-sm">Debes iniciar sesión.</p>
+            <a href="login.html" class="inline-block px-5 py-2.5 bg-brand-600 text-white font-bold text-sm rounded-xl">Iniciar sesión</a>
+          </div>`;
         return;
       }
 
       const userEmail = session.user.email;
       const userId = session.user.id;
-      const metadata = session.user.user_metadata || {};
-      
-      // Avatar y datos visuales
-      document.getElementById('user-avatar-img').src = metadata.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(userEmail)}&background=22c55e&color=fff`;
-      document.getElementById('user-email-title').innerText = userEmail;
+      const meta = session.user.user_metadata || {};
 
-      // BÚSQUEDA INTELIGENTE MULTICAMPOS (user_id, contact_info, email)
-      const { data: ads, error } = await cliente
+      document.getElementById('user-avatar-img').src =
+        meta.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(userEmail)}&background=6B4423&color=fff`;
+      document.getElementById('user-email-title').textContent = meta.full_name || userEmail;
+      document.getElementById('profile-tag').textContent = meta.user_role === 'profesional' ? 'Empresa / Profesional' : 'Particular';
+
+      const { data: ads, error } = await sb
         .from('ads')
         .select('*')
         .or(`user_id.eq.${userId},contact_info.eq.${userEmail},email.eq.${userEmail}`)
@@ -141,97 +150,147 @@
 
       if (error || !ads || ads.length === 0) {
         container.innerHTML = `
-          <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 text-center space-y-4">
-            <p class="text-slate-600 text-sm">No tienes anuncios publicados aún con el correo <strong>(${userEmail})</strong>.</p>
-            <a href="publicar.html" class="inline-block px-6 py-3 bg-brand-600 text-white font-bold text-sm rounded-xl shadow-md hover:bg-brand-700 transition-all">Publicar anuncio gratis</a>
-          </div>
-        `;
+          <div class="bg-white p-8 rounded-2xl border border-stone-200 text-center space-y-3">
+            <p class="text-stone-600 text-sm">Aún no tienes anuncios publicados.</p>
+            <a href="publicar.html" class="inline-block px-5 py-2.5 bg-brand-600 text-white font-bold text-sm rounded-xl">Publicar anuncio gratis</a>
+          </div>`;
         return;
       }
 
-      container.innerHTML = ads.map(ad => `
-        <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div class="space-y-1">
-            <h3 class="font-bold text-lg text-slate-900">${ad.title || ad.profession || 'Anuncio'}</h3>
-            <div class="text-xs text-slate-500 flex items-center gap-2">
-              <span class="px-2.5 py-0.5 bg-slate-100 rounded-md font-semibold text-slate-700 uppercase">Estado: ${ad.status || 'pendiente'}</span>
-              <span>•</span>
-              <span>📍 ${ad.city || ad.province || 'España'}</span>
-            </div>
-            <p class="text-sm text-slate-600 line-clamp-2 mt-2">${ad.description || ad.descripcion || ''}</p>
-          </div>
-          <div class="flex items-center gap-2 w-full sm:w-auto justify-end flex-wrap">
-            <button onclick="renewAd('${ad.id}')" class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-xs rounded-xl transition-all border border-blue-200 cursor-pointer">
-              <i class="fa-solid fa-rotate mr-1"></i> Renovar
-            </button>
-            <button onclick="openEditModal('${ad.id}', '${escapeHtml(ad.title || ad.profession || '')}', '${escapeHtml(ad.city || '')}', '${escapeHtml(ad.description || ad.descripcion || '')}')" class="px-3.5 py-2 bg-amber-50 hover:bg-amber-100 text-amber-600 font-bold text-xs rounded-xl transition-all border border-amber-200 cursor-pointer">
-              <i class="fa-solid fa-pen mr-1"></i> Modificar
-            </button>
-            <button onclick="deleteAd('${ad.id}')" class="px-3.5 py-2 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs rounded-xl transition-all border border-red-200 cursor-pointer">
-              <i class="fa-solid fa-trash-can mr-1"></i> Eliminar
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
+      container.innerHTML = ads.map(ad => {
+        const titulo = ad.title || ad.titulo || ad.profession || 'Anuncio';
+        const ciudad = ad.city || ad.provincia || ad.municipio || 'España';
+        const estado = ad.status || 'pending';
+        const foto = ad.image_url || ad.photo_url || '';
+        const estadoColor = estado === 'approved' ? 'bg-green-100 text-green-800' :
+                            estado === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800';
+        const estadoTxt = estado === 'approved' ? 'Aprobado' : estado === 'rejected' ? 'Rechazado' : 'Pendiente';
 
-    function escapeHtml(str) {
-      if (!str) return '';
-      return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        return `
+        <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm flex flex-col sm:flex-row gap-4">
+          ${foto ? `<img src="${foto}" class="w-full sm:w-24 h-24 object-cover rounded-lg border border-stone-100 shrink-0" alt="">` : `
+          <div class="w-full sm:w-24 h-24 bg-stone-100 rounded-lg flex items-center justify-center text-stone-400 shrink-0"><i class="fa-solid fa-image text-xl"></i></div>`}
+          <div class="flex-1 min-w-0 space-y-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-xs font-bold ${estadoColor}">${estadoTxt}</span>
+              <span class="text-xs text-stone-400">${ad.created_at ? new Date(ad.created_at).toLocaleDateString('es-ES') : ''}</span>
+            </div>
+            <h3 class="font-bold text-brand-900 truncate">${titulo}</h3>
+            <p class="text-xs text-stone-500"><i class="fa-solid fa-location-dot mr-1"></i>${ciudad}</p>
+            <p class="text-sm text-stone-600 line-clamp-2">${ad.description || ad.descripcion || ''}</p>
+          </div>
+          <div class="flex sm:flex-col gap-2 shrink-0">
+            <button onclick="renewAd('${ad.id}')" class="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold text-xs rounded-lg">
+              <i class="fa-solid fa-rotate mr-1"></i>Renovar
+            </button>
+            <button onclick='openEditModal(${JSON.stringify({ id: ad.id, title: titulo, city: ciudad, desc: ad.description || ad.descripcion || "", photo: foto })})' class="px-3 py-1.5 bg-brand-100 hover:bg-brand-200 text-brand-800 font-semibold text-xs rounded-lg">
+              <i class="fa-solid fa-pen mr-1"></i>Editar
+            </button>
+            <button onclick="deleteAd('${ad.id}')" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 font-semibold text-xs rounded-lg">
+              <i class="fa-solid fa-trash-can mr-1"></i>Eliminar
+            </button>
+          </div>
+        </div>`;
+      }).join('');
     }
 
     async function renewAd(id) {
-      const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      const { error } = await cliente.from('ads').update({ created_at: new Date().toISOString() }).eq('id', id);
-      if (error) alert('Error al renovar: ' + error.message);
-      else {
-        alert('¡Anuncio renovado con éxito!');
-        loadUserAds();
-      }
+      const sb = getClient();
+      const { error } = await sb.from('ads').update({ created_at: new Date().toISOString() }).eq('id', id);
+      if (error) alert('Error: ' + error.message);
+      else { alert('Anuncio renovado'); loadUserAds(); }
     }
 
     async function deleteAd(id) {
-      if (!confirm('¿Seguro que deseas borrar este anuncio?')) return;
-      const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      const { error } = await cliente.from('ads').delete().eq('id', id);
-      if (error) alert('Error al borrar: ' + error.message);
+      if (!confirm('¿Eliminar este anuncio?')) return;
+      const sb = getClient();
+      const { error } = await sb.from('ads').delete().eq('id', id);
+      if (error) alert('Error: ' + error.message);
       else loadUserAds();
     }
 
-    function openEditModal(id, title, city, desc) {
-      document.getElementById('edit-id').value = id;
-      document.getElementById('edit-title').value = title;
-      document.getElementById('edit-city').value = city;
-      document.getElementById('edit-desc').value = desc;
-      document.getElementById('edit-modal').style.display = 'flex';
+    function openEditModal(ad) {
+      document.getElementById('edit-id').value = ad.id;
+      document.getElementById('edit-title').value = ad.title || '';
+      document.getElementById('edit-city').value = ad.city || '';
+      document.getElementById('edit-desc').value = ad.desc || '';
+      const prev = document.getElementById('edit-photo-preview');
+      if (ad.photo) {
+        prev.src = ad.photo;
+        prev.classList.remove('hidden');
+      } else {
+        prev.classList.add('hidden');
+      }
+      document.getElementById('edit-photo').value = '';
+      document.getElementById('edit-modal').classList.remove('hidden');
     }
 
     function closeEditModal() {
-      document.getElementById('edit-modal').style.display = 'none';
+      document.getElementById('edit-modal').classList.add('hidden');
     }
+
+    document.getElementById('edit-photo').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      const prev = document.getElementById('edit-photo-preview');
+      if (file) {
+        prev.src = URL.createObjectURL(file);
+        prev.classList.remove('hidden');
+      }
+    });
 
     document.getElementById('edit-form').addEventListener('submit', async (e) => {
       e.preventDefault();
+      const sb = getClient();
       const id = document.getElementById('edit-id').value;
-      const title = document.getElementById('edit-title').value;
-      const city = document.getElementById('edit-city').value;
-      const description = document.getElementById('edit-desc').value;
+      const title = document.getElementById('edit-title').value.trim();
+      const city = document.getElementById('edit-city').value.trim();
+      const description = document.getElementById('edit-desc').value.trim();
+      const photoInput = document.getElementById('edit-photo');
 
-      const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      const { error } = await cliente.from('ads').update({ title, profession: title, city, description }).eq('id', id);
+      let image_url = null;
+      if (photoInput.files && photoInput.files[0]) {
+        const file = photoInput.files[0];
+        const ext = file.name.split('.').pop();
+        const path = `ads/${id}_${Date.now()}.${ext}`;
+        const { error: upErr } = await sb.storage.from('ads').upload(path, file, { upsert: true });
+        if (!upErr) {
+          const { data } = sb.storage.from('ads').getPublicUrl(path);
+          image_url = data.publicUrl;
+        }
+      }
 
-      if (error) {
-        alert('Error al guardar los cambios: ' + error.message);
-      } else {
-        alert('¡Anuncio modificado correctamente!');
+      const payload = { title, city, description, titulo: title, descripcion: description };
+      if (image_url) { payload.image_url = image_url; payload.photo_url = image_url; }
+
+      const { error } = await sb.from('ads').update(payload).eq('id', id);
+      if (error) alert('Error: ' + error.message);
+      else {
         closeEditModal();
         loadUserAds();
       }
     });
 
+    async function uploadAvatar(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const sb = getClient();
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session) return;
+
+      const ext = file.name.split('.').pop();
+      const path = `avatars/${session.user.id}.${ext}`;
+      const { error } = await sb.storage.from('avatars').upload(path, file, { upsert: true });
+      if (error) {
+        alert('No se pudo subir la foto. ¿Existe el bucket "avatars"?');
+        return;
+      }
+      const { data } = sb.storage.from('avatars').getPublicUrl(path);
+      await sb.auth.updateUser({ data: { avatar_url: data.publicUrl } });
+      document.getElementById('user-avatar-img').src = data.publicUrl + '?t=' + Date.now();
+    }
+
     async function logoutUser() {
-      const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      await cliente.auth.signOut();
+      await getClient().auth.signOut();
       window.location.href = 'login.html';
     }
 
