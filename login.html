@@ -20,26 +20,25 @@
       --bg: #fafaf9;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      height: 100vh;
-      overflow: hidden; /* Evita cualquier desplazamiento o scroll */
-    }
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
     header {
       background: #fff;
       border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
     .nav {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 10px 20px;
+      padding: 12px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -77,8 +76,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 12px 16px;
-      overflow-y: auto;
+      padding: 16px;
     }
     .box {
       width: 100%;
@@ -86,7 +84,7 @@
       background: #fff;
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 20px 20px;
+      padding: 20px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.04);
     }
     h1 {
@@ -100,7 +98,7 @@
       text-align: center;
       font-size: 13px;
       color: var(--muted);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .form-group { margin-bottom: 10px; }
     label {
@@ -127,8 +125,6 @@
       background: #fff;
       box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.12);
     }
-
-    /* Ojo de contraseña */
     .password-wrapper {
       position: relative;
       display: flex;
@@ -153,8 +149,6 @@
     .toggle-password-btn:hover {
       color: var(--brand-600);
     }
-
-    /* Casilla Guardar Contraseña */
     .remember-wrapper {
       display: flex;
       align-items: center;
@@ -177,7 +171,6 @@
       color: var(--text);
       cursor: pointer;
     }
-
     .btn {
       width: 100%;
       padding: 11px;
@@ -242,7 +235,6 @@
       font-size: 11px;
       text-align: center;
       padding: 12px 15px;
-      flex-shrink: 0;
     }
     footer a { color: #e7e5e4; text-decoration: none; }
     footer a:hover { text-decoration: underline; }
@@ -284,7 +276,6 @@
             <a class="forgot" onclick="toggleForms('reset')">¿Olvidaste tu contraseña?</a>
           </div>
 
-          <!-- Casilla para guardar contraseña -->
           <div class="remember-wrapper">
             <input type="checkbox" id="remember-me">
             <label for="remember-me">Guardar contraseña</label>
