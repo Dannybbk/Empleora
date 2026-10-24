@@ -3,206 +3,161 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panel de Administración - Roda Trabajo</title>
-  
-  <!-- Tailwind CSS CDN -->
+  <title>Admin - Roda Trabajo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts: Plus Jakarta Sans -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['Plus Jakarta Sans', 'sans-serif'],
-          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
           colors: {
             brand: {
-              50: '#f0fdf4',
-              100: '#dcfce7',
-              500: '#22c55e',
-              600: '#16a34a',
-              700: '#15803d',
+              50: '#faf6f1', 100: '#f0e6d8', 200: '#e0ccb0',
+              500: '#8B5E3C', 600: '#6B4423', 700: '#4A2F18',
+              800: '#3A2414', 900: '#1a1a1a'
             }
           }
         }
       }
     }
   </script>
-  <style>
-    .glass-nav {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+<body class="bg-stone-50 text-stone-800 font-sans antialiased min-h-screen flex flex-col">
 
-  <!-- PANTALLA DE BLOQUEO INICIAL (SEGURIDAD ADMIN) -->
-  <div id="auth-guard" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl text-center space-y-4 border border-slate-100">
-      <div class="w-16 h-16 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center text-2xl mx-auto">
+  <!-- Bloqueo si no es admin -->
+  <div id="auth-guard" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
+      <div class="w-14 h-14 bg-red-100 text-red-600 rounded-xl flex items-center justify-center text-2xl mx-auto">
         <i class="fa-solid fa-lock"></i>
       </div>
-      <h2 class="text-2xl font-black text-slate-900">Acceso Denegado</h2>
-      <p class="text-slate-500 text-sm">Esta sección es exclusiva para el administrador de Roda Trabajo. Inicia sesión con tu cuenta autorizada.</p>
-      <a href="login.html" class="block w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-brand-500/20 transition-all">
-        Iniciar sesión
-      </a>
+      <h2 class="text-xl font-bold text-brand-900">Acceso denegado</h2>
+      <p class="text-sm text-stone-500">Solo el administrador puede entrar aquí.</p>
+      <a href="login.html" class="block w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl">Iniciar sesión</a>
     </div>
   </div>
 
-  <!-- HEADER MODERNO CON BANDERA DE ESPAÑA -->
-  <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/80">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        
-        <!-- Logo -->
-        <a href="index.html" class="flex items-center gap-2.5 group">
-          <div class="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-brand-500/20 flex flex-col border border-slate-200">
-            <div class="h-1/4 bg-red-600 w-full"></div>
-            <div class="h-2/4 bg-yellow-500 w-full"></div>
-            <div class="h-1/4 bg-red-600 w-full"></div>
-          </div>
-          <span class="text-xl font-black tracking-tight text-slate-900">
-            RODA TRABAJO <span class="text-xs px-2 py-0.5 bg-brand-100 text-brand-700 rounded-md font-bold uppercase tracking-wide ml-1">Admin</span>
-          </span>
-        </a>
-
-        <!-- Botones Header -->
-        <div class="flex items-center gap-3">
-          <a href="index.html" class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-brand-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all flex items-center gap-2">
-            <i class="fa-solid fa-arrow-left"></i>
-            <span>Ver Web</span>
-          </a>
-          <button onclick="logoutAdmin()" class="px-4 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-xl transition-all flex items-center gap-2">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            <span>Salir</span>
-          </button>
-        </div>
-
+  <header class="sticky top-0 z-40 bg-white border-b border-stone-200">
+    <div class="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-brand-900 text-brand-100 flex items-center justify-center text-xs font-black">RT</div>
+        <span class="font-extrabold text-brand-900 text-sm">Roda Trabajo</span>
+        <span class="text-[10px] px-2 py-0.5 bg-brand-100 text-brand-800 rounded-md font-bold uppercase">Admin</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="px-3 py-1.5 text-xs font-semibold text-stone-600 bg-stone-100 hover:bg-stone-200 rounded-lg">Ver web</a>
+        <button type="button" onclick="logoutAdmin()" class="px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-lg">Salir</button>
       </div>
     </div>
   </header>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-10 flex-1">
-    
-    <!-- Título de Sección -->
+  <main class="max-w-4xl mx-auto px-4 py-8 w-full flex-1 space-y-8">
     <div>
-      <span class="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 px-3 py-1 rounded-full">Panel de Control</span>
-      <h1 class="text-3xl font-black text-slate-900 mt-2">Moderación de Anuncios</h1>
-      <p class="text-slate-500 text-sm mt-1">Revisa las solicitudes pendientes o gestiona las ofertas activas en la plataforma.</p>
+      <p class="text-xs font-bold uppercase tracking-wider text-brand-600">Panel de control</p>
+      <h1 class="text-2xl font-extrabold text-brand-900 mt-1">Moderación de anuncios</h1>
+      <p class="text-sm text-stone-500 mt-1">Aprueba pendientes o gestiona todos los anuncios de la plataforma.</p>
     </div>
 
-    <!-- SECCIÓN 1: PENDIENTES -->
-    <section class="space-y-4">
-      <div class="flex items-center justify-between">
-        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-          <i class="fa-solid fa-clock-rotate-left text-amber-500"></i> Anuncios pendientes de aprobación
-        </h2>
-      </div>
-      
+    <!-- Pendientes -->
+    <section class="space-y-3">
+      <h2 class="text-lg font-bold text-brand-900 flex items-center gap-2">
+        <i class="fa-solid fa-clock text-amber-600"></i> Pendientes de aprobación
+      </h2>
       <div id="pending-container" class="space-y-3">
-        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 text-center text-slate-500 shadow-sm">
-          <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
-          <p class="text-sm">Comprobando anuncios pendientes...</p>
+        <div class="bg-white p-6 rounded-xl border border-stone-200 text-center text-stone-500 text-sm">
+          <i class="fa-solid fa-spinner fa-spin mb-2"></i>
+          <p>Cargando pendientes...</p>
         </div>
       </div>
     </section>
 
-    <hr class="border-slate-200">
+    <hr class="border-stone-200">
 
-    <!-- SECCIÓN 2: CONTROL TOTAL -->
-    <section class="space-y-4">
-      <div class="flex items-center justify-between">
-        <div>
-          <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-            <i class="fa-solid fa-list-check text-brand-600"></i> Gestión de todos los anuncios
-          </h2>
-          <p class="text-slate-500 text-sm mt-0.5">Aquí puedes ver, borrar o renovar cualquier anuncio publicado en Roda Trabajo.</p>
-        </div>
+    <!-- Todos -->
+    <section class="space-y-3">
+      <div>
+        <h2 class="text-lg font-bold text-brand-900 flex items-center gap-2">
+          <i class="fa-solid fa-list text-brand-600"></i> Todos los anuncios
+        </h2>
+        <p class="text-sm text-stone-500 mt-0.5">Renovar o eliminar cualquier anuncio.</p>
       </div>
-
       <div id="all-ads-container" class="space-y-3">
-        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 text-center text-slate-500 shadow-sm">
-          <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
-          <p class="text-sm">Cargando base de datos de anuncios...</p>
+        <div class="bg-white p-6 rounded-xl border border-stone-200 text-center text-stone-500 text-sm">
+          <i class="fa-solid fa-spinner fa-spin mb-2"></i>
+          <p>Cargando anuncios...</p>
         </div>
       </div>
     </section>
-
   </main>
 
-  <!-- FOOTER -->
-  <footer class="bg-slate-900 text-slate-400 text-sm mt-20 border-t border-slate-800 py-6">
-    <div class="max-w-7xl mx-auto px-4 text-center">
-      <p>© 2026 Roda Trabajo. Todos los derechos reservados.</p>
-    </div>
+  <footer class="bg-brand-900 text-brand-100 text-xs text-center py-5 mt-auto">
+    Roda Trabajo © 2026 · Admin
   </footer>
 
-  <!-- SUPABASE & SCRIPT DE LÓGICA -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
     const ADMIN_EMAIL = 'danny10bbk@gmail.com';
-
-    const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     async function verificarAccesoAdmin() {
       const { data: { session } } = await cliente.auth.getSession();
       const guard = document.getElementById('auth-guard');
-
-      if (!session || session.user.email !== ADMIN_EMAIL) {
+      if (!session || (session.user.email || '').toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
         guard.classList.remove('hidden');
         return false;
       }
       return true;
     }
 
+    function titulo(ad) {
+      return ad.title || ad.titulo || 'Sin título';
+    }
+    function ubicacion(ad) {
+      return ad.city || ad.provincia || ad.municipio || 'España';
+    }
+
     async function loadAdminPanel() {
-      const esAdmin = await verificarAccesoAdmin();
-      if (!esAdmin) return;
+      const ok = await verificarAccesoAdmin();
+      if (!ok) return;
 
       const pendingContainer = document.getElementById('pending-container');
       const allAdsContainer = document.getElementById('all-ads-container');
 
-      // 1. Cargar pendientes
       const { data: pendingAds, error: errPending } = await cliente
         .from('ads')
         .select('*')
-        .eq('status', 'pending');
+        .eq('status', 'pending')
+        .order('created_at', { ascending: false });
 
       if (errPending) {
-        pendingContainer.innerHTML = '<p class="text-red-500 text-sm bg-white p-4 rounded-xl border border-slate-200">Error al cargar pendientes.</p>';
+        pendingContainer.innerHTML = '<p class="text-red-600 text-sm bg-white p-4 rounded-xl border border-stone-200">Error al cargar pendientes.</p>';
       } else if (!pendingAds || pendingAds.length === 0) {
         pendingContainer.innerHTML = `
-          <div class="bg-white p-6 rounded-2xl border border-slate-200/80 text-center text-slate-400 shadow-sm">
-            <i class="fa-regular fa-circle-check text-2xl text-emerald-500 mb-1"></i>
-            <p class="text-sm font-medium text-slate-600">No hay anuncios pendientes de revisión.</p>
-          </div>
-        `;
+          <div class="bg-white p-6 rounded-xl border border-stone-200 text-center text-stone-500">
+            <i class="fa-regular fa-circle-check text-2xl text-brand-600 mb-1"></i>
+            <p class="text-sm font-medium">No hay anuncios pendientes de revisión.</p>
+          </div>`;
       } else {
         pendingContainer.innerHTML = pendingAds.map(ad => `
-          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div class="space-y-1">
-              <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-amber-100 text-amber-800">Pendiente</span>
-              <h3 class="font-bold text-slate-900 text-base">${ad.title || ad.titulo || 'Sin título'}</h3>
-              <p class="text-xs text-slate-500 flex items-center gap-3">
-                <span><i class="fa-solid fa-location-dot text-slate-400"></i> ${ad.city || ad.provincia || 'España'}</span>
-                <span><i class="fa-solid fa-layer-group text-slate-400"></i> ${ad.categoria || 'Empleo'}</span>
+          <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="space-y-1 min-w-0">
+              <span class="px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800">Pendiente</span>
+              <h3 class="font-bold text-brand-900">${titulo(ad)}</h3>
+              <p class="text-xs text-stone-500">
+                <i class="fa-solid fa-location-dot"></i> ${ubicacion(ad)}
+                · ${ad.categoria || 'Empleo'}
+                ${ad.tipo === 'busco_trabajo' ? ' · Demanda' : ad.tipo === 'ofrezco_empleo' ? ' · Oferta' : ''}
               </p>
+              <p class="text-sm text-stone-600 line-clamp-2">${ad.description || ad.descripcion || ''}</p>
             </div>
-            <div class="flex items-center gap-2 shrink-0">
-              <button onclick="approveAd('${ad.id}')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center gap-1.5 cursor-pointer">
+            <div class="flex gap-2 shrink-0">
+              <button type="button" onclick="approveAd('${ad.id}')" class="px-3 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-lg">
                 <i class="fa-solid fa-check"></i> Aprobar
               </button>
-              <button onclick="deleteAd('${ad.id}')" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center gap-1.5 cursor-pointer">
+              <button type="button" onclick="deleteAd('${ad.id}')" class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-lg">
                 <i class="fa-solid fa-xmark"></i> Rechazar
               </button>
             </div>
@@ -210,63 +165,69 @@
         `).join('');
       }
 
-      // 2. Cargar TODOS los anuncios
       const { data: allAds, error: errAll } = await cliente
         .from('ads')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (errAll) {
-        allAdsContainer.innerHTML = '<p class="text-red-500 text-sm bg-white p-4 rounded-xl border border-slate-200">Error al cargar la lista.</p>';
+        allAdsContainer.innerHTML = '<p class="text-red-600 text-sm bg-white p-4 rounded-xl border border-stone-200">Error al cargar la lista.</p>';
       } else if (!allAds || allAds.length === 0) {
-        allAdsContainer.innerHTML = '<p class="text-slate-500 text-sm bg-white p-4 rounded-xl border border-slate-200 text-center">No hay anuncios en la base de datos.</p>';
+        allAdsContainer.innerHTML = '<p class="text-stone-500 text-sm bg-white p-4 rounded-xl border border-stone-200 text-center">No hay anuncios.</p>';
       } else {
-        allAdsContainer.innerHTML = allAds.map(ad => `
-          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div class="space-y-1">
-              <div class="flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded-md text-xs font-bold ${ad.status === 'approved' ? 'bg-brand-100 text-brand-800' : 'bg-amber-100 text-amber-800'}">
-                  ${ad.status === 'approved' ? 'Aprobado / Activo' : (ad.status || 'Pendiente')}
-                </span>
-                <span class="text-xs text-slate-400">• Creado: ${ad.created_at ? new Date(ad.created_at).toLocaleDateString('es-ES') : 'Reciente'}</span>
+        allAdsContainer.innerHTML = allAds.map(ad => {
+          const st = ad.status || 'pending';
+          const badge = st === 'approved'
+            ? 'bg-brand-100 text-brand-800'
+            : st === 'rejected'
+            ? 'bg-red-100 text-red-800'
+            : 'bg-amber-100 text-amber-800';
+          const label = st === 'approved' ? 'Aprobado' : st === 'rejected' ? 'Rechazado' : 'Pendiente';
+          return `
+          <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="space-y-1 min-w-0">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-xs font-bold ${badge}">${label}</span>
+                <span class="text-xs text-stone-400">${ad.created_at ? new Date(ad.created_at).toLocaleDateString('es-ES') : ''}</span>
               </div>
-              <h3 class="font-bold text-slate-900 text-base">${ad.title || ad.titulo || 'Sin título'}</h3>
-              <p class="text-xs text-slate-500 flex items-center gap-3">
-                <span><i class="fa-solid fa-location-dot text-slate-400"></i> ${ad.city || ad.provincia || 'España'}</span>
-                <span><i class="fa-solid fa-euro-sign text-slate-400"></i> ${ad.sueldo || ad.salario || 'A convenir'}</span>
+              <h3 class="font-bold text-brand-900">${titulo(ad)}</h3>
+              <p class="text-xs text-stone-500">
+                <i class="fa-solid fa-location-dot"></i> ${ubicacion(ad)}
+                ${ad.sueldo ? ' · ' + ad.sueldo : ''}
               </p>
             </div>
-            <div class="flex items-center gap-2 shrink-0">
-              <button onclick="renewAd('${ad.id}')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center gap-1.5 cursor-pointer">
+            <div class="flex gap-2 shrink-0">
+              ${st !== 'approved' ? `<button type="button" onclick="approveAd('${ad.id}')" class="px-3 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-lg">Aprobar</button>` : ''}
+              <button type="button" onclick="renewAd('${ad.id}')" class="px-3 py-2 bg-stone-800 hover:bg-stone-900 text-white font-bold text-xs rounded-lg">
                 <i class="fa-solid fa-rotate"></i> Renovar
               </button>
-              <button onclick="deleteAd('${ad.id}')" class="px-4 py-2 bg-slate-100 hover:bg-red-600 hover:text-white text-slate-700 font-bold text-xs rounded-xl transition-all flex items-center gap-1.5 cursor-pointer">
+              <button type="button" onclick="deleteAd('${ad.id}')" class="px-3 py-2 bg-stone-100 hover:bg-red-600 hover:text-white text-stone-700 font-bold text-xs rounded-lg">
                 <i class="fa-solid fa-trash"></i> Borrar
               </button>
             </div>
-          </div>
-        `).join('');
+          </div>`;
+        }).join('');
       }
     }
 
     async function approveAd(id) {
       const { error } = await cliente.from('ads').update({ status: 'approved' }).eq('id', id);
-      if (error) alert('Error al aprobar el anuncio');
+      if (error) alert('Error al aprobar');
       else loadAdminPanel();
     }
 
     async function deleteAd(id) {
-      if (!confirm('¿Estás seguro de querer borrar este anuncio permanentemente?')) return;
+      if (!confirm('¿Borrar este anuncio de forma permanente?')) return;
       const { error } = await cliente.from('ads').delete().eq('id', id);
-      if (error) alert('Error al borrar el anuncio');
+      if (error) alert('Error al borrar');
       else loadAdminPanel();
     }
 
     async function renewAd(id) {
       const { error } = await cliente.from('ads').update({ created_at: new Date().toISOString() }).eq('id', id);
-      if (error) alert('Error al renovar el anuncio');
+      if (error) alert('Error al renovar');
       else {
-        alert('¡Anuncio renovado con éxito!');
+        alert('Anuncio renovado');
         loadAdminPanel();
       }
     }
