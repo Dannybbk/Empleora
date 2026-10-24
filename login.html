@@ -20,25 +20,26 @@
       --bg: #fafaf9;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100vh;
+      overflow: hidden; /* Evita cualquier desplazamiento o scroll */
+    }
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
     header {
       background: #fff;
       border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 50;
+      flex-shrink: 0;
     }
     .nav {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 14px 20px;
+      padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -53,8 +54,8 @@
       font-size: 18px;
     }
     .logo-mark {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 8px;
       background: var(--brand-900);
       color: var(--brand-100);
@@ -76,46 +77,47 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 32px 16px;
+      padding: 12px 16px;
+      overflow-y: auto;
     }
     .box {
       width: 100%;
-      max-width: 420px;
+      max-width: 400px;
       background: #fff;
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px 24px;
+      border-radius: 16px;
+      padding: 20px 20px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.04);
     }
     h1 {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 800;
       text-align: center;
       color: var(--brand-900);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .sub {
       text-align: center;
-      font-size: 14px;
+      font-size: 13px;
       color: var(--muted);
-      margin-bottom: 22px;
+      margin-bottom: 16px;
     }
-    .form-group { margin-bottom: 14px; }
+    .form-group { margin-bottom: 10px; }
     label {
       display: block;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       color: var(--brand-900);
     }
     input, select {
       width: 100%;
-      padding: 12px 14px;
+      padding: 10px 12px;
       border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 14px;
+      border-radius: 8px;
+      font-size: 13px;
       background: #fafaf9;
       color: var(--text);
     }
@@ -126,23 +128,23 @@
       box-shadow: 0 0 0 3px rgba(139, 94, 60, 0.12);
     }
 
-    /* Estilo del ojo en el input de contraseña */
+    /* Ojo de contraseña */
     .password-wrapper {
       position: relative;
       display: flex;
       align-items: center;
     }
     .password-wrapper input {
-      padding-right: 42px;
+      padding-right: 38px;
     }
     .toggle-password-btn {
       position: absolute;
-      right: 12px;
+      right: 10px;
       background: none;
       border: none;
       color: var(--muted);
       cursor: pointer;
-      font-size: 15px;
+      font-size: 14px;
       padding: 4px;
       display: flex;
       align-items: center;
@@ -152,22 +154,22 @@
       color: var(--brand-600);
     }
 
-    /* Estilo de la casilla Guardar Contraseña */
+    /* Casilla Guardar Contraseña */
     .remember-wrapper {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-top: 10px;
-      margin-bottom: 6px;
+      margin-top: 8px;
+      margin-bottom: 4px;
     }
     .remember-wrapper input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
+      width: 15px;
+      height: 15px;
       cursor: pointer;
       accent-color: var(--brand-600);
     }
     .remember-wrapper label {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
       text-transform: none;
       letter-spacing: normal;
@@ -178,23 +180,23 @@
 
     .btn {
       width: 100%;
-      padding: 13px;
+      padding: 11px;
       background: var(--brand-600);
       color: #fff;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 8px;
       transition: background 0.15s;
     }
     .btn:hover { background: var(--brand-800); }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
     .toggle {
       text-align: center;
-      margin-top: 18px;
-      font-size: 14px;
+      margin-top: 12px;
+      font-size: 13px;
       color: var(--muted);
     }
     .toggle a {
@@ -207,19 +209,19 @@
     .forgot {
       display: block;
       text-align: right;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--muted);
-      margin-top: 6px;
+      margin-top: 4px;
       text-decoration: none;
       font-weight: 500;
       cursor: pointer;
     }
     .forgot:hover { color: var(--brand-600); }
     .alert {
-      padding: 11px;
-      border-radius: 10px;
-      font-size: 13px;
-      margin-bottom: 14px;
+      padding: 9px;
+      border-radius: 8px;
+      font-size: 12px;
+      margin-bottom: 10px;
       display: none;
       text-align: center;
       font-weight: 500;
@@ -237,11 +239,13 @@
     footer {
       background: var(--brand-900);
       color: #a8a29e;
-      font-size: 13px;
+      font-size: 11px;
       text-align: center;
-      padding: 20px;
+      padding: 12px 15px;
+      flex-shrink: 0;
     }
-    footer a { color: #e7e5e4; }
+    footer a { color: #e7e5e4; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -280,7 +284,7 @@
             <a class="forgot" onclick="toggleForms('reset')">¿Olvidaste tu contraseña?</a>
           </div>
 
-          <!-- Casilla para guardar contraseña / recordar -->
+          <!-- Casilla para guardar contraseña -->
           <div class="remember-wrapper">
             <input type="checkbox" id="remember-me">
             <label for="remember-me">Guardar contraseña</label>
@@ -296,7 +300,7 @@
       <!-- REGISTRO -->
       <div id="register-form-wrapper" style="display:none;">
         <h1>Crear cuenta gratis</h1>
-        <p class="sub">Particular o empresa · Publica anuncios gratis</p>
+        <p class="sub">Publica anuncios de empleo gratis</p>
         <div id="register-alert" class="alert"></div>
         <form id="register-form">
           <div class="form-group">
@@ -355,7 +359,7 @@
   </main>
 
   <footer>
-    <p>Roda Trabajo © 2026 · <a href="mailto:info@rodatrabajo.com">info@rodatrabajo.com</a></p>
+    <p>Roda Trabajo © 2026 · Conectando el mejor talento con empresas · Soporte: <a href="mailto:info@rodatrabajo.com">info@rodatrabajo.com</a></p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -364,7 +368,6 @@
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
     const ADMIN_EMAIL = 'danny10bbk@gmail.com';
 
-    // Función para mostrar / ocultar contraseña
     function togglePasswordVisibility(inputId, btn) {
       const input = document.getElementById(inputId);
       const icon = btn.querySelector('i');
@@ -388,7 +391,6 @@
     document.addEventListener('DOMContentLoaded', () => {
       const cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      // Login
       document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const alertBox = document.getElementById('login-alert');
@@ -410,7 +412,6 @@
         }
       });
 
-      // Registro
       document.getElementById('register-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const alertBox = document.getElementById('register-alert');
@@ -445,7 +446,6 @@
           alertBox.textContent = error.message || 'Error al crear la cuenta.';
           alertBox.style.display = 'block';
         } else {
-          // Perfil en tabla profiles (si existe)
           if (data.user) {
             try {
               await cliente.from('profiles').upsert({
@@ -455,7 +455,7 @@
                 phone: phone,
                 role: role
               });
-            } catch (err) { /* ignorar si la tabla no está lista */ }
+            } catch (err) {}
           }
           alertBox.className = 'alert alert-success';
           alertBox.textContent = 'Cuenta creada. Ya puedes iniciar sesión.';
@@ -464,7 +464,6 @@
         }
       });
 
-      // Reset password
       document.getElementById('reset-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const alertBox = document.getElementById('reset-alert');
