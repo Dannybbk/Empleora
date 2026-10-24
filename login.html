@@ -120,6 +120,11 @@
       background: #fafaf9;
       color: var(--text);
     }
+    input[type="file"] {
+      padding: 6px;
+      font-size: 12px;
+      cursor: pointer;
+    }
     input:focus, select:focus {
       outline: none;
       border-color: var(--brand-500);
@@ -311,6 +316,10 @@
             <input type="tel" id="reg-phone" placeholder="600 000 000">
           </div>
           <div class="form-group">
+            <label>Foto de perfil (Opcional)</label>
+            <input type="file" id="reg-avatar" accept="image/*">
+          </div>
+          <div class="form-group">
             <label>Correo electrónico</label>
             <input type="email" id="reg-email" placeholder="tu@email.com" required>
           </div>
@@ -419,6 +428,26 @@
         const phone = document.getElementById('reg-phone').value.trim();
         const email = document.getElementById('reg-email').value.trim();
         const password = document.getElementById('reg-password').value;
+        const avatarFile = document.getElementById('reg-avatar').files[0];
+
+        let avatarUrl = '';
+
+        if (avatarFile) {
+          try {
+            const fileExt = avatarFile.name.split('.').pop();
+            const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+            const { data: uploadData, error: uploadError } = await cliente.storage
+              .from('avatars')
+              .upload(fileName, avatarFile);
+
+            if (!uploadError && uploadData) {
+              const { data: publicUrlData } = cliente.storage.from('avatars').getPublicUrl(fileName);
+              avatarUrl = publicUrlData.publicUrl;
+            }
+          } catch (err) {
+            console.log('Error al subir la foto de perfil:', err);
+          }
+        }
 
         const { data, error } = await cliente.auth.signUp({
           email,
@@ -427,7 +456,8 @@
             data: {
               user_role: role,
               full_name: name,
-              phone: phone
+              phone: phone,
+              avatar_url: avatarUrl
             }
           }
         });
@@ -447,7 +477,8 @@
                 email: email,
                 full_name: name,
                 phone: phone,
-                role: role
+                role: role,
+                avatar_url: avatarUrl
               });
             } catch (err) {}
           }
