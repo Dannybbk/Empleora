@@ -292,14 +292,14 @@
       <!-- REGISTRO -->
       <div id="register-form-wrapper" style="display:none;">
         <h1>Crear cuenta gratis</h1>
-        <p class="sub">Publica anuncios de empleo gratis</p>
+        <p class="sub">Particular o empresa · Publica anuncios en Roda Trabajo</p>
         <div id="register-alert" class="alert"></div>
         <form id="register-form">
           <div class="form-group">
             <label>Tipo de perfil</label>
             <select id="reg-role" required>
-              <option value="particular">Particular (busco trabajo)</option>
-              <option value="profesional">Empresa / Profesional / Autónomo</option>
+              <option value="particular">Particular</option>
+              <option value="profesional">Profesional</option>
             </select>
           </div>
           <div class="form-group">
@@ -323,7 +323,7 @@
               </button>
             </div>
           </div>
-          <button type="submit" id="btn-reg" class="btn">Crear mi cuenta</button>
+          <button type="submit" id="btn-reg" class="btn">Registrarse</button>
         </form>
         <div class="toggle">
           ¿Ya tienes cuenta? <a onclick="toggleForms('login')">Inicia sesión</a>
@@ -383,6 +383,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       const cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+      // Login normal con email
       document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const alertBox = document.getElementById('login-alert');
@@ -404,12 +405,13 @@
         }
       });
 
+      // Registro
       document.getElementById('register-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const alertBox = document.getElementById('register-alert');
         const btn = document.getElementById('btn-reg');
         alertBox.style.display = 'none';
-        btn.textContent = 'Creando cuenta...';
+        btn.textContent = 'Registrando...';
         btn.disabled = true;
 
         const role = document.getElementById('reg-role').value;
@@ -430,7 +432,7 @@
           }
         });
 
-        btn.textContent = 'Crear mi cuenta';
+        btn.textContent = 'Registrarse';
         btn.disabled = false;
 
         if (error) {
@@ -456,6 +458,7 @@
         }
       });
 
+      // Reset password
       document.getElementById('reset-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const alertBox = document.getElementById('reset-alert');
