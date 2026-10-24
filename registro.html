@@ -174,4 +174,140 @@
   <main>
     <div class="box">
       <h1>Crear cuenta gratis</h1>
-      <p class="sub">Particular o
+      <p class="sub">Publica o busca anuncios en Roda Trabajo</p>
+
+      <form id="register-form">
+        <div class="form-group">
+          <label>Tipo de perfil</label>
+          <select id="reg-role" name="role" required>
+            <option value="particular">Particular</option>
+            <option value="profesional">Profesional</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" id="reg-name" name="name" placeholder="Tu nombre o empresa" required>
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" id="reg-phone" name="phone" placeholder="600 000 000">
+        </div>
+        <div class="form-group">
+          <label>Foto de perfil (opcional)</label>
+          <input type="file" id="reg-avatar" name="avatar" accept="image/*">
+        </div>
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input type="email" id="reg-email" name="email" placeholder="tu@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" id="reg-password" name="password" placeholder="Mínimo 6 caracteres" required minlength="6">
+        </div>
+        <button type="submit" id="btn-reg" class="btn">Registrarse</button>
+      </form>
+
+      <p class="toggle">¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
+      <p id="message"></p>
+    </div>
+  </main>
+
+  <footer>
+    <p>Roda Trabajo © 2026 · <a href="mailto:info@rodatrabajo.com">info@rodatrabajo.com</a></p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
+    const cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('message');
+      const btn = document.getElementById('btn-reg');
+      msg.style.color = '#78716c';
+      msg.textContent = 'Procesando...';
+      btn.disabled = true;
+      btn.textContent = 'Creando cuenta...';
+
+      const role = document.getElementById('reg-role').value;
+      const name = document.getElementById('reg-name').value.trim();
+      const phone = document.getElementById('reg-phone').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const avatarFile = document.getElementById('reg-avatar').files[0];
+
+      const { data, error } = await cliente.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            user_role: role,
+            full_name: name,
+            phone: phone
+          }
+        }
+      });
+
+      if (error && !error.message.includes('email')) {
+        btn.disabled = false;
+        btn.textContent = 'Registrarse';
+        msg.style.color = '#b91c1c';
+        msg.textContent = error.message;
+        return;
+      }
+
+      let userId = data?.user?.id;
+      
+      if (!userId) {
+        const { data: loginData } = await cliente.auth.signInWithPassword({ email, password });
+        userId = loginData?.user?.id;
+      }
+
+      if (userId) {
+        let avatarUrl = '';
+
+        if (avatarFile) {
+          try {
+            const fileExt = avatarFile.name.split('.').pop();
+            const filePath = `${userId}-${Math.random()}.${fileExt}`;
+            
+            const { error: uploadError } = await cliente.storage
+              .from('avatars')
+              .upload(filePath, avatarFile);
+
+            if (!uploadError) {
+              const { data: urlData } = cliente.storage
+                .from('avatars')
+                .getPublicUrl(filePath);
+              avatarUrl = urlData.publicUrl;
+            }
+          } catch (uploadErr) {
+            console.error('Error al subir avatar:', uploadErr);
+          }
+        }
+
+        try {
+          await cliente.from('profiles').upsert({
+            id: userId,
+            email: email,
+            full_name: name,
+            phone: phone,
+            role: role,
+            avatar_url: avatarUrl
+          });
+        } catch (err) {
+          console.error('Error al guardar perfil:', err);
+        }
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Registrarse';
+      msg.style.color = '#166534';
+      msg.textContent = '¡Cuenta creada con éxito! Redirigiendo...';
+      setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+    });
+  </script>
+</body>
+</html>
