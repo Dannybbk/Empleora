@@ -3,30 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detalle del Anuncio - Empleora</title>
+  <title>Detalle del Anuncio - Roda Trabajo</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .seller-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: #fafaf9;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .seller-card:hover {
+      background: #f0e6d833;
+    }
+    .seller-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .seller-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #6B4423;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .seller-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .seller-label {
+      font-size: 11px;
+      color: #78716c;
+      display: block;
+    }
+    .seller-name-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .seller-name-row h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1c1917;
+      margin: 0;
+    }
+    .verified-badge {
+      color: #2563eb;
+      font-size: 12px;
+    }
+    .seller-role {
+      font-size: 11px;
+      font-weight: 600;
+      color: #6B4423;
+      background: #f0e6d8;
+      padding: 1px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-top: 2px;
+      text-transform: capitalize;
+    }
+    .seller-arrow {
+      color: #78716c;
+      font-size: 13px;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <div class="container nav">
-      <a href="index.html" class="logo"><img src="logo.jpg" alt="Empleora"> EMPLEORA</a>
-      <ul class="nav-links">
-        <li><a href="index.html">Inicio</a></li>
-        <li><a href="buscar.html">Buscar</a></li>
-        <li><a href="publicar.html">Publicar</a></li>
+    <div class="container nav" style="max-width: 1100px; margin: 0 auto; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;">
+      <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #1a1a1a; font-weight: 800; font-size: 17px;"><img src="logo.jpg" alt="Roda Trabajo" style="width: 32px; height: 32px; border-radius: 8px; object-fit: cover;"> RODA TRABAJO</a>
+      <ul class="nav-links" style="list-style: none; display: flex; gap: 16px;">
+        <li><a href="index.html" style="text-decoration: none; color: #78716c; font-weight: 600; font-size: 13px;">Inicio</a></li>
+        <li><a href="buscar.html" style="text-decoration: none; color: #78716c; font-weight: 600; font-size: 13px;">Buscar</a></li>
+        <li><a href="publicar.html" style="text-decoration: none; color: #78716c; font-weight: 600; font-size: 13px;">Publicar</a></li>
       </ul>
     </div>
   </header>
 
-  <main class="container" style="padding: 40px 0; max-width: 800px;">
+  <main class="container" style="padding: 40px 16px; max-width: 800px; margin: 0 auto;">
     <!-- Contenedor principal del anuncio -->
     <div id="ad-detail" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:30px; box-shadow:0 4px 6px rgba(0,0,0,0.05);">
       <p style="text-align:center; color:#64748b;">Cargando anuncio...</p>
     </div>
     
     <div style="margin-top: 20px;">
-      <a href="buscar.html" class="btn" style="background:#64748b; color:#fff; text-decoration:none; padding:10px 20px; border-radius:6px; display:inline-block;">&larr; Volver a la búsqueda</a>
+      <a href="buscar.html" class="btn" style="background:#64748b; color:#fff; text-decoration:none; padding:10px 20px; border-radius:6px; display:inline-block; font-size: 13px; font-weight: 600;">&larr; Volver a la búsqueda</a>
     </div>
   </main>
 
@@ -62,29 +139,68 @@
           return;
         }
 
+        // Consultar los datos del vendedor/perfil en Supabase usando el user_id del anuncio
+        let sellerName = 'Anunciante Roda';
+        let sellerRole = 'Particular';
+        let sellerAvatarHtml = 'RT';
+
+        if (ad.user_id) {
+          const { data: perfil } = await cliente
+            .from('profiles')
+            .select('full_name, role, avatar_url')
+            .eq('id', ad.user_id)
+            .single();
+
+          if (perfil) {
+            if (perfil.full_name) sellerName = perfil.full_name;
+            if (perfil.role) sellerRole = perfil.role;
+            if (perfil.avatar_url) {
+              sellerAvatarHtml = `<img src="${perfil.avatar_url}" alt="${sellerName}">`;
+            } else {
+              sellerAvatarHtml = sellerName.charAt(0).toUpperCase();
+            }
+          }
+        }
+
         const emailContacto = ad.contact_email || ad.email || ad.user_email;
         const telefonoContacto = ad.contact_phone || ad.phone || ad.telefono;
 
         container.innerHTML = `
-          <h1 style="color:#1e293b; margin-bottom:12px;">${ad.title || ad.profession || 'Detalle del puesto'}</h1>
-          <div style="color:#64748b; font-size:15px; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;">
+          <h1 style="color:#1e293b; margin-bottom:12px; font-size: 22px;">${ad.title || ad.profession || 'Detalle del puesto'}</h1>
+          <div style="color:#64748b; font-size:14px; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;">
             <strong>Categoría:</strong> ${ad.categories?.name || ad.category || 'General'} &bull; 
             <strong>Ubicación:</strong> ${ad.city || ad.province || 'España'} &bull; 
             <strong>Publicado:</strong> ${new Date(ad.created_at).toLocaleDateString('es-ES')}
           </div>
+
+          <!-- TARJETA DEL VENDEDOR (Estilo MilAnuncios) -->
+          <div class="seller-card">
+            <div class="seller-info">
+              <div class="seller-avatar" id="seller-avatar-box">${sellerAvatarHtml}</div>
+              <div>
+                <span class="seller-label">Oferta de</span>
+                <div class="seller-name-row">
+                  <h4>${sellerName}</h4>
+                  <i class="fa-solid fa-circle-check verified-badge" title="Verificado"></i>
+                </div>
+                <span class="seller-role">${sellerRole}</span>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-right seller-arrow"></i>
+          </div>
           
           <div style="margin-bottom:24px;">
-            <h3 style="color:#334155; margin-bottom:8px;">Descripción del puesto</h3>
-            <p style="color:#475569; line-height:1.6; white-space: pre-line;">${ad.description || ad.experience || 'Sin descripción detallada.'}</p>
+            <h3 style="color:#334155; margin-bottom:8px; font-size: 16px;">Descripción del puesto</h3>
+            <p style="color:#475569; line-height:1.6; white-space: pre-line; font-size: 14px;">${ad.description || ad.experience || 'Sin descripción detallada.'}</p>
           </div>
 
           <div style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom: 24px;">
             <h3 style="color:#334155; margin-bottom:12px; font-size:16px;">Forma de contacto directa</h3>
             ${emailContacto || telefonoContacto ? `
-              ${emailContacto ? `<p style="margin:6px 0;"><strong>Correo electrónico:</strong> <a href="mailto:${emailContacto}" style="color:#2563eb;">${emailContacto}</a></p>` : ''}
-              ${telefonoContacto ? `<p style="margin:6px 0;"><strong>Teléfono / WhatsApp:</strong> <a href="tel:${telefonoContacto}" style="color:#2563eb;">${telefonoContacto}</a></p>` : ''}
+              ${emailContacto ? `<p style="margin:6px 0; font-size: 14px;"><strong>Correo electrónico:</strong> <a href="mailto:${emailContacto}" style="color:#2563eb;">${emailContacto}</a></p>` : ''}
+              ${telefonoContacto ? `<p style="margin:6px 0; font-size: 14px;"><strong>Teléfono / WhatsApp:</strong> <a href="tel:${telefonoContacto}" style="color:#2563eb;">${telefonoContacto}</a></p>` : ''}
             ` : `
-              <p style="color:#64748b; margin:0;">Este anunciante no ha indicado un teléfono o correo directo.</p>
+              <p style="color:#64748b; margin:0; font-size: 14px;">Este anunciante no ha indicado un teléfono o correo directo.</p>
             `}
           </div>
 
@@ -95,20 +211,20 @@
             
             <form id="contact-form" style="display:grid; gap:12px;">
               <div>
-                <label style="display:block; font-size:14px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Nombre</label>
-                <input type="text" id="contact-name" required placeholder="Ej. María Pérez" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
+                <label style="display:block; font-size:13px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Nombre</label>
+                <input type="text" id="contact-name" required placeholder="Ej. María Pérez" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;">
               </div>
               <div>
-                <label style="display:block; font-size:14px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Teléfono o Correo de contacto</label>
-                <input type="text" id="contact-info" required placeholder="Ej. 600123456 o correo@email.com" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
+                <label style="display:block; font-size:13px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Teléfono o Correo de contacto</label>
+                <input type="text" id="contact-info" required placeholder="Ej. 600123456 o correo@email.com" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;">
               </div>
               <div>
-                <label style="display:block; font-size:14px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Mensaje</label>
-                <textarea id="contact-msg" rows="4" required placeholder="Hola, estoy muy interesado/a en este puesto..." style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;"></textarea>
+                <label style="display:block; font-size:13px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Mensaje</label>
+                <textarea id="contact-msg" rows="4" required placeholder="Hola, estoy muy interesado/a en este puesto..." style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;"></textarea>
               </div>
-              <button type="submit" class="btn" style="background:#2563eb; color:#fff; padding:12px; border:none; border-radius:6px; font-weight:600; cursor:pointer;">Enviar mensaje al anunciante</button>
+              <button type="submit" class="btn" style="background:#2563eb; color:#fff; padding:12px; border:none; border-radius:6px; font-weight:600; cursor:pointer; font-size: 14px;">Enviar mensaje al anunciante</button>
             </form>
-            <div id="form-success" style="display:none; margin-top:12px; color:#166534; font-weight:600; text-align:center;">¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.</div>
+            <div id="form-success" style="display:none; margin-top:12px; color:#166534; font-weight:600; text-align:center; font-size: 14px;">¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.</div>
           </div>
         `;
 
