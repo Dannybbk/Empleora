@@ -44,7 +44,6 @@
       <p class="text-sm text-stone-500 mt-1">Elige el tipo. Se revisará antes de publicarse.</p>
     </div>
 
-    <!-- DOS BOTONES: OFERTA / DEMANDA -->
     <div class="space-y-2 mb-6">
       <button type="button" id="btn-oferta" onclick="elegirTipo('ofrezco_empleo')"
         class="w-full py-3 px-4 rounded-xl border-2 border-brand-600 bg-brand-50 text-brand-900 font-bold text-sm flex items-center justify-center gap-2 transition">
@@ -113,7 +112,6 @@
         </div>
       </div>
 
-      <!-- SUELDO solo en OFERTA -->
       <div id="bloque-sueldo">
         <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Sueldo (opcional)</label>
         <input type="text" id="sueldo" placeholder="Ej: 1.200 € / mes · A convenir"
@@ -249,11 +247,11 @@
         }
       }
 
-        const row = {
+      const row = {
         user_id: session.user.id,
         title: titulo,
         titulo: titulo,
-        profession: titulo,   // ← AÑADE ESTA LÍNEA
+        profession: titulo,
         categoria: categoria,
         city: municipio || provincia,
         provincia: provincia,
@@ -288,7 +286,6 @@
       }
     });
 
-    // Por defecto: oferta de empleo (con sueldo visible)
     elegirTipo('ofrezco_empleo');
   </script>
 </body>
