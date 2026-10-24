@@ -43,7 +43,7 @@
         <nav class="hidden md:flex items-center gap-5 text-sm font-semibold text-stone-600">
           <a href="index.html" class="text-brand-600">Inicio</a>
           <a href="#anuncios" class="hover:text-brand-600">Ofertas</a>
-          <a href="publicar.html" class="hover:text-brand-600">Publicar</a>
+          <a href="registro.html" class="hover:text-brand-600">Publicar</a>
           <button type="button" onclick="abrirModalInfo()" class="hover:text-brand-600">Contacto</button>
         </nav>
         <div class="hidden md:flex items-center gap-2" id="auth-desk"></div>
@@ -71,18 +71,15 @@
       <span id="barra-email" class="text-brand-100 text-xs sm:text-sm truncate"></span>
       <div class="flex items-center gap-2">
         <a href="mis-anuncios.html" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-500 rounded-lg font-semibold text-xs">Mis anuncios</a>
-        <a href="publicar.html" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg font-semibold text-xs">Publicar</a>
+        <a href="registro.html" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg font-semibold text-xs">Publicar</a>
         <button type="button" onclick="cerrarSesion()" class="px-3 py-1.5 text-brand-200 hover:text-white text-xs font-semibold">Cerrar sesión</button>
       </div>
     </div>
   </div>
 
-  <section class="bg-brand-900 text-white pt-10 pb-12 px-4">
-    <div class="max-w-2xl mx-auto text-center space-y-5">
-      <p class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-800 text-brand-100 text-xs font-bold uppercase tracking-wider">Portal de empleo · España</p>
-      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">Tu próximo trabajo empieza aquí</h1>
-      <p class="text-brand-100 text-sm sm:text-base max-w-lg mx-auto">Publica o busca anuncios de empleo. Particular o empresa. Gratis para empezar.</p>
-      <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-xl text-left mt-4 space-y-3 text-stone-800">
+  <section class="bg-brand-900 text-white pt-6 pb-10 px-4">
+    <div class="max-w-2xl mx-auto space-y-4">
+      <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-xl text-left space-y-3 text-stone-800">
         <form onsubmit="filtrarAnuncios(event)" class="space-y-3">
           <div class="relative">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
@@ -276,14 +273,14 @@
         desk.innerHTML = `
           <a href="mis-anuncios.html" class="px-3.5 py-2 text-sm font-semibold text-brand-700 bg-brand-100 hover:bg-brand-200 rounded-lg">Mis anuncios</a>
           ${esAdmin ? '<a href="admin.html" class="px-3.5 py-2 text-sm font-semibold text-white bg-brand-900 hover:bg-brand-800 rounded-lg">Admin</a>' : ''}
-          <a href="publicar.html" class="px-3.5 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-lg">Publicar</a>
+          <a href="registro.html" class="px-3.5 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-lg">Publicar</a>
           <button type="button" onclick="cerrarSesion()" class="px-3 py-2 text-sm font-semibold text-stone-600 hover:text-red-600">Cerrar sesión</button>`;
         mob.innerHTML = `
           <a href="mis-anuncios.html" class="block px-3 py-2.5 rounded-lg font-semibold text-brand-800 bg-brand-50"><i class="fa-solid fa-folder-open w-5 inline-block"></i> Mis anuncios</a>
           ${esAdmin ? '<a href="admin.html" class="block px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50"><i class="fa-solid fa-shield-halved w-5 inline-block"></i> Panel admin</a>' : ''}
-          <a href="publicar.html" class="block px-3 py-2.5 rounded-lg font-semibold text-brand-700 bg-brand-50"><i class="fa-solid fa-circle-plus w-5 inline-block"></i> Publicar anuncio</a>
+          <a href="registro.html" class="block px-3 py-2.5 rounded-lg font-semibold text-brand-700 bg-brand-50"><i class="fa-solid fa-circle-plus w-5 inline-block"></i> Publicar anuncio</a>
           <button type="button" onclick="cerrarSesion()" class="w-full text-left px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50"><i class="fa-solid fa-right-from-bracket w-5 inline-block"></i> Cerrar sesión</button>`;
-        btnHero.href = 'publicar.html';
+        btnHero.href = 'registro.html';
       } else {
         barra.classList.add('hidden');
         desk.innerHTML = `
