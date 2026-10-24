@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roda Trabajo - Encuentra trabajo y oportunidades</title>
-  <meta name="description" content="Roda Trabajo. Publica y busca anuncios de empleo gratis en España.">
+  <title>Roda Trabajo - Empleo gratis en España</title>
+  <meta name="description" content="Roda Trabajo: publica y busca anuncios de empleo gratis. Ofertas y demandas en toda España. Particular o empresa.">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,14 +15,9 @@
           fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
           colors: {
             brand: {
-              50:  '#faf6f1',
-              100: '#f0e6d8',
-              200: '#e0ccb0',
-              500: '#8B5E3C',
-              600: '#6B4423',
-              700: '#4A2F18',
-              800: '#3A2414',
-              900: '#1a1a1a'
+              50: '#faf6f1', 100: '#f0e6d8', 200: '#e0ccb0',
+              500: '#8B5E3C', 600: '#6B4423', 700: '#4A2F18',
+              800: '#3A2414', 900: '#1a1a1a'
             }
           }
         }
@@ -36,65 +31,61 @@
 </head>
 <body class="bg-stone-50 text-stone-800 antialiased min-h-screen flex flex-col">
 
-  <!-- CABECERA -->
   <header class="sticky top-0 z-50 glass-nav border-b border-stone-200">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="flex items-center justify-between h-16">
-        
-        <!-- LOGO -->
-        <a href="index.html" class="flex items-center gap-2.5">
+      <div class="flex items-center justify-between h-14 sm:h-16">
+        <a href="index.html" class="flex items-center gap-2">
           <div class="w-9 h-9 rounded-lg bg-brand-900 flex items-center justify-center shadow-sm">
-            <span class="text-brand-100 font-black text-sm tracking-tighter">RT</span>
+            <span class="text-brand-100 font-black text-sm">RT</span>
           </div>
-          <span class="text-lg sm:text-xl font-extrabold tracking-tight text-brand-900">Roda Trabajo</span>
+          <span class="text-lg font-extrabold tracking-tight text-brand-900">Roda Trabajo</span>
         </a>
 
-        <!-- MENÚ ESCRITORIO -->
-        <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-stone-600">
+        <!-- Menú escritorio -->
+        <nav class="hidden md:flex items-center gap-5 text-sm font-semibold text-stone-600">
           <a href="index.html" class="text-brand-600">Inicio</a>
-          <a href="#anuncios" class="hover:text-brand-600 transition">Ofertas</a>
-          <a href="login.html" class="hover:text-brand-600 transition">Publicar</a>
-          <button onclick="abrirModalInfo()" class="hover:text-brand-600 transition">Contacto</button>
+          <a href="#anuncios" class="hover:text-brand-600">Ofertas</a>
+          <a href="publicar.html" id="nav-publicar-desk" class="hover:text-brand-600">Publicar</a>
+          <button type="button" onclick="abrirModalInfo()" class="hover:text-brand-600">Contacto</button>
         </nav>
 
-        <div class="hidden md:flex items-center gap-2">
-          <a href="login.html" id="btn-login-desktop" class="px-3.5 py-2 text-sm font-semibold text-stone-700 hover:text-brand-600 transition">Iniciar sesión</a>
-          <a href="registro.html" class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-lg shadow-sm transition">Regístrate gratis</a>
-          <a href="login.html" class="px-4 py-2 text-sm font-semibold text-brand-900 bg-brand-100 hover:bg-brand-200 rounded-lg border border-brand-200 transition">+ Publicar anuncio</a>
+        <div class="hidden md:flex items-center gap-2" id="auth-desk">
+          <!-- se rellena con JS según sesión -->
         </div>
 
-        <!-- HAMBURGUESA MÓVIL -->
         <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-stone-700 hover:bg-stone-100" aria-label="Menú">
           <i class="fa-solid fa-bars text-xl"></i>
         </button>
       </div>
     </div>
 
-    <!-- MENÚ MÓVIL -->
     <div id="mobile-menu" class="hidden md:hidden border-t border-stone-200 bg-white px-4 py-3 space-y-1">
       <a href="index.html" class="block px-3 py-2.5 rounded-lg font-semibold text-brand-600 bg-brand-50">
-        <i class="fa-solid fa-house w-5"></i> Inicio
+        <i class="fa-solid fa-house w-5 inline-block"></i> Inicio
       </a>
       <a href="#anuncios" class="block px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50">
-        <i class="fa-solid fa-briefcase w-5"></i> Ofertas de empleo
+        <i class="fa-solid fa-briefcase w-5 inline-block"></i> Ofertas de empleo
       </a>
-      <a href="login.html" id="btn-login-mobile" class="block px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50">
-        <i class="fa-solid fa-right-to-bracket w-5"></i> Iniciar sesión
-      </a>
-      <a href="registro.html" class="block px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50">
-        <i class="fa-solid fa-user-plus w-5"></i> Regístrate gratis
-      </a>
-      <a href="login.html" class="block px-3 py-2.5 rounded-lg font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100">
-        <i class="fa-solid fa-circle-plus w-5"></i> Publicar anuncio gratis
-      </a>
-      <button onclick="abrirModalInfo()" class="w-full text-left px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50">
-        <i class="fa-solid fa-envelope w-5"></i> Contacto
+      <div id="auth-mobile"><!-- se rellena con JS --></div>
+      <button type="button" onclick="abrirModalInfo()" class="w-full text-left px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50">
+        <i class="fa-solid fa-envelope w-5 inline-block"></i> Contacto
       </button>
     </div>
   </header>
 
-  <!-- HERO -->
-  <section class="bg-brand-900 text-white pt-12 pb-14 px-4">
+  <!-- Barra usuario logueado -->
+  <div id="barra-sesion" class="hidden bg-brand-900 text-white text-sm">
+    <div class="max-w-6xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-2">
+      <span id="barra-email" class="text-brand-100 text-xs sm:text-sm truncate"></span>
+      <div class="flex items-center gap-2">
+        <a href="mis-anuncios.html" class="px-3 py-1.5 bg-brand-600 hover:bg-brand-500 rounded-lg font-semibold text-xs">Mis anuncios</a>
+        <a href="publicar.html" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg font-semibold text-xs">Publicar</a>
+        <button type="button" onclick="cerrarSesion()" class="px-3 py-1.5 text-brand-200 hover:text-white text-xs font-semibold">Cerrar sesión</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="bg-brand-900 text-white pt-10 pb-12 px-4">
     <div class="max-w-2xl mx-auto text-center space-y-5">
       <p class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-800 text-brand-100 text-xs font-bold uppercase tracking-wider">
         Portal de empleo · España
@@ -103,17 +94,15 @@
         Tu próximo trabajo empieza aquí
       </h1>
       <p class="text-brand-100 text-sm sm:text-base max-w-lg mx-auto">
-        Publica o busca anuncios de empleo de forma sencilla. Particular o empresa. Gratis para empezar.
+        Publica o busca anuncios de empleo. Particular o empresa. Gratis para empezar.
       </p>
 
-      <!-- BUSCADOR -->
-      <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-xl text-left mt-6 space-y-3 text-stone-800">
+      <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-xl text-left mt-4 space-y-3 text-stone-800">
         <form onsubmit="filtrarAnuncios(event)" class="space-y-3">
           <div class="relative">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
-            <input type="text" id="search-keyword" placeholder="¿Qué trabajo buscas?" class="w-full pl-10 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+            <input type="text" id="search-keyword" placeholder="¿Qué trabajo buscas?" class="w-full pl-10 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
           </div>
-
           <div class="relative">
             <i class="fa-solid fa-layer-group absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
             <select id="search-category" class="w-full pl-10 pr-8 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-brand-500">
@@ -139,7 +128,6 @@
             </select>
             <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs pointer-events-none"></i>
           </div>
-
           <div class="relative">
             <i class="fa-solid fa-location-dot absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
             <select id="search-province" onchange="actualizarMunicipios()" class="w-full pl-10 pr-8 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-brand-500">
@@ -167,7 +155,6 @@
             </select>
             <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs pointer-events-none"></i>
           </div>
-
           <div id="container-municipio" class="hidden relative">
             <i class="fa-solid fa-city absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
             <select id="search-municipio" class="w-full pl-10 pr-8 py-3 bg-brand-50 border border-brand-200 rounded-xl text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-brand-500">
@@ -175,14 +162,13 @@
             </select>
             <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs pointer-events-none"></i>
           </div>
-
-          <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl transition flex items-center justify-center gap-2">
+          <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl flex items-center justify-center gap-2">
             <i class="fa-solid fa-magnifying-glass text-xs"></i> Buscar ofertas
           </button>
         </form>
 
-        <div class="pt-2 border-t border-stone-100">
-          <a href="login.html" class="flex items-center justify-center gap-2 w-full py-3 px-4 bg-brand-50 hover:bg-brand-100 text-brand-800 font-bold text-sm rounded-xl border border-brand-200 transition">
+        <div class="pt-2 border-t border-stone-100 space-y-2">
+          <a id="btn-publicar-hero" href="registro.html" class="flex items-center justify-center gap-2 w-full py-3 px-4 bg-brand-50 hover:bg-brand-100 text-brand-800 font-bold text-sm rounded-xl border border-brand-200">
             <i class="fa-solid fa-circle-plus"></i> Publicar anuncio gratis
           </a>
         </div>
@@ -190,18 +176,16 @@
     </div>
   </section>
 
-  <!-- LISTADO DE ANUNCIOS -->
   <section id="anuncios" class="max-w-4xl mx-auto px-4 sm:px-6 py-10 flex-1 w-full">
     <div class="mb-6 flex items-center justify-between gap-3">
       <div>
         <h2 class="text-xl font-bold text-brand-900">Últimos anuncios</h2>
-        <p class="text-stone-500 text-xs sm:text-sm mt-0.5">Pulsa «Ver oferta» para ver detalles y contactar</p>
+        <p class="text-stone-500 text-xs sm:text-sm mt-0.5">Pulsa «Ver oferta» para detalles y contactar</p>
       </div>
-      <button onclick="limpiarFiltros()" id="btn-limpiar" class="hidden text-xs font-semibold text-brand-600 hover:underline">
+      <button type="button" onclick="limpiarFiltros()" id="btn-limpiar" class="hidden text-xs font-semibold text-brand-600 hover:underline">
         <i class="fa-solid fa-rotate-right"></i> Ver todos
       </button>
     </div>
-
     <div id="contenedor-anuncios" class="space-y-3">
       <div class="text-center py-10 text-stone-500">
         <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
@@ -210,7 +194,6 @@
     </div>
   </section>
 
-  <!-- PIE -->
   <footer class="bg-brand-900 text-brand-100 text-sm mt-auto border-t border-brand-800">
     <div class="max-w-6xl mx-auto px-4 py-8 text-center space-y-2">
       <p class="font-bold text-white">Roda Trabajo © 2026</p>
@@ -218,34 +201,27 @@
     </div>
   </footer>
 
-  <!-- MODAL CONTACTO -->
   <div id="modal-info" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
     <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative text-center space-y-4">
-      <button onclick="cerrarModalInfo()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-600 hover:bg-stone-200">
+      <button type="button" onclick="cerrarModalInfo()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-600 hover:bg-stone-200">
         <i class="fa-solid fa-xmark"></i>
       </button>
       <div class="w-12 h-12 bg-brand-100 text-brand-700 rounded-xl flex items-center justify-center mx-auto text-xl">
         <i class="fa-solid fa-envelope"></i>
       </div>
       <h3 class="text-lg font-bold text-brand-900">Contacto</h3>
-      <p class="text-sm text-stone-600">Para consultas o soporte escríbenos a:</p>
-      <a href="mailto:info@rodatrabajo.com" class="block p-3 bg-brand-50 border border-brand-200 rounded-xl text-brand-800 font-bold text-sm select-all">
-        info@rodatrabajo.com
-      </a>
-      <button onclick="cerrarModalInfo()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm rounded-xl transition">
-        Cerrar
-      </button>
+      <p class="text-sm text-stone-600">Consultas y soporte:</p>
+      <a href="mailto:info@rodatrabajo.com" class="block p-3 bg-brand-50 border border-brand-200 rounded-xl text-brand-800 font-bold text-sm">info@rodatrabajo.com</a>
+      <button type="button" onclick="cerrarModalInfo()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm rounded-xl">Cerrar</button>
     </div>
   </div>
 
-  <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // ⚠️ Mantén tu URL y clave de Supabase si son distintas
     const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
+    const ADMIN_EMAIL = 'danny10bbk@gmail.com';
     const cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
     let todosLosAnuncios = [];
 
     const municipiosPorProvincia = {
@@ -297,21 +273,65 @@
       document.getElementById('modal-info').classList.add('hidden');
     }
 
+    async function cerrarSesion() {
+      await cliente.auth.signOut();
+      location.reload();
+    }
+
     async function gestionarEstadoSesion() {
       const { data: { session } } = await cliente.auth.getSession();
+      const desk = document.getElementById('auth-desk');
+      const mob = document.getElementById('auth-mobile');
+      const barra = document.getElementById('barra-sesion');
+      const btnHero = document.getElementById('btn-publicar-hero');
+
       if (session) {
-        const d = document.getElementById('btn-login-desktop');
-        const m = document.getElementById('btn-login-mobile');
-        if (d) {
-          d.textContent = 'Cerrar sesión';
-          d.href = '#';
-          d.onclick = async (e) => { e.preventDefault(); await cliente.auth.signOut(); location.reload(); };
-        }
-        if (m) {
-          m.innerHTML = '<i class="fa-solid fa-right-from-bracket w-5"></i> Cerrar sesión';
-          m.href = '#';
-          m.onclick = async (e) => { e.preventDefault(); await cliente.auth.signOut(); location.reload(); };
-        }
+        const email = session.user.email || '';
+        const esAdmin = email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+
+        barra.classList.remove('hidden');
+        document.getElementById('barra-email').textContent = 'Conectado: ' + email;
+
+        desk.innerHTML = `
+          <a href="mis-anuncios.html" class="px-3.5 py-2 text-sm font-semibold text-brand-700 bg-brand-100 hover:bg-brand-200 rounded-lg">Mis anuncios</a>
+          ${esAdmin ? '<a href="admin.html" class="px-3.5 py-2 text-sm font-semibold text-white bg-brand-900 hover:bg-brand-800 rounded-lg">Admin</a>' : ''}
+          <a href="publicar.html" class="px-3.5 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-lg">Publicar</a>
+          <button type="button" onclick="cerrarSesion()" class="px-3 py-2 text-sm font-semibold text-stone-600 hover:text-red-600">Cerrar sesión</button>
+        `;
+
+        mob.innerHTML = `
+          <a href="mis-anuncios.html" class="block px-3 py-2.5 rounded-lg font-semibold text-brand-800 bg-brand-50">
+            <i class="fa-solid fa-folder-open w-5 inline-block"></i> Mis anuncios
+          </a>
+          ${esAdmin ? '<a href="admin.html" class="block px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50"><i class="fa-solid fa-shield-halved w-5 inline-block"></i> Panel admin</a>' : ''}
+          <a href="publicar.html" class="block px-3 py-2.5 rounded-lg font-semibold text-brand-700 bg-brand-50">
+            <i class="fa-solid fa-circle-plus w-5 inline-block"></i> Publicar anuncio
+          </a>
+          <button type="button" onclick="cerrarSesion()" class="w-full text-left px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50">
+            <i class="fa-solid fa-right-from-bracket w-5 inline-block"></i> Cerrar sesión
+          </button>
+        `;
+
+        btnHero.href = 'publicar.html';
+      } else {
+        barra.classList.add('hidden');
+        desk.innerHTML = `
+          <a href="login.html" class="px-3.5 py-2 text-sm font-semibold text-stone-700 hover:text-brand-600">Iniciar sesión</a>
+          <a href="registro.html" class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-lg">Regístrate gratis</a>
+          <a href="registro.html" class="px-4 py-2 text-sm font-semibold text-brand-900 bg-brand-100 hover:bg-brand-200 rounded-lg border border-brand-200">+ Publicar</a>
+        `;
+        mob.innerHTML = `
+          <a href="login.html" class="block px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50">
+            <i class="fa-solid fa-right-to-bracket w-5 inline-block"></i> Iniciar sesión
+          </a>
+          <a href="registro.html" class="block px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50">
+            <i class="fa-solid fa-user-plus w-5 inline-block"></i> Regístrate gratis
+          </a>
+          <a href="registro.html" class="block px-3 py-2.5 rounded-lg font-semibold text-brand-700 bg-brand-50">
+            <i class="fa-solid fa-circle-plus w-5 inline-block"></i> Publicar anuncio gratis
+          </a>
+        `;
+        btnHero.href = 'registro.html';
       }
     }
 
@@ -337,22 +357,25 @@
       }
       cont.innerHTML = '';
       aprobados.forEach(ad => {
+        const tipo = ad.tipo === 'busco_trabajo' ? 'Demanda' : (ad.tipo === 'ofrezco_empleo' ? 'Oferta' : '');
         const card = document.createElement('div');
         card.className = 'p-4 bg-white rounded-xl border border-stone-200 hover:border-brand-300 hover:shadow-md transition flex flex-col sm:flex-row sm:items-center justify-between gap-3';
         card.innerHTML = `
           <div class="space-y-1.5 min-w-0">
             <div class="flex flex-wrap items-center gap-2">
               <span class="px-2 py-0.5 rounded text-xs font-bold bg-brand-100 text-brand-800">${ad.categoria || 'Empleo'}</span>
+              ${tipo ? `<span class="px-2 py-0.5 rounded text-xs font-bold bg-stone-100 text-stone-700">${tipo}</span>` : ''}
               <span class="text-xs text-stone-400">${ad.created_at ? new Date(ad.created_at).toLocaleDateString('es-ES') : ''}</span>
             </div>
             <h3 class="font-bold text-brand-900 truncate">${ad.titulo || ad.title || 'Oferta'}</h3>
             <p class="text-sm text-stone-600 flex flex-wrap gap-3">
               <span><i class="fa-solid fa-location-dot text-stone-400 mr-1"></i>${ad.city || ad.provincia || ad.municipio || 'España'}</span>
-              <span><i class="fa-solid fa-euro-sign text-stone-400 mr-1"></i>${ad.sueldo || 'A convenir'}</span>
+              ${ad.sueldo ? `<span><i class="fa-solid fa-euro-sign text-stone-400 mr-1"></i>${ad.sueldo}</span>` : ''}
             </p>
           </div>`;
         const btn = document.createElement('button');
-        btn.className = 'shrink-0 px-4 py-2 bg-brand-900 hover:bg-brand-800 text-white text-sm font-semibold rounded-lg transition';
+        btn.type = 'button';
+        btn.className = 'shrink-0 px-4 py-2 bg-brand-900 hover:bg-brand-800 text-white text-sm font-semibold rounded-lg';
         btn.textContent = 'Ver oferta';
         btn.onclick = () => verDetalleAnuncio(ad);
         card.appendChild(btn);
@@ -397,16 +420,17 @@
       modal.id = 'modal-detalle';
       modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50';
       const titulo = ad.titulo || ad.title || 'Oferta';
+      const contacto = ad.email || ad.contact_info || 'info@rodatrabajo.com';
       modal.innerHTML = `
         <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 relative max-h-[90vh] overflow-y-auto">
-          <button onclick="document.getElementById('modal-detalle').remove()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-600 hover:bg-stone-200"><i class="fa-solid fa-xmark"></i></button>
+          <button type="button" onclick="document.getElementById('modal-detalle').remove()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-600 hover:bg-stone-200"><i class="fa-solid fa-xmark"></i></button>
           <div>
             <span class="inline-block px-2.5 py-0.5 rounded text-xs font-bold bg-brand-100 text-brand-800 uppercase mb-2">${ad.categoria || 'Empleo'}</span>
             <h2 class="text-xl font-bold text-brand-900 pr-8">${titulo}</h2>
           </div>
           <div class="grid grid-cols-2 gap-3 bg-stone-50 p-3 rounded-xl text-sm">
             <div><span class="block text-xs font-bold text-stone-400 uppercase">Ubicación</span><span class="font-semibold">${ad.city || ad.provincia || ad.municipio || 'España'}</span></div>
-            <div><span class="block text-xs font-bold text-stone-400 uppercase">Sueldo</span><span class="font-semibold">${ad.sueldo || 'A convenir'}</span></div>
+            <div><span class="block text-xs font-bold text-stone-400 uppercase">Sueldo</span><span class="font-semibold">${ad.sueldo || '—'}</span></div>
           </div>
           <div>
             <h4 class="font-bold text-sm text-brand-900 mb-1">Descripción</h4>
@@ -414,8 +438,8 @@
           </div>
           <div class="border-t border-stone-100 pt-3 space-y-2">
             <h4 class="font-bold text-sm text-brand-900"><i class="fa-solid fa-paper-plane text-brand-600 mr-1"></i> Contactar</h4>
-            <form action="mailto:info@rodatrabajo.com" method="POST" enctype="text/plain" class="space-y-2">
-              <input type="hidden" name="Anuncio" value="${titulo}">
+            <form action="mailto:${contacto}" method="POST" enctype="text/plain" class="space-y-2">
+              <input type="hidden" name="Anuncio" value="${titulo.replace(/"/g, '')}">
               <input type="text" name="Nombre" required placeholder="Tu nombre" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm">
               <div class="grid grid-cols-2 gap-2">
                 <input type="tel" name="Telefono" required placeholder="Teléfono" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm">
