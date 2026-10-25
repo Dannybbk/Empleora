@@ -26,7 +26,6 @@
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans antialiased min-h-screen flex flex-col">
 
-  <!-- HEADER -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-stone-200">
     <div class="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-2">
@@ -46,22 +45,31 @@
     <!-- PERFIL -->
     <div class="bg-white p-5 sm:p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col sm:flex-row items-center gap-4">
       <div class="relative">
-        <img id="user-avatar-img" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover bg-stone-100 border-2 border-brand-200" src="" alt="Avatar">
+        <img id="user-avatar-img" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover bg-stone-100 border-2 border-brand-200" src="" alt="Avatar">
         <label class="absolute -bottom-1 -right-1 w-7 h-7 bg-brand-600 text-white rounded-full flex items-center justify-center cursor-pointer hover:bg-brand-700 shadow">
           <i class="fa-solid fa-camera text-xs"></i>
           <input type="file" id="avatar-input" accept="image/*" class="hidden" onchange="uploadAvatar(event)">
         </label>
       </div>
-      <div class="text-center sm:text-left flex-1">
-        <h1 class="text-lg font-bold text-brand-900" id="user-email-title">Mi panel</h1>
-        <p class="text-xs text-stone-500 mt-0.5" id="profile-tag">Usuario</p>
+      <div class="text-center sm:text-left flex-1 space-y-2 w-full">
+        <div>
+          <label class="block text-xs font-bold uppercase text-stone-400 mb-1">Nombre público</label>
+          <div class="flex gap-2">
+            <input type="text" id="profile-name" placeholder="Tu nombre o empresa"
+              class="flex-1 px-3 py-2 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <button type="button" onclick="saveProfileName()" class="px-3 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl shrink-0">
+              Guardar
+            </button>
+          </div>
+        </div>
+        <p class="text-xs text-stone-500" id="user-email-title"></p>
+        <p class="text-xs text-stone-400" id="profile-tag">Particular</p>
       </div>
-      <a href="publicar.html" class="w-full sm:w-auto text-center px-4 py-2.5 bg-brand-900 hover:bg-brand-800 text-white text-sm font-bold rounded-xl">
+      <a href="publicar.html" class="w-full sm:w-auto text-center px-4 py-2.5 bg-brand-900 hover:bg-brand-800 text-white text-sm font-bold rounded-xl shrink-0">
         + Nuevo anuncio
       </a>
     </div>
 
-    <!-- ANUNCIOS -->
     <div>
       <h2 class="text-lg font-bold text-brand-900 mb-3">Tus anuncios</h2>
       <div id="user-ads-container" class="space-y-3">
@@ -70,7 +78,6 @@
     </div>
   </main>
 
-  <!-- MODAL EDITAR -->
   <div id="edit-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
     <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-2xl w-full max-w-md border border-stone-200 space-y-4 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center">
@@ -119,6 +126,22 @@
       return cliente;
     }
 
+    async function ensureProfile(session) {
+      const sb = getClient();
+      const meta = session.user.user_metadata || {};
+      const { data: existing } = await sb.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
+      if (!existing) {
+        await sb.from('profiles').insert([{
+          id: session.user.id,
+          full_name: meta.full_name || '',
+          avatar_url: meta.avatar_url || null,
+          phone: meta.phone || null,
+          user_role: meta.user_role === 'profesional' ? 'empresa' : 'particular'
+        }]);
+      }
+      return existing;
+    }
+
     async function loadUserAds() {
       const sb = getClient();
       const { data: { session } } = await sb.auth.getSession();
@@ -137,10 +160,19 @@
       const userId = session.user.id;
       const meta = session.user.user_metadata || {};
 
+      await ensureProfile(session);
+
+      const { data: perfil } = await sb.from('profiles').select('*').eq('id', userId).maybeSingle();
+      const nombre = (perfil && perfil.full_name) || meta.full_name || '';
+      const avatar = (perfil && perfil.avatar_url) || meta.avatar_url || '';
+      const rol = (perfil && perfil.user_role) || meta.user_role || 'particular';
+
       document.getElementById('user-avatar-img').src =
-        meta.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(userEmail)}&background=6B4423&color=fff`;
-      document.getElementById('user-email-title').textContent = meta.full_name || userEmail;
-      document.getElementById('profile-tag').textContent = meta.user_role === 'profesional' ? 'Empresa / Profesional' : 'Particular';
+        avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(nombre || userEmail)}&background=6B4423&color=fff`;
+      document.getElementById('profile-name').value = nombre;
+      document.getElementById('user-email-title').textContent = userEmail;
+      document.getElementById('profile-tag').textContent =
+        (rol === 'empresa' || rol === 'profesional') ? 'Empresa / Profesional' : 'Particular';
 
       const { data: ads, error } = await sb
         .from('ads')
@@ -192,6 +224,53 @@
           </div>
         </div>`;
       }).join('');
+    }
+
+    async function saveProfileName() {
+      const sb = getClient();
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session) return;
+      const name = document.getElementById('profile-name').value.trim();
+      if (!name) { alert('Escribe un nombre'); return; }
+
+      const { error } = await sb.from('profiles').upsert({
+        id: session.user.id,
+        full_name: name,
+        updated_at: new Date().toISOString()
+      });
+      if (error) alert('Error: ' + error.message);
+      else {
+        await sb.auth.updateUser({ data: { full_name: name } });
+        alert('Nombre guardado. Se verá en tus anuncios.');
+      }
+    }
+
+    async function uploadAvatar(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const sb = getClient();
+      const { data: { session } } = await sb.auth.getSession();
+      if (!session) return;
+
+      const ext = file.name.split('.').pop();
+      const path = `${session.user.id}.${ext}`;
+      const { error } = await sb.storage.from('avatars').upload(path, file, { upsert: true });
+      if (error) {
+        alert('No se pudo subir la foto: ' + error.message);
+        return;
+      }
+      const { data } = sb.storage.from('avatars').getPublicUrl(path);
+      const url = data.publicUrl;
+
+      await sb.from('profiles').upsert({
+        id: session.user.id,
+        avatar_url: url,
+        updated_at: new Date().toISOString()
+      });
+      await sb.auth.updateUser({ data: { avatar_url: url } });
+
+      document.getElementById('user-avatar-img').src = url + '?t=' + Date.now();
+      alert('Foto de perfil guardada. Se verá en Ver oferta.');
     }
 
     async function renewAd(id) {
@@ -269,25 +348,6 @@
         loadUserAds();
       }
     });
-
-    async function uploadAvatar(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const sb = getClient();
-      const { data: { session } } = await sb.auth.getSession();
-      if (!session) return;
-
-      const ext = file.name.split('.').pop();
-      const path = `avatars/${session.user.id}.${ext}`;
-      const { error } = await sb.storage.from('avatars').upload(path, file, { upsert: true });
-      if (error) {
-        alert('No se pudo subir la foto. ¿Existe el bucket "avatars"?');
-        return;
-      }
-      const { data } = sb.storage.from('avatars').getPublicUrl(path);
-      await sb.auth.updateUser({ data: { avatar_url: data.publicUrl } });
-      document.getElementById('user-avatar-img').src = data.publicUrl + '?t=' + Date.now();
-    }
 
     async function logoutUser() {
       await getClient().auth.signOut();
