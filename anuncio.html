@@ -7,88 +7,12 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/styles.css">
-  <style>
-    .seller-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 14px;
-      background: #fafaf9;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      margin-bottom: 24px;
-      text-decoration: none;
-      transition: background 0.15s;
-    }
-    .seller-card:hover {
-      background: #f0e6d833;
-    }
-    .seller-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .seller-avatar {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: #6B4423;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 16px;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    .seller-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .seller-label {
-      font-size: 11px;
-      color: #78716c;
-      display: block;
-    }
-    .seller-name-row {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .seller-name-row h4 {
-      font-size: 14px;
-      font-weight: 700;
-      color: #1c1917;
-      margin: 0;
-    }
-    .verified-badge {
-      color: #2563eb;
-      font-size: 12px;
-    }
-    .seller-role {
-      font-size: 11px;
-      font-weight: 600;
-      color: #6B4423;
-      background: #f0e6d8;
-      padding: 1px 6px;
-      border-radius: 4px;
-      display: inline-block;
-      margin-top: 2px;
-      text-transform: capitalize;
-    }
-    .seller-arrow {
-      color: #78716c;
-      font-size: 13px;
-    }
-  </style>
 </head>
-<body>
-  <header>
+<body style="background: #f8fafc; font-family: 'Inter', sans-serif; margin: 0; padding: 0;">
+  <header style="background: #fff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 40;">
     <div class="container nav" style="max-width: 1100px; margin: 0 auto; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;">
       <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #1a1a1a; font-weight: 800; font-size: 17px;"><img src="logo.jpg" alt="Roda Trabajo" style="width: 32px; height: 32px; border-radius: 8px; object-fit: cover;"> RODA TRABAJO</a>
-      <ul class="nav-links" style="list-style: none; display: flex; gap: 16px;">
+      <ul class="nav-links" style="list-style: none; display: flex; gap: 16px; margin: 0; padding: 0;">
         <li><a href="index.html" style="text-decoration: none; color: #78716c; font-weight: 600; font-size: 13px;">Inicio</a></li>
         <li><a href="buscar.html" style="text-decoration: none; color: #78716c; font-weight: 600; font-size: 13px;">Buscar</a></li>
         <li><a href="publicar.html" style="text-decoration: none; color: #78716c; font-weight: 600; font-size: 13px;">Publicar</a></li>
@@ -139,23 +63,21 @@
           return;
         }
 
-        // Consultar los datos del vendedor/perfil en Supabase usando el user_id del anuncio
+        // Consultar los datos del usuario/perfil en Supabase usando el user_id del anuncio
         let sellerName = 'Anunciante Roda';
-        let sellerRole = 'Particular';
         let sellerAvatarHtml = 'RT';
 
         if (ad.user_id) {
           const { data: perfil } = await cliente
             .from('profiles')
-            .select('full_name, role, avatar_url')
+            .select('full_name, avatar_url')
             .eq('id', ad.user_id)
             .single();
 
           if (perfil) {
             if (perfil.full_name) sellerName = perfil.full_name;
-            if (perfil.role) sellerRole = perfil.role;
             if (perfil.avatar_url) {
-              sellerAvatarHtml = `<img src="${perfil.avatar_url}" alt="${sellerName}">`;
+              sellerAvatarHtml = `<img src="${perfil.avatar_url}" alt="${sellerName}" style="width: 100%; height: 100%; object-fit: cover;">`;
             } else {
               sellerAvatarHtml = sellerName.charAt(0).toUpperCase();
             }
@@ -165,29 +87,39 @@
         const emailContacto = ad.contact_email || ad.email || ad.user_email;
         const telefonoContacto = ad.contact_phone || ad.phone || ad.telefono;
 
+        // Comprobar si es oferta de empleo y si tiene sueldo
+        const esOferta = ad.tipo === 'oferta' || ad.category === 'oferta' || ad.sueldo || ad.salary;
+        const sueldoTexto = ad.sueldo || ad.salary || ad.sueldo_anuncio;
+
         container.innerHTML = `
           <h1 style="color:#1e293b; margin-bottom:12px; font-size: 22px;">${ad.title || ad.profession || 'Detalle del puesto'}</h1>
-          <div style="color:#64748b; font-size:14px; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;">
-            <strong>Categoría:</strong> ${ad.categories?.name || ad.category || 'General'} &bull; 
-            <strong>Ubicación:</strong> ${ad.city || ad.province || 'España'} &bull; 
-            <strong>Publicado:</strong> ${new Date(ad.created_at).toLocaleDateString('es-ES')}
-          </div>
+          
+          <div style="color:#64748b; font-size:14px; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:16px;">
+            <div style="margin-bottom: 10px;">
+              <strong>Categoría:</strong> ${ad.categories?.name || ad.category || 'General'} &bull; 
+              <strong>Ubicación:</strong> ${ad.city || ad.province || 'España'} &bull; 
+              <strong>Publicado:</strong> ${new Date(ad.created_at).toLocaleDateString('es-ES')}
+            </div>
 
-          <!-- TARJETA DEL VENDEDOR (Estilo MilAnuncios) -->
-          <div class="seller-card">
-            <div class="seller-info">
-              <div class="seller-avatar" id="seller-avatar-box">${sellerAvatarHtml}</div>
-              <div>
-                <span class="seller-label">Oferta de</span>
-                <div class="seller-name-row">
-                  <h4>${sellerName}</h4>
-                  <i class="fa-solid fa-circle-check verified-badge" title="Verificado"></i>
-                </div>
-                <span class="seller-role">${sellerRole}</span>
+            <!-- FOTO DE PERFIL Y NOMBRE DEL USUARIO DEBAJO DE LA UBICACIÓN -->
+            <div style="display: flex; align-items: center; gap: 10px; background: #f8fafc; padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0; width: fit-content; margin-top: 10px;">
+              <div style="width: 36px; height: 36px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; overflow: hidden; flex-shrink: 0;">
+                ${sellerAvatarHtml}
+              </div>
+              <div style="display: flex; flex-direction: column; line-height: 1.2;">
+                <span style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 600;">Publicado por</span>
+                <span style="font-weight: 700; font-size: 13px; color: #1e293b;">${sellerName}</span>
               </div>
             </div>
-            <i class="fa-solid fa-chevron-right seller-arrow"></i>
           </div>
+
+          <!-- BLOQUE DE DATOS: SALARIO (Solo aparece si es oferta y tiene sueldo) -->
+          ${esOferta && sueldoTexto ? `
+            <div style="background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom:24px;">
+              <span style="font-size: 12px; color: #64748b; display: block; margin-bottom: 2px;">SUELDO</span>
+              <strong style="color: #16a34a; font-size: 15px;">${sueldoTexto}</strong>
+            </div>
+          ` : ''}
           
           <div style="margin-bottom:24px;">
             <h3 style="color:#334155; margin-bottom:8px; font-size: 16px;">Descripción del puesto</h3>
