@@ -18,7 +18,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-  <!-- HEADER -->
+  <!-- HEADER IDÉNTICO AL PERFIL (Con la bandera de España) -->
   <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/85">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-2.5">
@@ -89,11 +89,11 @@
       const msg = document.getElementById('message');
       const form = document.getElementById('ad-form');
 
-      // Verificamos si hay una sesión activa
-      const { data: { session }, error } = await cliente.auth.getSession();
+      // Usamos onAuthStateChange o getUser para evitar falsas redirecciones de sesión
+      const { data: { user }, error: userError } = await cliente.auth.getUser();
 
-      if (error || !session) {
-        // Si no está registrado o logueado, lo lleva al login
+      if (userError || !user) {
+        // Solo redirige al login si realmente no hay usuario autenticado
         window.location.href = 'login.html';
         return;
       }
@@ -103,8 +103,8 @@
         msg.style.color = '#666';
         msg.textContent = 'Guardando y publicando anuncio...';
 
-        const userId = session.user.id;
-        const userEmail = session.user.email;
+        const userId = user.id;
+        const userEmail = user.email;
 
         let userName = userEmail.split('@')[0];
         let userAvatar = '';
