@@ -148,7 +148,7 @@
       const pendingContainer = document.getElementById('pending-container');
       const allAdsContainer = document.getElementById('all-ads-container');
 
-      // Consultamos los anuncios y traemos la relación de perfiles correcta
+      // Consultamos los anuncios trayendo toda la información posible del perfil asociado
       let { data: pendingAds, error: errPending } = await cliente
         .from('ads')
         .select(`*, profiles:user_id(*)`)
@@ -188,15 +188,15 @@
     }
 
     function renderBigCard(ad, st) {
-      // Extraemos los datos del perfil asegurándonos de leer los campos exactos (full_name, nombre, avatar_url, etc.)
       const profile = ad.profiles || {};
       
-      const userName = profile.full_name || profile.nombre || profile.name || ad.nombre_contacto || 'Usuario';
+      // Ampliamos las opciones para capturar el nombre y la foto exactamente como los guarda tu app pública
+      const userName = profile.full_name || profile.nombre || profile.name || profile.nombre_completo || ad.nombre_contacto || ad.user_name || 'Usuario';
       const userEmail = profile.email || ad.email || 'No disponible';
       const userPhone = profile.phone || profile.telefono || profile.celular || ad.phone || ad.telefono || null;
       
-      // Foto de perfil con respaldo a imagen por defecto si no existe
-      const avatarUrl = profile.avatar_url || profile.avatar || profile.photo_url || profile.imagen || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80';
+      // Buscamos la foto en el perfil o en el anuncio, si no hay ninguna, usamos una inicial o avatar limpio
+      const avatarUrl = profile.avatar_url || profile.avatar || profile.photo_url || profile.imagen || ad.avatar_url || ad.foto || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80';
 
       const badge = st === 'approved' ? 'bg-brand-100 text-brand-800' : st === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800';
       const label = st === 'approved' ? 'Aprobado' : st === 'rejected' ? 'Rechazado' : 'Pendiente';
