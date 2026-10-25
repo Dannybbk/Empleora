@@ -224,12 +224,12 @@
     const cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     document.getElementById('register-form').addEventListener('submit', async (e) => {
-      e.preventDefault(); // Evita que la página se recargue sola
+      e.preventDefault();
       
       const msg = document.getElementById('message');
       const btn = document.getElementById('btn-reg');
       msg.style.color = '#78716c';
-      msg.textContent = 'Conectando con el servidor...';
+      msg.textContent = 'Procesando registro...';
       btn.disabled = true;
 
       const role = document.getElementById('reg-role').value;
@@ -240,37 +240,37 @@
       const avatarFile = document.getElementById('reg-avatar').files[0];
 
       try {
-        // 1. Registro en Supabase Auth
-        const { data: authData, error: authError } = await cliente.auth.signUp({
+        const res = await cliente.auth.signUp({
           email,
           password,
           options: {
             data: { user_role: role, full_name: name, phone: phone }
           }
         });
+        
+        let authData = res.data;
+        let authError = res.error;
 
-        if (authError) {
+        if (authError && !authError.message.includes('email') && !authError.message.includes('sending')) {
           throw new Error('Error Auth: ' + authError.message);
         }
 
         let userId = authData?.user?.id;
 
-        // Si no hay sesión inmediata, intentamos loguear automáticamente
         if (!userId) {
           const { data: loginData, error: loginError } = await cliente.auth.signInWithPassword({ email, password });
           if (loginError) {
-            throw new Error('Error Login automático: ' + loginError.message);
+            throw new Error('Inicia sesión manualmente o comprueba los datos.');
           }
           userId = loginData?.user?.id;
         }
 
         if (!userId) {
-          throw new Error('No se pudo obtener el ID del usuario.');
+          throw new Error('No se pudo obtener el ID de usuario.');
         }
 
         let avatarUrl = '';
 
-        // 2. Subir foto de perfil si se seleccionó
         if (avatarFile) {
           msg.textContent = 'Subiendo imagen...';
           const fileExt = avatarFile.name.split('.').pop();
@@ -280,9 +280,7 @@
             .from('avatars')
             .upload(filePath, avatarFile, { upsert: true });
 
-          if (uploadError) {
-            console.error('Error al subir imagen:', uploadError.message);
-          } else {
+          if (!uploadError) {
             const { data: urlData } = cliente.storage
               .from('avatars')
               .getPublicUrl(filePath);
@@ -290,7 +288,6 @@
           }
         }
 
-        // 3. Guardar en la tabla public.profiles
         msg.textContent = 'Guardando perfil...';
         const { error: profileError } = await cliente.from('profiles').upsert({
           id: userId,
@@ -302,7 +299,7 @@
         });
 
         if (profileError) {
-          throw new Error('Error tabla profiles: ' + profileError.message);
+          console.error('Error tabla profiles:', profileError.message);
         }
 
         msg.style.color = '#166534';
@@ -314,7 +311,7 @@
         btn.disabled = false;
         btn.textContent = 'Registrarse';
         msg.style.color = '#b91c1c';
-        msg.textContent = err.message; // Muestra el error exacto en pantalla en vez de recargar
+        msg.textContent = err.message;
       }
     });
   </script>
