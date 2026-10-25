@@ -49,15 +49,33 @@
   <!-- CONTENIDO PRINCIPAL -->
   <main class="max-w-4xl mx-auto px-4 py-10 w-full flex-1 space-y-8">
     
-    <!-- PERFIL INFO -->
-    <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-200/80 flex flex-col sm:flex-row items-center gap-6">
-      <div id="user-avatar" class="w-20 h-20 bg-brand-600 text-white font-black text-2xl rounded-2xl flex items-center justify-center shadow-lg shadow-brand-500/30 overflow-hidden">
-        U
+    <!-- PERFIL INFO Y EDICIÓN -->
+    <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-200/80 flex flex-col items-center text-center space-y-4">
+      
+      <!-- FOTO DE PERFIL CON BOTÓN PARA CAMBIAR -->
+      <div class="relative group cursor-pointer" onclick="document.getElementById('avatar-input').click()">
+        <div id="user-avatar" class="w-24 h-24 bg-brand-600 text-white font-black text-3xl rounded-full flex items-center justify-center shadow-lg shadow-brand-500/30 overflow-hidden border-4 border-white">
+          U
+        </div>
+        <div class="absolute bottom-0 right-0 bg-stone-800 text-white p-2 rounded-full shadow-md hover:bg-brand-600 transition border-2 border-white">
+          <i class="fa-solid fa-camera text-xs"></i>
+        </div>
+        <input type="file" id="avatar-input" accept="image/*" class="hidden" onchange="previewAndUploadAvatar(event)">
       </div>
-      <div class="text-center sm:text-left space-y-1">
-        <h2 id="user-email" class="text-lg sm:text-xl font-bold text-slate-900">Cargando usuario...</h2>
-        <span class="inline-block px-3 py-1 bg-brand-100 text-brand-700 text-xs font-bold rounded-full">Perfil Verificado</span>
+
+      <!-- FORMULARIO DE NOMBRE Y GUARDADO -->
+      <div class="w-full max-w-md space-y-3">
+        <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Nombre público</p>
+        <div class="flex items-center gap-2">
+          <input type="text" id="input-full-name" placeholder="Tu nombre público..." class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500 transition text-center">
+          <button type="button" id="btn-save-profile" onclick="saveProfile()" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl shadow-md transition shrink-0">
+            Guardar
+          </button>
+        </div>
+        <p id="user-email-text" class="text-xs text-slate-500 font-medium"></p>
+        <span id="user-role-badge" class="inline-block px-3 py-1 bg-brand-100 text-brand-700 text-xs font-bold rounded-full">Perfil Verificado</span>
       </div>
+
     </div>
 
     <!-- MIS ANUNCIOS -->
@@ -82,6 +100,9 @@
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
     const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    let currentUserId = null;
+    let uploadedAvatarUrl = null;
+
     async function loadMyAds() {
       const { data: { session } } = await cliente.auth.getSession();
       if (!session) {
@@ -90,41 +111,41 @@
       }
 
       const userEmail = session.user.email;
-      const userId = session.user.id;
+      currentUserId = session.user.id;
 
-      // 1. Cargar los datos del perfil (Nombre, foto, rol) desde la tabla 'profiles'
-      let displayName = userEmail;
+      document.getElementById('user-email-text').textContent = userEmail;
+
+      // 1. Cargar los datos del perfil desde la tabla 'profiles'
+      let displayName = '';
       let displayRole = 'Perfil Verificado';
       let avatarHtml = userEmail.substring(0, 2).toUpperCase();
 
       const { data: perfil } = await cliente
         .from('profiles')
         .select('full_name, role, avatar_url')
-        .eq('id', userId)
+        .eq('id', currentUserId)
         .single();
 
       if (perfil) {
         if (perfil.full_name) displayName = perfil.full_name;
         if (perfil.role) displayRole = perfil.role;
         if (perfil.avatar_url) {
+          uploadedAvatarUrl = perfil.avatar_url;
           avatarHtml = `<img src="${perfil.avatar_url}" alt="Avatar" class="w-full h-full object-cover">`;
         }
       }
 
-      // Mostrar datos del usuario en pantalla
-      document.getElementById('user-email').textContent = displayName;
+      document.getElementById('input-full-name').value = displayName;
+      document.getElementById('user-role-badge').textContent = displayRole;
       
       const avatarContainer = document.getElementById('user-avatar');
       avatarContainer.innerHTML = avatarHtml;
-      if (perfil?.avatar_url) {
-        avatarContainer.classList.remove('bg-brand-600', 'text-white', 'font-black', 'text-2xl', 'items-center', 'justify-center');
-      }
 
       // 2. Búsqueda inteligente de anuncios del usuario
       const { data, error } = await cliente
         .from('ads')
         .select('*')
-        .or(`user_id.eq.${userId},contact_info.eq.${userEmail}`)
+        .or(`user_id.eq.${currentUserId},contact_info.eq.${userEmail}`)
         .order('created_at', { ascending: false });
 
       const container = document.getElementById('my-ads');
@@ -150,7 +171,6 @@
             <p class="text-sm text-slate-600 line-clamp-2 mt-2">${ad.description || ad.descripcion || ''}</p>
           </div>
           <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-            <!-- Botón para ver el detalle del anuncio -->
             <a href="anuncio.html?id=${ad.id}" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all border border-slate-200 text-center">
               Ver detalle
             </a>
@@ -160,6 +180,62 @@
           </div>
         </div>
       `).join('');
+    }
+
+    // FUNCIÓN PARA PREVISUALIZAR Y SUBIR FOTO A SUPABASE STORAGE
+    async function previewAndUploadAvatar(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Previsualización inmediata en el círculo
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('user-avatar').innerHTML = `<img src="${e.target.result}" alt="Avatar" class="w-full h-full object-cover">`;
+      };
+      reader.readAsDataURL(file);
+
+      // Subida de la foto a Supabase Storage
+      const fileExt = file.name.split('.').pop();
+      const filePath = `avatars/${currentUserId}_${Date.now()}.${fileExt}`;
+
+      const { data, error } = await cliente.storage
+        .from('avatars')
+        .upload(filePath, file, { upsert: true });
+
+      if (error) {
+        // Si no existe el bucket 'avatars' o falla la subida de archivo, guardamos como base64 o notificamos
+        console.warn('Error al subir a storage de Supabase:', error.message);
+      } else {
+        const { data: publicUrlData } = cliente.storage.from('avatars').getPublicUrl(filePath);
+        uploadedAvatarUrl = publicUrlData.publicUrl;
+      }
+    }
+
+    // FUNCIÓN DEFINITIVA PARA GUARDAR FOTO Y NOMBRE EN LA TABLA PROFILES
+    async function saveProfile() {
+      const btn = document.getElementById('btn-save-profile');
+      btn.innerText = 'Guardando...';
+      btn.disabled = true;
+
+      const newFullName = document.getElementById('input-full-name').value.trim();
+
+      const updateData = {};
+      if (newFullName) updateData.full_name = newFullName;
+      if (uploadedAvatarUrl) updateData.avatar_url = uploadedAvatarUrl;
+
+      const { error } = await cliente
+        .from('profiles')
+        .upsert({ id: currentUserId, ...updateData });
+
+      btn.disabled = false;
+      btn.innerText = 'Guardar';
+
+      if (error) {
+        alert('Error al guardar datos: ' + error.message);
+      } else {
+        alert('¡Perfil actualizado con éxito!');
+        loadMyAds();
+      }
     }
 
     async function deleteAd(id) {
