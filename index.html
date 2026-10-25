@@ -266,7 +266,6 @@
       const btnHero = document.getElementById('btn-publicar-hero');
       const navPub = document.getElementById('nav-publicar-desk');
       const destinoPublicar = session ? 'publicar.html' : 'registro.html';
-
       if (btnHero) btnHero.href = destinoPublicar;
       if (navPub) navPub.href = destinoPublicar;
 
@@ -281,16 +280,10 @@
           <a href="publicar.html" class="px-3.5 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-lg">Publicar</a>
           <button type="button" onclick="cerrarSesion()" class="px-3 py-2 text-sm font-semibold text-stone-600 hover:text-red-600">Cerrar sesión</button>`;
         mob.innerHTML = `
-          <a href="mis-anuncios.html" class="block px-3 py-2.5 rounded-lg font-semibold text-brand-800 bg-brand-50">
-            <i class="fa-solid fa-folder-open w-5 inline-block"></i> Mis anuncios
-          </a>
+          <a href="mis-anuncios.html" class="block px-3 py-2.5 rounded-lg font-semibold text-brand-800 bg-brand-50"><i class="fa-solid fa-folder-open w-5 inline-block"></i> Mis anuncios</a>
           ${esAdmin ? '<a href="admin.html" class="block px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50"><i class="fa-solid fa-shield-halved w-5 inline-block"></i> Panel admin</a>' : ''}
-          <a href="publicar.html" class="block px-3 py-2.5 rounded-lg font-semibold text-brand-700 bg-brand-50">
-            <i class="fa-solid fa-circle-plus w-5 inline-block"></i> Publicar anuncio
-          </a>
-          <button type="button" onclick="cerrarSesion()" class="w-full text-left px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50">
-            <i class="fa-solid fa-right-from-bracket w-5 inline-block"></i> Cerrar sesión
-          </button>`;
+          <a href="publicar.html" class="block px-3 py-2.5 rounded-lg font-semibold text-brand-700 bg-brand-50"><i class="fa-solid fa-circle-plus w-5 inline-block"></i> Publicar anuncio</a>
+          <button type="button" onclick="cerrarSesion()" class="w-full text-left px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50"><i class="fa-solid fa-right-from-bracket w-5 inline-block"></i> Cerrar sesión</button>`;
       } else {
         barra.classList.add('hidden');
         desk.innerHTML = `
@@ -298,15 +291,9 @@
           <a href="registro.html" class="px-4 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-lg">Regístrate gratis</a>
           <a href="registro.html" class="px-4 py-2 text-sm font-semibold text-brand-900 bg-brand-100 hover:bg-brand-200 rounded-lg border border-brand-200">+ Publicar</a>`;
         mob.innerHTML = `
-          <a href="login.html" class="block px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50">
-            <i class="fa-solid fa-right-to-bracket w-5 inline-block"></i> Iniciar sesión
-          </a>
-          <a href="registro.html" class="block px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50">
-            <i class="fa-solid fa-user-plus w-5 inline-block"></i> Regístrate gratis
-          </a>
-          <a href="registro.html" class="block px-3 py-2.5 rounded-lg font-semibold text-brand-700 bg-brand-50">
-            <i class="fa-solid fa-circle-plus w-5 inline-block"></i> Publicar anuncio gratis
-          </a>`;
+          <a href="login.html" class="block px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50"><i class="fa-solid fa-right-to-bracket w-5 inline-block"></i> Iniciar sesión</a>
+          <a href="registro.html" class="block px-3 py-2.5 rounded-lg font-semibold text-stone-700 hover:bg-stone-50"><i class="fa-solid fa-user-plus w-5 inline-block"></i> Regístrate gratis</a>
+          <a href="registro.html" class="block px-3 py-2.5 rounded-lg font-semibold text-brand-700 bg-brand-50"><i class="fa-solid fa-circle-plus w-5 inline-block"></i> Publicar anuncio gratis</a>`;
       }
     }
 
@@ -391,15 +378,40 @@
       renderizarAnuncios(todosLosAnuncios);
     }
 
-    function verDetalleAnuncio(ad) {
+    async function verDetalleAnuncio(ad) {
       const prev = document.getElementById('modal-detalle');
       if (prev) prev.remove();
-      const modal = document.createElement('div');
-      modal.id = 'modal-detalle';
-      modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50';
+
+      let nombre = 'Anunciante';
+      let avatar = '';
+      let rol = ad.perfil || 'Particular';
+
+      if (ad.user_id) {
+        try {
+          const { data: perfil } = await cliente
+            .from('profiles')
+            .select('full_name, avatar_url, user_role')
+            .eq('id', ad.user_id)
+            .maybeSingle();
+          if (perfil) {
+            if (perfil.full_name) nombre = perfil.full_name;
+            if (perfil.avatar_url) avatar = perfil.avatar_url;
+            if (perfil.user_role) {
+              rol = (perfil.user_role === 'empresa' || perfil.user_role === 'profesional') ? 'Empresa' : 'Particular';
+            }
+          }
+        } catch (e) {}
+      }
+
+      const iniciales = encodeURIComponent((nombre || 'A').charAt(0));
+      const avatarSrc = avatar || ('https://ui-avatars.com/api/?name=' + iniciales + '&background=8B5E3C&color=fff&size=128');
       const titulo = ad.titulo || ad.title || 'Oferta';
       const foto = ad.image_url || ad.photo_url || '';
       const contacto = ad.email || ad.contact_info || 'info@rodatrabajo.com';
+
+      const modal = document.createElement('div');
+      modal.id = 'modal-detalle';
+      modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50';
       modal.innerHTML = `
         <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
           ${foto ? `<img src="${foto}" alt="" class="w-full h-48 object-cover rounded-t-2xl">` : ''}
@@ -412,6 +424,13 @@
             <div class="grid grid-cols-2 gap-3 bg-stone-50 p-3 rounded-xl text-sm">
               <div><span class="block text-xs font-bold text-stone-400 uppercase">Ubicación</span><span class="font-semibold">${ad.city || ad.provincia || ad.municipio || 'España'}</span></div>
               <div><span class="block text-xs font-bold text-stone-400 uppercase">Sueldo</span><span class="font-semibold">${ad.sueldo || '—'}</span></div>
+            </div>
+            <div class="flex items-center gap-3 py-1">
+              <img src="${avatarSrc}" alt="" class="w-12 h-12 rounded-full object-cover border-2 border-brand-100 shrink-0">
+              <div>
+                <p class="font-bold text-brand-900 text-sm">${nombre}</p>
+                <p class="text-xs text-stone-500">${rol}</p>
+              </div>
             </div>
             <div>
               <h4 class="font-bold text-sm text-brand-900 mb-1">Descripción</h4>
