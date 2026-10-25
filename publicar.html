@@ -4,51 +4,89 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Publicar Anuncio - Roda Trabajo</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans p-6">
-  <div class="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-md border border-slate-200">
-    <h1 class="text-2xl font-black mb-6 text-slate-900">Publicar un nuevo anuncio</h1>
-    
-    <div id="message" class="mb-4 text-sm font-semibold"></div>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-    <form id="ad-form" class="space-y-4">
-      <div>
-        <label class="block text-sm font-bold mb-1">Título del puesto / Anuncio</label>
-        <input type="text" name="title" required placeholder="Ej. Repartidor en moto" class="w-full p-3 border rounded-xl">
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/85">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-xl overflow-hidden shadow-md flex flex-col border border-slate-200">
+          <div class="h-1/4 bg-red-600 w-full"></div>
+          <div class="h-2/4 bg-yellow-500 w-full"></div>
+          <div class="h-1/4 bg-red-600 w-full"></div>
+        </div>
+        <span class="text-xl font-black tracking-tight text-slate-900">RODA TRABAJO</span>
+      </a>
+      <div class="flex items-center gap-4">
+        <a href="perfil.html" class="text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">Mi perfil</a>
+        <a href="#" id="logout" class="text-sm font-semibold text-slate-600 hover:text-red-600 transition-colors">Cerrar sesión</a>
       </div>
-      <div>
-        <label class="block text-sm font-bold mb-1">Categoría</label>
-        <input type="text" name="category" required placeholder="Ej. Transporte" class="w-full p-3 border rounded-xl">
-      </div>
-      <div>
-        <label class="block text-sm font-bold mb-1">Ciudad / Ubicación</label>
-        <input type="text" name="city" required placeholder="Ej. Madrid" class="w-full p-3 border rounded-xl">
-      </div>
-      <div>
-        <label class="block text-sm font-bold mb-1">Sueldo (Opcional - Solo para ofertas)</label>
-        <input type="text" name="salary" placeholder="Ej. 1300€ / mes" class="w-full p-3 border rounded-xl">
-      </div>
-      <div>
-        <label class="block text-sm font-bold mb-1">Descripción</label>
-        <textarea name="description" rows="4" required placeholder="Detalles del puesto..." class="w-full p-3 border rounded-xl"></textarea>
-      </div>
-      <button type="submit" class="w-full py-3 bg-green-600 text-white font-bold rounded-xl shadow-md hover:bg-green-700 transition-all">Publicar anuncio</button>
-    </form>
-    
-    <div class="mt-4 text-center">
-      <a href="perfil.html" class="text-sm font-semibold text-blue-600 hover:underline">&larr; Volver a mi perfil</a>
     </div>
-  </div>
+  </header>
 
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="max-w-2xl mx-auto px-4 py-10 w-full flex-1 space-y-6">
+    <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-slate-200/80">
+      <h1 class="text-2xl font-black text-slate-900 mb-6">Publicar un nuevo anuncio</h1>
+      
+      <div id="message" class="mb-4 text-sm font-semibold"></div>
+
+      <form id="ad-form" class="space-y-4">
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-1">Título del puesto / Anuncio</label>
+          <input type="text" name="title" required placeholder="Ej. Repartidor en moto" class="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:border-slate-900">
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-1">Categoría</label>
+          <input type="text" name="category" required placeholder="Ej. Transporte" class="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:border-slate-900">
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-1">Ciudad / Ubicación</label>
+          <input type="text" name="city" required placeholder="Ej. Madrid" class="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:border-slate-900">
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-1">Sueldo (Opcional - Solo para ofertas)</label>
+          <input type="text" name="salary" placeholder="Ej. 1300€ / mes" class="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:border-slate-900">
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-slate-700 mb-1">Descripción</label>
+          <textarea name="description" rows="4" required placeholder="Detalles del puesto..." class="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:border-slate-900"></textarea>
+        </div>
+        <button type="submit" class="w-full py-3 bg-slate-900 text-white font-bold rounded-xl shadow-md hover:bg-slate-800 transition-all cursor-pointer">Publicar anuncio</button>
+      </form>
+      
+      <div class="mt-4 text-center">
+        <a href="perfil.html" class="text-sm font-semibold text-slate-600 hover:text-slate-900">&larr; Volver a mi perfil</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-400 text-sm border-t border-slate-800 py-6 text-center">
+    <p>© 2026 Roda Trabajo. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     document.addEventListener('DOMContentLoaded', async () => {
-      const { data: { session } } = await supabaseClient.auth.getSession();
+      const { data: { session } } = await cliente.auth.getSession();
       const msg = document.getElementById('message');
       const form = document.getElementById('ad-form');
 
@@ -65,12 +103,13 @@
         msg.textContent = 'Guardando y publicando anuncio...';
 
         const userId = session.user.id;
+        const userEmail = session.user.email;
 
-        // Buscamos el nombre y avatar actual del usuario en la tabla profiles para guardarlo directamente en el anuncio
-        let userName = session.user.email.split('@')[0];
+        // Capturamos el nombre y avatar actual de la tabla profiles si existen
+        let userName = userEmail.split('@')[0];
         let userAvatar = '';
 
-        const { data: perfil } = await supabaseClient
+        const { data: perfil } = await cliente
           .from('profiles')
           .select('full_name, avatar_url')
           .eq('id', userId)
@@ -88,14 +127,13 @@
           city: form.city.value,
           salary: form.salary.value || null,
           description: form.description.value,
-          contact_info: session.user.email,
-          // Guardamos los datos del autor directamente en columnas del anuncio
+          contact_info: userEmail,
           author_name: userName,
           author_avatar: userAvatar,
           status: 'published'
         };
 
-        const { error } = await supabaseClient.from('ads').insert([adData]);
+        const { error } = await cliente.from('ads').insert([adData]);
 
         if (error) {
           msg.style.color = 'red';
@@ -109,6 +147,12 @@
           }, 1500);
         }
       });
+    });
+
+    document.getElementById('logout').addEventListener('click', async (e) => {
+      e.preventDefault();
+      await cliente.auth.signOut();
+      window.location.href = 'index.html';
     });
   </script>
 </body>
