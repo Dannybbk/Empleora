@@ -6,13 +6,13 @@
   <title>Detalle del Anuncio - Roda Trabajo</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body style="background: #f8fafc; font-family: 'Inter', sans-serif; margin: 0; padding: 0;">
   <header style="background: #fff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 40;">
-    <div style="max-width: 1100px; margin: 0 auto; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;">
-      <a href="index.html" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #1a1a1a; font-weight: 800; font-size: 17px;">RODA TRABAJO</a>
-      <ul style="list-style: none; display: flex; gap: 16px; margin: 0; padding: 0;">
+    <div class="container nav" style="max-width: 1100px; margin: 0 auto; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;">
+      <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #1a1a1a; font-weight: 800; font-size: 17px;"><img src="logo.jpg" alt="Roda Trabajo" style="width: 32px; height: 32px; border-radius: 8px; object-fit: cover;"> RODA TRABAJO</a>
+      <ul class="nav-links" style="list-style: none; display: flex; gap: 16px; margin: 0; padding: 0;">
         <li><a href="index.html" style="text-decoration: none; color: #78716c; font-weight: 600; font-size: 13px;">Inicio</a></li>
         <li><a href="buscar.html" style="text-decoration: none; color: #78716c; font-weight: 600; font-size: 13px;">Buscar</a></li>
         <li><a href="publicar.html" style="text-decoration: none; color: #78716c; font-weight: 600; font-size: 13px;">Publicar</a></li>
@@ -20,22 +20,26 @@
     </div>
   </header>
 
-  <main style="padding: 40px 16px; max-width: 800px; margin: 0 auto;">
+  <main class="container" style="padding: 40px 16px; max-width: 800px; margin: 0 auto;">
+    <!-- Contenedor principal del anuncio -->
     <div id="ad-detail" style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:30px; box-shadow:0 4px 6px rgba(0,0,0,0.05);">
       <p style="text-align:center; color:#64748b;">Cargando anuncio...</p>
     </div>
     
     <div style="margin-top: 20px;">
-      <a href="buscar.html" style="background:#64748b; color:#fff; text-decoration:none; padding:10px 20px; border-radius:6px; display:inline-block; font-size: 13px; font-weight: 600;">&larr; Volver a la búsqueda</a>
+      <a href="buscar.html" class="btn" style="background:#64748b; color:#fff; text-decoration:none; padding:10px 20px; border-radius:6px; display:inline-block; font-size: 13px; font-weight: 600;">&larr; Volver a la búsqueda</a>
     </div>
   </main>
 
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
 
     document.addEventListener('DOMContentLoaded', async () => {
       const container = document.getElementById('ad-detail');
+      
       const urlParams = new URLSearchParams(window.location.search);
       const adId = urlParams.get('id') || urlParams.get('anuncio');
 
@@ -45,36 +49,54 @@
       }
 
       try {
-        const cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const { data: ad, error } = await cliente
           .from('ads')
-          .select('*')
+          .select('*, categories(name)')
           .eq('id', adId)
           .single();
 
         if (error || !ad) {
+          console.error('Error al cargar:', error);
           container.innerHTML = '<h2 style="color:#ef4444;">No disponible</h2><p>El anuncio no existe o ha sido eliminado.</p>';
           return;
         }
 
-        // Leemos el nombre y avatar guardados directamente en el anuncio
-        const authorName = ad.author_name || 'Anunciante Roda';
-        const authorAvatar = ad.author_avatar;
-        
-        let avatarHtml = authorName.charAt(0).toUpperCase();
-        if (authorAvatar) {
-          avatarHtml = `<img src="${authorAvatar}" alt="${authorName}" style="width: 100%; height: 100%; object-fit: cover;">`;
+        // Consultar los datos del usuario/perfil en Supabase usando el user_id del anuncio
+        let sellerName = 'Anunciante Roda';
+        let sellerAvatarHtml = 'RT';
+
+        if (ad.user_id) {
+          const { data: perfil } = await cliente
+            .from('profiles')
+            .select('full_name, avatar_url')
+            .eq('id', ad.user_id)
+            .single();
+
+          if (perfil) {
+            if (perfil.full_name) sellerName = perfil.full_name;
+            if (perfil.avatar_url) {
+              sellerAvatarHtml = `<img src="${perfil.avatar_url}" alt="${sellerName}" style="width: 100%; height: 100%; object-fit: cover;">`;
+            } else {
+              sellerAvatarHtml = sellerName.charAt(0).toUpperCase();
+            }
+          }
         }
 
-        const sueldoTexto = ad.salary || ad.sueldo;
+        const emailContacto = ad.contact_email || ad.email || ad.user_email;
+        const telefonoContacto = ad.contact_phone || ad.phone || ad.telefono;
+
+        // Comprobar si es oferta de empleo y si tiene sueldo
+        const esOferta = ad.tipo === 'oferta' || ad.category === 'oferta' || ad.sueldo || ad.salary;
+        const sueldoTexto = ad.sueldo || ad.salary || ad.sueldo_anuncio;
 
         container.innerHTML = `
           <h1 style="color:#1e293b; margin-bottom:12px; font-size: 22px;">${ad.title || ad.profession || 'Detalle del puesto'}</h1>
           
           <div style="color:#64748b; font-size:14px; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:16px;">
             <div style="margin-bottom: 10px;">
-              <strong>Categoría:</strong> ${ad.category || 'General'} &bull; 
+              <strong>Categoría:</strong> ${ad.categories?.name || ad.category || 'General'} &bull; 
               <strong>Ubicación:</strong> ${ad.city || ad.province || 'España'} &bull; 
               <strong>Publicado:</strong> ${new Date(ad.created_at).toLocaleDateString('es-ES')}
             </div>
@@ -82,17 +104,17 @@
             <!-- FOTO DE PERFIL Y NOMBRE DEL USUARIO DEBAJO DE LA UBICACIÓN -->
             <div style="display: flex; align-items: center; gap: 10px; background: #f8fafc; padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0; width: fit-content; margin-top: 10px;">
               <div style="width: 36px; height: 36px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; overflow: hidden; flex-shrink: 0;">
-                ${avatarHtml}
+                ${sellerAvatarHtml}
               </div>
               <div style="display: flex; flex-direction: column; line-height: 1.2;">
                 <span style="font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 600;">Publicado por</span>
-                <span style="font-weight: 700; font-size: 13px; color: #1e293b;">${authorName}</span>
+                <span style="font-weight: 700; font-size: 13px; color: #1e293b;">${sellerName}</span>
               </div>
             </div>
           </div>
 
-          <!-- SALARIO (Solo aparece si la oferta tiene sueldo indicado) -->
-          ${sueldoTexto ? `
+          <!-- BLOQUE DE DATOS: SALARIO (Solo aparece si es oferta y tiene sueldo) -->
+          ${esOferta && sueldoTexto ? `
             <div style="background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom:24px;">
               <span style="font-size: 12px; color: #64748b; display: block; margin-bottom: 2px;">SUELDO</span>
               <strong style="color: #16a34a; font-size: 15px;">${sueldoTexto}</strong>
@@ -101,14 +123,52 @@
           
           <div style="margin-bottom:24px;">
             <h3 style="color:#334155; margin-bottom:8px; font-size: 16px;">Descripción del puesto</h3>
-            <p style="color:#475569; line-height:1.6; white-space: pre-line; font-size: 14px;">${ad.description || 'Sin descripción detallada.'}</p>
+            <p style="color:#475569; line-height:1.6; white-space: pre-line; font-size: 14px;">${ad.description || ad.experience || 'Sin descripción detallada.'}</p>
           </div>
 
-          <div style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0;">
+          <div style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom: 24px;">
             <h3 style="color:#334155; margin-bottom:12px; font-size:16px;">Forma de contacto directa</h3>
-            <p style="margin:6px 0; font-size: 14px;"><strong>Correo electrónico:</strong> <a href="mailto:${ad.contact_info}" style="color:#2563eb;">${ad.contact_info}</a></p>
+            ${emailContacto || telefonoContacto ? `
+              ${emailContacto ? `<p style="margin:6px 0; font-size: 14px;"><strong>Correo electrónico:</strong> <a href="mailto:${emailContacto}" style="color:#2563eb;">${emailContacto}</a></p>` : ''}
+              ${telefonoContacto ? `<p style="margin:6px 0; font-size: 14px;"><strong>Teléfono / WhatsApp:</strong> <a href="tel:${telefonoContacto}" style="color:#2563eb;">${telefonoContacto}</a></p>` : ''}
+            ` : `
+              <p style="color:#64748b; margin:0; font-size: 14px;">Este anunciante no ha indicado un teléfono o correo directo.</p>
+            `}
+          </div>
+
+          <!-- Formulario de contacto para interesados -->
+          <div style="background:#eff6ff; padding:20px; border-radius:8px; border:1px solid #bfdbfe;">
+            <h3 style="color:#1e40af; margin-bottom:10px; font-size:18px;">¿Te interesa este anuncio? ¡Contacta ahora!</h3>
+            <p style="color:#3b82f6; font-size:14px; margin-bottom:15px;">Rellena tus datos y tu mensaje para enviar tu candidatura o consulta.</p>
+            
+            <form id="contact-form" style="display:grid; gap:12px;">
+              <div>
+                <label style="display:block; font-size:13px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Nombre</label>
+                <input type="text" id="contact-name" required placeholder="Ej. María Pérez" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;">
+              </div>
+              <div>
+                <label style="display:block; font-size:13px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Teléfono o Correo de contacto</label>
+                <input type="text" id="contact-info" required placeholder="Ej. 600123456 o correo@email.com" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;">
+              </div>
+              <div>
+                <label style="display:block; font-size:13px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Mensaje</label>
+                <textarea id="contact-msg" rows="4" required placeholder="Hola, estoy muy interesado/a en este puesto..." style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;"></textarea>
+              </div>
+              <button type="submit" class="btn" style="background:#2563eb; color:#fff; padding:12px; border:none; border-radius:6px; font-weight:600; cursor:pointer; font-size: 14px;">Enviar mensaje al anunciante</button>
+            </form>
+            <div id="form-success" style="display:none; margin-top:12px; color:#166534; font-weight:600; text-align:center; font-size: 14px;">¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.</div>
           </div>
         `;
+
+        // Lógica al enviar el formulario
+        const form = document.getElementById('contact-form');
+        if (form) {
+          form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            form.style.display = 'none';
+            document.getElementById('form-success').style.display = 'block';
+          });
+        }
 
       } catch (err) {
         console.error('Error inesperado:', err);
