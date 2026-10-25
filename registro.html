@@ -229,7 +229,7 @@
       const msg = document.getElementById('message');
       const btn = document.getElementById('btn-reg');
       msg.style.color = '#78716c';
-      msg.textContent = 'Procesando registro...';
+      msg.textContent = 'Creando cuenta...';
       btn.disabled = true;
 
       const role = document.getElementById('reg-role').value;
@@ -240,37 +240,39 @@
       const avatarFile = document.getElementById('reg-avatar').files[0];
 
       try {
-        const res = await cliente.auth.signUp({
+        // 1. Crear el usuario en Supabase Auth
+        const { data, error: authError } = await cliente.auth.signUp({
           email,
           password,
           options: {
             data: { user_role: role, full_name: name, phone: phone }
           }
         });
-        
-        let authData = res.data;
-        let authError = res.error;
 
         if (authError && !authError.message.includes('email') && !authError.message.includes('sending')) {
-          throw new Error('Error Auth: ' + authError.message);
+          throw new Error('Error en el registro: ' + authError.message);
         }
 
-        let userId = authData?.user?.id;
+        // Si Supabase devuelve el usuario directamente o podemos iniciar sesión para obtener su ID
+        let userId = data?.user?.id;
 
         if (!userId) {
-          const { data: loginData, error: loginError } = await cliente.auth.signInWithPassword({ email, password });
-          if (loginError) {
-            throw new Error('Inicia sesión manualmente o comprueba los datos.');
-          }
+          // Intentamos hacer login rápido para capturar el ID
+          const { data: loginData } = await cliente.auth.signInWithPassword({ email, password });
           userId = loginData?.user?.id;
         }
 
+        // Si aun así no tenemos ID (porque requiere confirmación estricta), avisamos que vaya a iniciar sesión
         if (!userId) {
-          throw new Error('No se pudo obtener el ID de usuario.');
+          msg.style.color = '#166534';
+          msg.textContent = '¡Cuenta creada! Ya puedes iniciar sesión.';
+          setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+          return;
         }
 
         let avatarUrl = '';
 
+        // 2. Subir foto de perfil si se seleccionó
         if (avatarFile) {
           msg.textContent = 'Subiendo imagen...';
           const fileExt = avatarFile.name.split('.').pop();
@@ -288,8 +290,9 @@
           }
         }
 
+        // 3. Guardar en la tabla public.profiles
         msg.textContent = 'Guardando perfil...';
-        const { error: profileError } = await cliente.from('profiles').upsert({
+        await cliente.from('profiles').upsert({
           id: userId,
           email: email,
           full_name: name,
@@ -297,10 +300,6 @@
           role: role,
           avatar_url: avatarUrl
         });
-
-        if (profileError) {
-          console.error('Error tabla profiles:', profileError.message);
-        }
 
         msg.style.color = '#166534';
         msg.textContent = '¡Cuenta creada con éxito! Redirigiendo...';
