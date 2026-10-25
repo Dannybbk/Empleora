@@ -60,13 +60,13 @@
     </div>
 
     <!-- Pendientes -->
-    <section class="space-y-3">
+    <section class="space-y-4">
       <h2 class="text-lg font-bold text-brand-900 flex items-center gap-2">
         <i class="fa-solid fa-clock text-amber-600"></i> Pendientes de aprobación
       </h2>
-      <div id="pending-container" class="space-y-3">
-        <div class="bg-white p-6 rounded-xl border border-stone-200 text-center text-stone-500 text-sm">
-          <i class="fa-solid fa-spinner fa-spin mb-2"></i>
+      <div id="pending-container" class="space-y-4">
+        <div class="bg-white p-6 rounded-2xl border border-stone-200 text-center text-stone-500 text-sm shadow-sm">
+          <i class="fa-solid fa-spinner fa-spin mb-2 text-lg"></i>
           <p>Cargando pendientes...</p>
         </div>
       </div>
@@ -75,16 +75,16 @@
     <hr class="border-stone-200">
 
     <!-- Todos -->
-    <section class="space-y-3">
+    <section class="space-y-4">
       <div>
         <h2 class="text-lg font-bold text-brand-900 flex items-center gap-2">
           <i class="fa-solid fa-list text-brand-600"></i> Todos los anuncios
         </h2>
-        <p class="text-sm text-stone-500 mt-0.5">Renovar o eliminar cualquier anuncio.</p>
+        <p class="text-sm text-stone-500 mt-0.5">Control total de usuarios y publicaciones.</p>
       </div>
-      <div id="all-ads-container" class="space-y-3">
-        <div class="bg-white p-6 rounded-xl border border-stone-200 text-center text-stone-500 text-sm">
-          <i class="fa-solid fa-spinner fa-spin mb-2"></i>
+      <div id="all-ads-container" class="space-y-4">
+        <div class="bg-white p-6 rounded-2xl border border-stone-200 text-center text-stone-500 text-sm shadow-sm">
+          <i class="fa-solid fa-spinner fa-spin mb-2 text-lg"></i>
           <p>Cargando anuncios...</p>
         </div>
       </div>
@@ -126,6 +126,9 @@
     function ubicacion(ad) {
       return ad.city || ad.provincia || ad.municipio || 'España';
     }
+    function descripcion(ad) {
+      return ad.description || ad.descripcion || 'Sin descripción detallada.';
+    }
 
     function openImageModal(url) {
       const modal = document.getElementById('image-modal');
@@ -145,7 +148,6 @@
       const pendingContainer = document.getElementById('pending-container');
       const allAdsContainer = document.getElementById('all-ads-container');
 
-      // Consulta trayendo perfiles amplios (buscando phone, telefono, mobile, etc.)
       let { data: pendingAds, error: errPending } = await cliente
         .from('ads')
         .select(`*, profiles:user_id(*)`)
@@ -159,7 +161,7 @@
 
       if (!pendingAds || pendingAds.length === 0) {
         pendingContainer.innerHTML = `
-          <div class="bg-white p-6 rounded-xl border border-stone-200 text-center text-stone-500">
+          <div class="bg-white p-6 rounded-2xl border border-stone-200 text-center text-stone-500 shadow-sm">
             <i class="fa-regular fa-circle-check text-2xl text-brand-600 mb-1"></i>
             <p class="text-sm font-medium">No hay anuncios pendientes de revisión.</p>
           </div>`;
@@ -168,10 +170,10 @@
           const profile = ad.profiles || {};
           const avatarUrl = profile.avatar_url || profile.avatar || profile.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80';
           const userEmail = profile.email || ad.email || 'No disponible';
-          // Buscamos el teléfono en múltiples nombres posibles de columnas por si acaso
           const userPhone = profile.phone || profile.telefono || profile.celular || ad.phone || ad.telefono || null;
+          const userName = profile.full_name || profile.nombre || 'Usuario de Roda Trabajo';
 
-          return renderAdCard(ad, avatarUrl, userEmail, userPhone, 'pending');
+          return renderBigCard(ad, avatarUrl, userName, userEmail, userPhone, 'pending');
         }).join('');
       }
 
@@ -186,55 +188,78 @@
       }
 
       if (!allAds || allAds.length === 0) {
-        allAdsContainer.innerHTML = '<p class="text-stone-500 text-sm bg-white p-4 rounded-xl border border-stone-200 text-center">No hay anuncios.</p>';
+        allAdsContainer.innerHTML = '<p class="text-stone-500 text-sm bg-white p-6 rounded-2xl border border-stone-200 text-center shadow-sm">No hay anuncios.</p>';
       } else {
         allAdsContainer.innerHTML = allAds.map(ad => {
           const profile = ad.profiles || {};
           const avatarUrl = profile.avatar_url || profile.avatar || profile.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80';
           const userEmail = profile.email || ad.email || 'No disponible';
           const userPhone = profile.phone || profile.telefono || profile.celular || ad.phone || ad.telefono || null;
+          const userName = profile.full_name || profile.nombre || 'Usuario de Roda Trabajo';
 
-          return renderAdCard(ad, avatarUrl, userEmail, userPhone, ad.status || 'pending');
+          return renderBigCard(ad, avatarUrl, userName, userEmail, userPhone, ad.status || 'pending');
         }).join('');
       }
     }
 
-    function renderAdCard(ad, avatarUrl, userEmail, userPhone, st) {
+    function renderBigCard(ad, avatarUrl, userName, userEmail, userPhone, st) {
       const badge = st === 'approved' ? 'bg-brand-100 text-brand-800' : st === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800';
       const label = st === 'approved' ? 'Aprobado' : st === 'rejected' ? 'Rechazado' : 'Pendiente';
 
       const phoneHtml = userPhone 
-        ? `<a href="tel:${userPhone}" class="font-semibold text-brand-700 underline hover:text-brand-900">${userPhone}</a>`
+        ? `<a href="tel:${userPhone}" class="font-bold text-brand-700 underline hover:text-brand-900">${userPhone}</a>`
         : `<span class="text-stone-400 italic">No registrado</span>`;
 
+      const tipoAnuncio = ad.tipo === 'busco_trabajo' ? 'Demanda (Busca empleo)' : ad.tipo === 'ofrezco_empleo' ? 'Oferta (Empleo)' : (ad.tipo || 'Anuncio');
+
       return `
-      <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="flex items-start gap-3.5 min-w-0">
-          <img src="${avatarUrl}" alt="Avatar" onclick="openImageModal('${avatarUrl}')" class="w-12 h-12 rounded-full object-cover cursor-pointer border-2 border-brand-200 shrink-0 hover:scale-105 transition shadow-sm" title="Haz clic para ver foto a pantalla completa">
-          <div class="space-y-1 min-w-0">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2 py-0.5 rounded text-xs font-bold ${badge}">${label}</span>
-              <span class="text-xs text-stone-400">${ad.created_at ? new Date(ad.created_at).toLocaleDateString('es-ES') : ''}</span>
-            </div>
-            <h3 class="font-bold text-brand-900 text-base">${titulo(ad)}</h3>
-            <p class="text-xs text-stone-500">
-              <i class="fa-solid fa-location-dot text-stone-400"></i> ${ubicacion(ad)} ${ad.sueldo ? ' · <span class="font-medium text-stone-700">' + ad.sueldo + '</span>' : ''}
-            </p>
-            <div class="text-xs text-stone-600 flex flex-wrap items-center gap-x-4 gap-y-1 pt-1.5 bg-stone-50 px-2.5 py-1.5 rounded-lg border border-stone-100">
-              <span class="flex items-center gap-1.5 truncate"><i class="fa-solid fa-envelope text-brand-600"></i> <strong class="text-stone-700 font-medium">${userEmail}</strong></span>
-              <span class="flex items-center gap-1.5"><i class="fa-solid fa-phone text-brand-600"></i> ${phoneHtml}</span>
+      <div class="bg-white rounded-2xl border border-stone-200 shadow-sm p-5 space-y-4 hover:shadow-md transition">
+        
+        <!-- Fila superior: Estado y Fecha -->
+        <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded-lg text-xs font-bold ${badge}">${label}</span>
+            <span class="text-xs px-2 py-0.5 bg-stone-100 text-stone-600 rounded font-medium">${tipoAnuncio}</span>
+          </div>
+          <span class="text-xs font-semibold text-stone-400"><i class="fa-regular fa-calendar mr-1"></i>${ad.created_at ? new Date(ad.created_at).toLocaleDateString('es-ES', {day: '2-digit', month: '2-digit', year: 'numeric'}) : ''}</span>
+        </div>
+
+        <!-- Bloque de Usuario (Datos de registro) -->
+        <div class="flex items-center gap-3.5 bg-stone-50 p-3.5 rounded-xl border border-stone-100">
+          <img src="${avatarUrl}" alt="Avatar" onclick="openImageModal('${avatarUrl}')" class="w-14 h-14 rounded-full object-cover cursor-pointer border-2 border-brand-300 shrink-0 hover:scale-105 transition shadow" title="Toca para ver foto a pantalla completa">
+          <div class="min-w-0 flex-1 space-y-1">
+            <h4 class="font-bold text-brand-900 text-sm truncate">${userName}</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-xs">
+              <span class="flex items-center gap-1.5 text-stone-600 truncate"><i class="fa-solid fa-envelope text-brand-600 shrink-0"></i> <strong class="truncate">${userEmail}</strong></span>
+              <span class="flex items-center gap-1.5 text-stone-600"><i class="fa-solid fa-phone text-brand-600 shrink-0"></i> ${phoneHtml}</span>
             </div>
           </div>
         </div>
-        <div class="flex items-center gap-2 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-stone-100">
-          ${st !== 'approved' ? `<button type="button" onclick="approveAd('${ad.id}')" class="px-3 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-lg shadow-sm transition">Aprobar</button>` : ''}
-          <button type="button" onclick="renewAd('${ad.id}')" class="px-3 py-2 bg-stone-800 hover:bg-stone-900 text-white font-bold text-xs rounded-lg shadow-sm transition" title="Renovar fecha">
-            <i class="fa-solid fa-rotate"></i> Renovar
+
+        <!-- Bloque del Anuncio (Detalles) -->
+        <div class="space-y-2 pt-1">
+          <h3 class="font-extrabold text-brand-900 text-lg">${titulo(ad)}</h3>
+          <p class="text-xs text-stone-500 flex flex-wrap gap-3 font-medium">
+            <span><i class="fa-solid fa-location-dot text-brand-600"></i> ${ubicacion(ad)}</span>
+            ${ad.categoria ? '<span><i class="fa-solid fa-tag text-brand-600"></i> ' + ad.categoria + '</span>' : ''}
+            ${ad.sueldo ? '<span><i class="fa-solid fa-wallet text-brand-600"></i> ' + ad.sueldo + '</span>' : ''}
+          </p>
+          <div class="bg-stone-50/70 p-3 rounded-xl border border-stone-100 text-xs text-stone-700 leading-relaxed max-h-32 overflow-y-auto">
+            ${descripcion(ad)}
+          </div>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="flex flex-wrap items-center justify-end gap-2 pt-3 border-t border-stone-100">
+          ${st !== 'approved' ? `<button type="button" onclick="approveAd('${ad.id}')" class="px-3.5 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-sm transition"><i class="fa-solid fa-check mr-1"></i> Aprobar</button>` : ''}
+          <button type="button" onclick="renewAd('${ad.id}')" class="px-3.5 py-2 bg-stone-800 hover:bg-stone-900 text-white font-bold text-xs rounded-xl shadow-sm transition">
+            <i class="fa-solid fa-rotate mr-1"></i> Renovar
           </button>
-          <button type="button" onclick="deleteAd('${ad.id}')" class="px-3 py-2 bg-stone-100 hover:bg-red-600 hover:text-white text-stone-700 font-bold text-xs rounded-lg transition" title="Borrar anuncio">
-            <i class="fa-solid fa-trash"></i>
+          <button type="button" onclick="deleteAd('${ad.id}')" class="px-3.5 py-2 bg-red-50 hover:bg-red-600 hover:text-white text-red-600 font-bold text-xs rounded-xl transition border border-red-100">
+            <i class="fa-solid fa-trash mr-1"></i> Borrar
           </button>
         </div>
+
       </div>`;
     }
 
@@ -255,7 +280,7 @@
       const { error } = await cliente.from('ads').update({ created_at: new Date().toISOString() }).eq('id', id);
       if (error) alert('Error al renovar');
       else {
-        alert('Anuncio renovado');
+        alert('Anuncio renovado con éxito');
         loadAdminPanel();
       }
     }
