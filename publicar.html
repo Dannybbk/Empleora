@@ -31,3 +31,250 @@
       <a href="index.html" class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-lg bg-brand-900 text-brand-100 flex items-center justify-center text-xs font-black">RT</div>
         <span class="font-extrabold text-brand-900 text-sm">Roda Trabajo</span>
+      </a>
+      <a href="mis-anuncios.html" class="text-sm font-semibold text-stone-500 hover:text-brand-600">← Mi panel</a>
+    </div>
+  </header>
+
+  <main class="max-w-lg mx-auto px-4 py-8 w-full flex-1">
+
+    <div class="mb-6">
+      <p class="text-xs font-bold uppercase tracking-wider text-brand-600 mb-1">Nuevo anuncio</p>
+      <h1 class="text-xl font-extrabold text-brand-900">Publicar en Roda Trabajo</h1>
+      <p class="text-sm text-stone-500 mt-1">Elige el tipo. Se revisará antes de publicarse.</p>
+    </div>
+
+    <div class="space-y-2 mb-6">
+      <button type="button" id="btn-oferta" onclick="elegirTipo('ofrezco_empleo')"
+        class="w-full py-3 px-4 rounded-xl border-2 border-brand-600 bg-brand-50 text-brand-900 font-bold text-sm flex items-center justify-center gap-2">
+        <i class="fa-solid fa-briefcase"></i> Publicar oferta de empleo
+      </button>
+      <button type="button" id="btn-demanda" onclick="elegirTipo('busco_trabajo')"
+        class="w-full py-3 px-4 rounded-xl border-2 border-stone-200 bg-white text-stone-700 font-bold text-sm flex items-center justify-center gap-2 hover:border-brand-400">
+        <i class="fa-solid fa-user"></i> Publicar demanda de empleo
+      </button>
+    </div>
+    <p id="tipo-hint" class="text-xs text-stone-500 mb-4 -mt-2">Oferta = necesitas contratar. Demanda = buscas trabajo.</p>
+
+    <form id="publish-form" class="bg-white rounded-2xl border border-stone-200 p-5 sm:p-6 space-y-4 shadow-sm">
+      <input type="hidden" id="tipo" value="ofrezco_empleo">
+
+      <div>
+        <label class="block text-xs font-bold uppercase text-stone-500 mb-1">¿Quién publica? *</label>
+        <select id="perfil" required class="w-full px-3 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+          <option value="particular">Particular</option>
+          <option value="empresa">Empresa / Autónomo</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Título del anuncio *</label>
+        <input type="text" id="titulo" required maxlength="80" placeholder="Ej: Se busca repartidor / Busco trabajo de camarero"
+          class="w-full px-3 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Sector *</label>
+        <select id="categoria" required class="w-full px-3 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+          <option value="">Selecciona un sector...</option>
+          <option value="construccion">Construcción y reformas</option>
+          <option value="limpieza">Limpieza</option>
+          <option value="hosteleria">Hostelería y turismo</option>
+          <option value="transporte">Transporte y conducción</option>
+          <option value="logistica">Logística y almacén</option>
+          <option value="administracion">Administración y oficina</option>
+          <option value="comercio">Comercio y ventas</option>
+          <option value="atencion-cliente">Atención al cliente</option>
+          <option value="informatica">Informática y tecnología</option>
+          <option value="sanidad">Sanidad</option>
+          <option value="educacion">Educación</option>
+          <option value="mantenimiento">Mantenimiento</option>
+          <option value="agricultura">Agricultura y campo</option>
+          <option value="industria">Industria</option>
+          <option value="peluqueria">Peluquería y estética</option>
+          <option value="cuidado">Cuidado de personas</option>
+          <option value="domestico">Trabajo doméstico</option>
+          <option value="otros">Otros</option>
+        </select>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Provincia *</label>
+          <input type="text" id="provincia" required placeholder="Ej: Madrid"
+            class="w-full px-3 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Localidad</label>
+          <input type="text" id="municipio" placeholder="Ej: Alcalá de Henares"
+            class="w-full px-3 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+      </div>
+
+      <div id="bloque-sueldo">
+        <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Sueldo (opcional)</label>
+        <input type="text" id="sueldo" placeholder="Ej: 1.200 € / mes · A convenir"
+          class="w-full px-3 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+        <p class="text-xs text-stone-400 mt-1">Solo en ofertas de empleo.</p>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Descripción *</label>
+        <textarea id="descripcion" rows="5" required placeholder="Condiciones, experiencia, horarios..."
+          class="w-full px-3 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Foto (opcional)</label>
+        <input type="file" id="foto" accept="image/*" class="w-full text-sm text-stone-600">
+        <img id="foto-preview" class="hidden mt-2 w-full h-36 object-cover rounded-xl border border-stone-200" alt="">
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Teléfono</label>
+          <input type="tel" id="telefono" placeholder="600 000 000"
+            class="w-full px-3 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Email de contacto</label>
+          <input type="email" id="email-contacto" placeholder="tu@email.com"
+            class="w-full px-3 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+      </div>
+
+      <p id="msg" class="text-sm text-center font-medium hidden"></p>
+
+      <button type="submit" id="btn-publish" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl">
+        Publicar anuncio
+      </button>
+    </form>
+  </main>
+
+  <footer class="bg-brand-900 text-brand-100 text-xs text-center py-5 mt-auto">
+    Roda Trabajo © 2026 · <a href="mailto:info@rodatrabajo.com" class="underline">info@rodatrabajo.com</a>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
+    const cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    function elegirTipo(tipo) {
+      document.getElementById('tipo').value = tipo;
+      const btnOferta = document.getElementById('btn-oferta');
+      const btnDemanda = document.getElementById('btn-demanda');
+      const bloqueSueldo = document.getElementById('bloque-sueldo');
+      const hint = document.getElementById('tipo-hint');
+      if (tipo === 'ofrezco_empleo') {
+        btnOferta.className = 'w-full py-3 px-4 rounded-xl border-2 border-brand-600 bg-brand-50 text-brand-900 font-bold text-sm flex items-center justify-center gap-2';
+        btnDemanda.className = 'w-full py-3 px-4 rounded-xl border-2 border-stone-200 bg-white text-stone-700 font-bold text-sm flex items-center justify-center gap-2 hover:border-brand-400';
+        bloqueSueldo.classList.remove('hidden');
+        hint.textContent = 'Oferta de empleo: necesitas contratar. Puedes indicar sueldo.';
+      } else {
+        btnDemanda.className = 'w-full py-3 px-4 rounded-xl border-2 border-brand-600 bg-brand-50 text-brand-900 font-bold text-sm flex items-center justify-center gap-2';
+        btnOferta.className = 'w-full py-3 px-4 rounded-xl border-2 border-stone-200 bg-white text-stone-700 font-bold text-sm flex items-center justify-center gap-2 hover:border-brand-400';
+        bloqueSueldo.classList.add('hidden');
+        document.getElementById('sueldo').value = '';
+        hint.textContent = 'Demanda de empleo: buscas trabajo. No se pide sueldo.';
+      }
+    }
+
+    document.getElementById('foto').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      const prev = document.getElementById('foto-preview');
+      if (file) { prev.src = URL.createObjectURL(file); prev.classList.remove('hidden'); }
+      else prev.classList.add('hidden');
+    });
+
+    (async () => {
+      const { data: { session } } = await cliente.auth.getSession();
+      if (!session) {
+        alert('Debes iniciar sesión para publicar.');
+        window.location.href = 'login.html';
+        return;
+      }
+      document.getElementById('email-contacto').value = session.user.email || '';
+      const meta = session.user.user_metadata || {};
+      if (meta.phone) document.getElementById('telefono').value = meta.phone;
+      if (meta.user_role === 'profesional') document.getElementById('perfil').value = 'empresa';
+    })();
+
+    document.getElementById('publish-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById('msg');
+      const btn = document.getElementById('btn-publish');
+      msg.classList.add('hidden');
+      btn.disabled = true;
+      btn.textContent = 'Publicando...';
+
+      const { data: { session } } = await cliente.auth.getSession();
+      if (!session) { window.location.href = 'login.html'; return; }
+
+      const tipo = document.getElementById('tipo').value;
+      const perfil = document.getElementById('perfil').value;
+      const titulo = document.getElementById('titulo').value.trim();
+      const categoria = document.getElementById('categoria').value;
+      const provincia = document.getElementById('provincia').value.trim();
+      const municipio = document.getElementById('municipio').value.trim();
+      const sueldo = tipo === 'ofrezco_empleo' ? (document.getElementById('sueldo').value.trim() || 'A convenir') : null;
+      const descripcion = document.getElementById('descripcion').value.trim();
+      const telefono = document.getElementById('telefono').value.trim();
+      const emailContacto = document.getElementById('email-contacto').value.trim() || session.user.email;
+
+      let image_url = null;
+      const fotoInput = document.getElementById('foto');
+      if (fotoInput.files && fotoInput.files[0]) {
+        const file = fotoInput.files[0];
+        const ext = file.name.split('.').pop();
+        const path = `ads/${session.user.id}_${Date.now()}.${ext}`;
+        const { error: upErr } = await cliente.storage.from('ads').upload(path, file);
+        if (!upErr) {
+          const { data } = cliente.storage.from('ads').getPublicUrl(path);
+          image_url = data.publicUrl;
+        }
+      }
+
+      const row = {
+        user_id: session.user.id,
+        title: titulo,
+        titulo: titulo,
+        profession: titulo,
+        categoria: categoria,
+        city: municipio || provincia,
+        provincia: provincia,
+        municipio: municipio || null,
+        description: descripcion,
+        descripcion: descripcion,
+        sueldo: sueldo,
+        tipo: tipo,
+        perfil: perfil,
+        contact_info: emailContacto,
+        email: emailContacto,
+        phone: telefono || null,
+        status: 'pending',
+        image_url: image_url,
+        photo_url: image_url
+      };
+
+      const { error } = await cliente.from('ads').insert([row]);
+      btn.disabled = false;
+      btn.textContent = 'Publicar anuncio';
+
+      if (error) {
+        msg.textContent = error.message || 'Error al publicar.';
+        msg.className = 'text-sm text-center font-medium text-red-600';
+        msg.classList.remove('hidden');
+      } else {
+        msg.textContent = 'Anuncio enviado. Se revisará antes de publicarse.';
+        msg.className = 'text-sm text-center font-medium text-green-700';
+        msg.classList.remove('hidden');
+        setTimeout(() => { window.location.href = 'mis-anuncios.html'; }, 1500);
+      }
+    });
+
+    elegirTipo('ofrezco_empleo');
+  </script>
+</body>
+</html>
