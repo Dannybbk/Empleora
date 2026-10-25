@@ -86,14 +86,15 @@
     const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     document.addEventListener('DOMContentLoaded', async () => {
-      const { data: { session } } = await cliente.auth.getSession();
       const msg = document.getElementById('message');
       const form = document.getElementById('ad-form');
 
-      if (!session) {
-        msg.style.color = 'red';
-        msg.innerHTML = 'Debes <a href="login.html" class="underline">iniciar sesión</a> para publicar un anuncio.';
-        form.style.display = 'none';
+      // Verificamos si hay una sesión activa
+      const { data: { session }, error } = await cliente.auth.getSession();
+
+      if (error || !session) {
+        // Si no está registrado o logueado, lo lleva al login
+        window.location.href = 'login.html';
         return;
       }
 
@@ -105,7 +106,6 @@
         const userId = session.user.id;
         const userEmail = session.user.email;
 
-        // Capturamos el nombre y avatar actual de la tabla profiles si existen
         let userName = userEmail.split('@')[0];
         let userAvatar = '';
 
@@ -133,11 +133,11 @@
           status: 'published'
         };
 
-        const { error } = await cliente.from('ads').insert([adData]);
+        const { error: insertError } = await cliente.from('ads').insert([adData]);
 
-        if (error) {
+        if (insertError) {
           msg.style.color = 'red';
-          msg.textContent = 'Error al publicar: ' + error.message;
+          msg.textContent = 'Error al publicar: ' + insertError.message;
         } else {
           msg.style.color = 'green';
           msg.textContent = '¡Anuncio publicado con éxito!';
@@ -149,11 +149,14 @@
       });
     });
 
-    document.getElementById('logout').addEventListener('click', async (e) => {
-      e.preventDefault();
-      await cliente.auth.signOut();
-      window.location.href = 'index.html';
-    });
+    const logoutBtn = document.getElementById('logout');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await cliente.auth.signOut();
+        window.location.href = 'index.html';
+      });
+    }
   </script>
 </body>
 </html>
