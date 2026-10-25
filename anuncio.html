@@ -36,6 +36,7 @@
   <script>
     const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
+    let cliente;
 
     document.addEventListener('DOMContentLoaded', async () => {
       const container = document.getElementById('ad-detail');
@@ -49,7 +50,7 @@
       }
 
       try {
-        const cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        cliente = window.supabaseClient || window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const { data: ad, error } = await cliente
           .from('ads')
@@ -84,9 +85,6 @@
           }
         }
 
-        const emailContacto = ad.contact_email || ad.email || ad.user_email;
-        const telefonoContacto = ad.contact_phone || ad.phone || ad.telefono;
-
         // Comprobar si es oferta de empleo y si tiene sueldo
         const esOferta = ad.tipo === 'oferta' || ad.category === 'oferta' || ad.sueldo || ad.salary;
         const sueldoTexto = ad.sueldo || ad.salary || ad.sueldo_anuncio;
@@ -101,7 +99,7 @@
               <strong>Publicado:</strong> ${new Date(ad.created_at).toLocaleDateString('es-ES')}
             </div>
 
-            <!-- FOTO DE PERFIL Y NOMBRE DEL USUARIO DEBAJO DE LA UBICACIÓN -->
+            <!-- FOTO DE PERFIL Y NOMBRE DEL USUARIO -->
             <div style="display: flex; align-items: center; gap: 10px; background: #f8fafc; padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0; width: fit-content; margin-top: 10px;">
               <div style="width: 36px; height: 36px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; overflow: hidden; flex-shrink: 0;">
                 ${sellerAvatarHtml}
@@ -113,7 +111,7 @@
             </div>
           </div>
 
-          <!-- BLOQUE DE DATOS: SALARIO (Solo aparece si es oferta y tiene sueldo) -->
+          <!-- BLOQUE DE SALARIO -->
           ${esOferta && sueldoTexto ? `
             <div style="background: #f8fafc; padding: 14px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom:24px;">
               <span style="font-size: 12px; color: #64748b; display: block; margin-bottom: 2px;">SUELDO</span>
@@ -126,78 +124,78 @@
             <p style="color:#475569; line-height:1.6; white-space: pre-line; font-size: 14px;">${ad.description || ad.experience || 'Sin descripción detallada.'}</p>
           </div>
 
-          <!-- Formulario de contacto interno (Directo a la base de datos Supabase) -->
+          <!-- FORMULARIO SEGURO DIRECTO A SUPABASE (SIN ACCIONES EXTERNAS) -->
           <div style="background:#eff6ff; padding:20px; border-radius:8px; border:1px solid #bfdbfe;">
             <h3 style="color:#1e40af; margin-bottom:10px; font-size:18px;">¿Te interesa este anuncio? ¡Contacta ahora!</h3>
-            <p style="color:#3b82f6; font-size:14px; margin-bottom:15px;">Rellena tus datos y tu mensaje para enviar tu candidatura o consulta directamente al panel del anunciante.</p>
+            <p style="color:#3b82f6; font-size:14px; margin-bottom:15px;">Rellena tus datos y tu mensaje para enviarlo directamente al panel del anunciante.</p>
             
-            <form id="contact-form" style="display:grid; gap:12px;">
+            <div id="contact-form-div" style="display:grid; gap:12px;">
               <div>
                 <label style="display:block; font-size:13px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Nombre</label>
-                <input type="text" id="contact-name" required placeholder="Ej. María Pérez" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;">
+                <input type="text" id="contact-name" placeholder="Ej. María Pérez" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;">
               </div>
               <div>
                 <label style="display:block; font-size:13px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Teléfono</label>
-                <input type="tel" id="contact-phone" required placeholder="Ej. 600123456" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;">
+                <input type="text" id="contact-phone" placeholder="Ej. 600123456" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;">
               </div>
               <div>
                 <label style="display:block; font-size:13px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Correo Electrónico</label>
-                <input type="email" id="contact-email" required placeholder="Ej. correo@email.com" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;">
+                <input type="text" id="contact-email" placeholder="Ej. correo@email.com" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;">
               </div>
               <div>
                 <label style="display:block; font-size:13px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Mensaje</label>
-                <textarea id="contact-msg" rows="4" required placeholder="Hola, estoy muy interesado/a en este puesto..." style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;"></textarea>
+                <textarea id="contact-msg" rows="4" placeholder="Hola, estoy muy interesado/a en este puesto..." style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;"></textarea>
               </div>
-              <button type="submit" id="btn-submit-msg" class="btn" style="background:#2563eb; color:#fff; padding:12px; border:none; border-radius:6px; font-weight:600; cursor:pointer; font-size: 14px;">Enviar mensaje al anunciante</button>
-            </form>
+              <button type="button" onclick="enviarMensajeDirecto('${ad.id}', '${ad.user_id}')" id="btn-submit-msg" style="background:#2563eb; color:#fff; padding:12px; border:none; border-radius:6px; font-weight:600; cursor:pointer; font-size: 14px;">Enviar mensaje al anunciante</button>
+            </div>
             <div id="form-success" style="display:none; margin-top:12px; color:#166534; font-weight:600; text-align:center; font-size: 14px;">¡Mensaje enviado con éxito al panel del anunciante!</div>
           </div>
         `;
-
-        // Lógica para enviar el mensaje directamente a Supabase
-        const form = document.getElementById('contact-form');
-        if (form) {
-          form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const btn = document.getElementById('btn-submit-msg');
-            btn.innerText = 'Enviando...';
-            btn.disabled = true;
-
-            const nombre = document.getElementById('contact-name').value.trim();
-            const telefono = document.getElementById('contact-phone').value.trim();
-            const email = document.getElementById('contact-email').value.trim();
-            const mensaje = document.getElementById('contact-msg').value.trim();
-
-            const { error: insertError } = await cliente
-              .from('messages')
-              .insert([
-                {
-                  ad_id: ad.id,
-                  receiver_id: ad.user_id,
-                  sender_name: nombre,
-                  sender_phone: telefono,
-                  sender_email: email,
-                  message: mensaje
-                }
-              ]);
-
-            if (insertError) {
-              alert('Error al enviar el mensaje: ' + insertError.message);
-              btn.disabled = false;
-              btn.innerText = 'Enviar mensaje al anunciante';
-            } else {
-              form.style.display = 'none';
-              document.getElementById('form-success').style.display = 'block';
-            }
-          });
-        }
 
       } catch (err) {
         console.error('Error inesperado:', err);
         container.innerHTML = '<p style="color:#ef4444;">Ocurrió un error al cargar los detalles del anuncio.</p>';
       }
     });
+
+    // FUNCIÓN DE ENVÍO DIRECTO A LA BASE DE DATOS
+    async function enviarMensajeDirecto(adId, receiverId) {
+      const btn = document.getElementById('btn-submit-msg');
+      const nombre = document.getElementById('contact-name').value.trim();
+      const telefono = document.getElementById('contact-phone').value.trim();
+      const email = document.getElementById('contact-email').value.trim();
+      const mensaje = document.getElementById('contact-msg').value.trim();
+
+      if (!nombre || !mensaje) {
+        alert('Por favor, rellena al menos tu nombre y el mensaje.');
+        return;
+      }
+
+      btn.innerText = 'Enviando...';
+      btn.disabled = true;
+
+      const { error: insertError } = await cliente
+        .from('messages')
+        .insert([
+          {
+            ad_id: adId,
+            receiver_id: receiverId,
+            sender_name: nombre,
+            sender_phone: telefono,
+            sender_email: email,
+            message: mensaje
+          }
+        ]);
+
+      if (insertError) {
+        alert('Error al enviar el mensaje: ' + insertError.message);
+        btn.disabled = false;
+        btn.innerText = 'Enviar mensaje al anunciante';
+      } else {
+        document.getElementById('contact-form-div').style.display = 'none';
+        document.getElementById('form-success').style.display = 'block';
+      }
+    }
   </script>
 </body>
 </html>
