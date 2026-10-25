@@ -91,6 +91,14 @@
     </section>
   </main>
 
+  <!-- Modal para ver imagen de perfil a pantalla completa -->
+  <div id="image-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
+    <button type="button" onclick="closeImageModal()" class="absolute top-4 right-4 text-white text-3xl font-bold bg-black/50 hover:bg-black w-12 h-12 rounded-full flex items-center justify-center">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <img id="modal-img" src="" alt="Foto de perfil ampliada" class="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl">
+  </div>
+
   <footer class="bg-brand-900 text-brand-100 text-xs text-center py-5 mt-auto">
     Roda Trabajo © 2026 · Admin
   </footer>
@@ -119,6 +127,18 @@
       return ad.city || ad.provincia || ad.municipio || 'España';
     }
 
+    function openImageModal(url) {
+      const modal = document.getElementById('image-modal');
+      const modalImg = document.getElementById('modal-img');
+      modalImg.src = url;
+      modal.classList.remove('hidden');
+    }
+
+    function closeImageModal() {
+      const modal = document.getElementById('image-modal');
+      modal.classList.add('hidden');
+    }
+
     async function loadAdminPanel() {
       const ok = await verificarAccesoAdmin();
       if (!ok) return;
@@ -126,9 +146,18 @@
       const pendingContainer = document.getElementById('pending-container');
       const allAdsContainer = document.getElementById('all-ads-container');
 
+      // Consulta con JOIN a la tabla profiles para obtener email, phone, avatar_url
       const { data: pendingAds, error: errPending } = await cliente
         .from('ads')
-        .select('*')
+        .select(`
+          *,
+          profiles:user_id (
+            email,
+            phone,
+            avatar_url,
+            full_name
+          )
+        `)
         .eq('status', 'pending')
         .order('created_at', { ascending: false });
 
@@ -141,17 +170,28 @@
             <p class="text-sm font-medium">No hay anuncios pendientes de revisión.</p>
           </div>`;
       } else {
-        pendingContainer.innerHTML = pendingAds.map(ad => `
+        pendingContainer.innerHTML = pendingAds.map(ad => {
+          const profile = ad.profiles || {};
+          const avatarUrl = profile.avatar_url || 'https://via.placeholder.com/150';
+          const userEmail = profile.email || 'No disponible';
+          const userPhone = profile.phone || 'No disponible';
+
+          return `
           <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div class="space-y-1 min-w-0">
-              <span class="px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800">Pendiente</span>
-              <h3 class="font-bold text-brand-900">${titulo(ad)}</h3>
-              <p class="text-xs text-stone-500">
-                <i class="fa-solid fa-location-dot"></i> ${ubicacion(ad)}
-                · ${ad.categoria || 'Empleo'}
-                ${ad.tipo === 'busco_trabajo' ? ' · Demanda' : ad.tipo === 'ofrezco_empleo' ? ' · Oferta' : ''}
-              </p>
-              <p class="text-sm text-stone-600 line-clamp-2">${ad.description || ad.descripcion || ''}</p>
+            <div class="flex items-start gap-3 min-w-0">
+              <img src="${avatarUrl}" alt="Avatar" onclick="openImageModal('${avatarUrl}')" class="w-12 h-12 rounded-full object-cover cursor-pointer border border-stone-200 shrink-0 hover:opacity-90 title='Ver foto a pantalla completa'" title="Haz clic para ver en pantalla completa">
+              <div class="space-y-1 min-w-0">
+                <span class="px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800">Pendiente</span>
+                <h3 class="font-bold text-brand-900">${titulo(ad)}</h3>
+                <p class="text-xs text-stone-500">
+                  <i class="fa-solid fa-location-dot"></i> ${ubicacion(ad)}
+                  · ${ad.categoria || 'Empleo'}
+                </p>
+                <div class="text-xs text-stone-600 flex flex-wrap gap-3 pt-1">
+                  <span><i class="fa-solid fa-envelope text-brand-600"></i> ${userEmail}</span>
+                  <span><i class="fa-solid fa-phone text-brand-600"></i> <a href="tel:${userPhone}" class="underline hover:text-brand-900">${userPhone}</a></span>
+                </div>
+              </div>
             </div>
             <div class="flex gap-2 shrink-0">
               <button type="button" onclick="approveAd('${ad.id}')" class="px-3 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-lg">
@@ -162,12 +202,22 @@
               </button>
             </div>
           </div>
-        `).join('');
+        `;
+        }).join('');
       }
 
+      // Consulta con JOIN para todos los anuncios
       const { data: allAds, error: errAll } = await cliente
         .from('ads')
-        .select('*')
+        .select(`
+          *,
+          profiles:user_id (
+            email,
+            phone,
+            avatar_url,
+            full_name
+          )
+        `)
         .order('created_at', { ascending: false });
 
       if (errAll) {
@@ -183,18 +233,31 @@
             ? 'bg-red-100 text-red-800'
             : 'bg-amber-100 text-amber-800';
           const label = st === 'approved' ? 'Aprobado' : st === 'rejected' ? 'Rechazado' : 'Pendiente';
+          
+          const profile = ad.profiles || {};
+          const avatarUrl = profile.avatar_url || 'https://via.placeholder.com/150';
+          const userEmail = profile.email || 'No disponible';
+          const userPhone = profile.phone || 'No disponible';
+
           return `
           <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div class="space-y-1 min-w-0">
-              <div class="flex flex-wrap items-center gap-2">
-                <span class="px-2 py-0.5 rounded text-xs font-bold ${badge}">${label}</span>
-                <span class="text-xs text-stone-400">${ad.created_at ? new Date(ad.created_at).toLocaleDateString('es-ES') : ''}</span>
+            <div class="flex items-start gap-3 min-w-0">
+              <img src="${avatarUrl}" alt="Avatar" onclick="openImageModal('${avatarUrl}')" class="w-12 h-12 rounded-full object-cover cursor-pointer border border-stone-200 shrink-0 hover:opacity-90" title="Haz clic para ver en pantalla completa">
+              <div class="space-y-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="px-2 py-0.5 rounded text-xs font-bold ${badge}">${label}</span>
+                  <span class="text-xs text-stone-400">${ad.created_at ? new Date(ad.created_at).toLocaleDateString('es-ES') : ''}</span>
+                </div>
+                <h3 class="font-bold text-brand-900">${titulo(ad)}</h3>
+                <p class="text-xs text-stone-500">
+                  <i class="fa-solid fa-location-dot"></i> ${ubicacion(ad)}
+                  ${ad.sueldo ? ' · ' + ad.sueldo : ''}
+                </p>
+                <div class="text-xs text-stone-600 flex flex-wrap gap-3 pt-1">
+                  <span><i class="fa-solid fa-envelope text-brand-600"></i> ${userEmail}</span>
+                  <span><i class="fa-solid fa-phone text-brand-600"></i> <a href="tel:${userPhone}" class="underline hover:text-brand-900">${userPhone}</a></span>
+                </div>
               </div>
-              <h3 class="font-bold text-brand-900">${titulo(ad)}</h3>
-              <p class="text-xs text-stone-500">
-                <i class="fa-solid fa-location-dot"></i> ${ubicacion(ad)}
-                ${ad.sueldo ? ' · ' + ad.sueldo : ''}
-              </p>
             </div>
             <div class="flex gap-2 shrink-0">
               ${st !== 'approved' ? `<button type="button" onclick="approveAd('${ad.id}')" class="px-3 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-lg">Aprobar</button>` : ''}
