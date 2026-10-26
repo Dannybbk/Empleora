@@ -173,6 +173,7 @@
         <p class="text-sm">Cargando ofertas...</p>
       </div>
     </div>
+    <div id="paginacion" class="mt-6"></div>
   </section>
 
   <footer class="bg-brand-900 text-brand-100 text-sm mt-auto border-t border-brand-800">
@@ -204,6 +205,9 @@
     const ADMIN_EMAIL = 'danny10bbk@gmail.com';
     const cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     let todosLosAnuncios = [];
+    let paginaActual = 1;
+    const ANUNCIOS_POR_PAGINA = 10;
+    let listaFiltrada = [];
 
     const municipiosPorProvincia = {
       "Madrid": ["Alcobendas","San Sebastián de los Reyes","Pozuelo de Alarcón","Majadahonda","Las Rozas de Madrid","Boadilla del Monte","Alcorcón","Móstoles","Fuenlabrada","Leganés","Getafe","Parla","Pinto","Valdemoro","Aranjuez","Coslada","Torrejón de Ardoz","Alcalá de Henares","Rivas-Vaciamadrid","Tres Cantos"],
@@ -303,6 +307,7 @@
         const { data, error } = await cliente.from('ads').select('*').order('created_at', { ascending: false });
         if (error) throw error;
         todosLosAnuncios = data || [];
+        paginaActual = 1;
         renderizarAnuncios(todosLosAnuncios);
       } catch (err) {
         console.error(err);
@@ -311,14 +316,25 @@
     }
 
     function renderizarAnuncios(lista) {
+      listaFiltrada = lista.filter(ad => !ad.status || ad.status === 'approved');
       const cont = document.getElementById('contenedor-anuncios');
-      const aprobados = lista.filter(ad => !ad.status || ad.status === 'approved');
-      if (!aprobados.length) {
+      const pag = document.getElementById('paginacion');
+
+      if (!listaFiltrada.length) {
         cont.innerHTML = '<p class="text-center text-stone-500 py-10 text-sm">No hay ofertas publicadas todavía.</p>';
+        if (pag) pag.innerHTML = '';
         return;
       }
+
+      const totalPaginas = Math.ceil(listaFiltrada.length / ANUNCIOS_POR_PAGINA);
+      if (paginaActual > totalPaginas) paginaActual = totalPaginas;
+      if (paginaActual < 1) paginaActual = 1;
+
+      const inicio = (paginaActual - 1) * ANUNCIOS_POR_PAGINA;
+      const pagina = listaFiltrada.slice(inicio, inicio + ANUNCIOS_POR_PAGINA);
+
       cont.innerHTML = '';
-      aprobados.forEach(ad => {
+      pagina.forEach(ad => {
         const tipo = ad.tipo === 'busco_trabajo' ? 'Demanda' : (ad.tipo === 'ofrezco_empleo' ? 'Oferta' : '');
         const foto = ad.image_url || ad.photo_url || '';
         const card = document.createElement('div');
@@ -346,6 +362,32 @@
         card.querySelector('.btn-ver').onclick = () => verDetalleAnuncio(ad);
         cont.appendChild(card);
       });
+
+      if (!pag) return;
+      if (totalPaginas <= 1) {
+        pag.innerHTML = '';
+        return;
+      }
+      pag.innerHTML = `
+        <div class="flex items-center justify-center gap-3 pt-2">
+          <button type="button" onclick="cambiarPagina(-1)" ${paginaActual === 1 ? 'disabled' : ''}
+            class="px-4 py-2 rounded-xl text-sm font-semibold border border-stone-200 bg-white hover:bg-stone-50 disabled:opacity-40 disabled:cursor-not-allowed text-stone-700">
+            <i class="fa-solid fa-chevron-left mr-1 text-xs"></i> Anterior
+          </button>
+          <span class="text-sm text-stone-600 font-medium">
+            Página <span class="font-bold text-brand-900">${paginaActual}</span> de ${totalPaginas}
+          </span>
+          <button type="button" onclick="cambiarPagina(1)" ${paginaActual === totalPaginas ? 'disabled' : ''}
+            class="px-4 py-2 rounded-xl text-sm font-semibold border border-stone-200 bg-white hover:bg-stone-50 disabled:opacity-40 disabled:cursor-not-allowed text-stone-700">
+            Siguiente <i class="fa-solid fa-chevron-right ml-1 text-xs"></i>
+          </button>
+        </div>`;
+    }
+
+    function cambiarPagina(dir) {
+      paginaActual += dir;
+      renderizarAnuncios(listaFiltrada);
+      document.getElementById('anuncios').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function filtrarAnuncios(e) {
@@ -365,6 +407,7 @@
                (!mun || u.includes(mun));
       });
       document.getElementById('btn-limpiar').classList.remove('hidden');
+      paginaActual = 1;
       renderizarAnuncios(filtrados);
     }
 
@@ -375,6 +418,7 @@
       document.getElementById('search-municipio').value = '';
       document.getElementById('container-municipio').classList.add('hidden');
       document.getElementById('btn-limpiar').classList.add('hidden');
+      paginaActual = 1;
       renderizarAnuncios(todosLosAnuncios);
     }
 
