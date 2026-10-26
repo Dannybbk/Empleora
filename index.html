@@ -407,7 +407,8 @@
       const avatarSrc = avatar || ('https://ui-avatars.com/api/?name=' + iniciales + '&background=8B5E3C&color=fff&size=128');
       const titulo = ad.titulo || ad.title || 'Oferta';
       const foto = ad.image_url || ad.photo_url || '';
-      const contacto = ad.email || ad.contact_info || 'info@rodatrabajo.com';
+      const adId = ad.id || '';
+      const ownerId = ad.user_id || '';
 
       const modal = document.createElement('div');
       modal.id = 'modal-detalle';
@@ -438,16 +439,16 @@
             </div>
             <div class="border-t border-stone-100 pt-3 space-y-2">
               <h4 class="font-bold text-sm text-brand-900"><i class="fa-solid fa-paper-plane text-brand-600 mr-1"></i> Contactar</h4>
-              <form action="mailto:${contacto}" method="POST" enctype="text/plain" class="space-y-2">
-                <input type="hidden" name="Anuncio" value="${titulo.replace(/"/g, '')}">
-                <input type="text" name="Nombre" required placeholder="Tu nombre" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm">
+              <p id="msg-feedback" class="hidden text-sm font-semibold"></p>
+              <form id="contact-form" class="space-y-2">
+                <input type="text" id="c-nombre" required placeholder="Tu nombre" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm">
                 <div class="grid grid-cols-2 gap-2">
-                  <input type="tel" name="Telefono" required placeholder="Teléfono" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm">
-                  <input type="email" name="Email" required placeholder="Email" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm">
+                  <input type="tel" id="c-telefono" required placeholder="Teléfono" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm">
+                  <input type="email" id="c-email" required placeholder="Email" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm">
                 </div>
-                <textarea name="Mensaje" rows="3" required placeholder="Tu mensaje..." class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm"></textarea>
+                <textarea id="c-mensaje" rows="3" required placeholder="Tu mensaje..." class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm"></textarea>
                 <div class="flex gap-2">
-                  <button type="submit" class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-lg">Enviar</button>
+                  <button type="submit" id="btn-enviar-msg" class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-lg">Enviar</button>
                   <button type="button" onclick="document.getElementById('modal-detalle').remove()" class="px-4 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold text-sm rounded-lg">Cerrar</button>
                 </div>
               </form>
@@ -455,6 +456,40 @@
           </div>
         </div>`;
       document.body.appendChild(modal);
+
+      document.getElementById('contact-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-enviar-msg');
+        const fb = document.getElementById('msg-feedback');
+        btn.disabled = true;
+        btn.textContent = 'Enviando...';
+        fb.classList.add('hidden');
+
+        const row = {
+          ad_id: adId || null,
+          owner_id: ownerId || null,
+          sender_name: document.getElementById('c-nombre').value.trim(),
+          sender_phone: document.getElementById('c-telefono').value.trim(),
+          sender_email: document.getElementById('c-email').value.trim(),
+          body: document.getElementById('c-mensaje').value.trim(),
+          ad_title: titulo
+        };
+
+        const { error } = await cliente.from('messages').insert([row]);
+        btn.disabled = false;
+        btn.textContent = 'Enviar';
+
+        if (error) {
+          fb.className = 'text-sm font-semibold text-red-600';
+          fb.textContent = 'Error: ' + error.message;
+          fb.classList.remove('hidden');
+        } else {
+          fb.className = 'text-sm font-semibold text-green-700';
+          fb.textContent = '¡Mensaje enviado! El anunciante lo verá en su panel.';
+          fb.classList.remove('hidden');
+          document.getElementById('contact-form').reset();
+        }
+      });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
