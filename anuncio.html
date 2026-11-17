@@ -75,7 +75,6 @@
           if (perfil) {
             if (perfil.full_name) sellerName = perfil.full_name;
             if (perfil.avatar_url) {
-              // Avatar entero sin recortar
               sellerAvatarHtml = `<img src="${perfil.avatar_url}" alt="${sellerName}" style="width: 100%; height: 100%; object-fit: contain; background: #f1f5f9;">`;
             } else {
               sellerAvatarHtml = sellerName.charAt(0).toUpperCase();
@@ -85,8 +84,6 @@
 
         const esOferta = ad.tipo === 'oferta' || ad.category === 'oferta' || ad.sueldo || ad.salary;
         const sueldoTexto = ad.sueldo || ad.salary || ad.sueldo_anuncio;
-
-        // Comprobamos si el anuncio tiene imagen (puede venir como image_url, image o foto)
         const imagenAnuncio = ad.image_url || ad.image || ad.foto;
 
         container.innerHTML = `
@@ -131,7 +128,7 @@
           <!-- FORMULARIO DE CONTACTO INTERNO -->
           <div style="background:#eff6ff; padding:20px; border-radius:8px; border:1px solid #bfdbfe;">
             <h3 style="color:#1e40af; margin-bottom:10px; font-size:18px;">¿Te interesa este anuncio? ¡Contacta ahora!</h3>
-            <p style="color:#3b82f6; font-size:14px; margin-bottom:15px;">Rellena tus datos y tu mensaje para enviarlo directamente al panel del anunciante.</p>
+            <p style="color:#3b82f6; font-size:14px; margin-bottom:15px;">Rellena tus datos, añade una foto tuya si lo deseas y envíalo al anunciante.</p>
             
             <div id="contact-form-div" style="display:grid; gap:12px;">
               <div>
@@ -150,45 +147,84 @@
                 <label style="display:block; font-size:13px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Mensaje</label>
                 <textarea id="contact-msg" rows="4" placeholder="Hola, estoy muy interesado/a en este puesto..." style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;"></textarea>
               </div>
-              <button type="button" id="btn-submit-msg" style="background:#2563eb; color:#fff; padding:12px; border:none; border-radius:6px; font-weight:600; cursor:pointer; font-size: 14px;">Enviar mensaje al anunciante</button>
+              
+              <!-- CAMPO NUEVO: FOTO DEL CANDIDATO -->
+              <div>
+                <label style="display:block; font-size:13px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Foto (Opcional)</label>
+                <input type="file" id="contact-photo" accept="image/*" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 13px; background:#fff;">
+                <span style="font-size:11px; color:#64748b; display:block; margin-top:2px;">Sube una foto tuya para que el anunciante te conozca.</span>
+              </div>
+
+              <button type="button" id="btn-submit-msg" style="background:#2563eb; color:#fff; padding:12px; border:none; border-radius:6px; font-weight:600; cursor:pointer; font-size: 14px;">Enviar mensaje y foto al anunciante</button>
             </div>
-            <div id="form-success" style="display:none; margin-top:12px; color:#166534; font-weight:600; text-align:center; font-size: 14px;">¡Mensaje enviado con éxito al panel del anunciante!</div>
+            <div id="form-success" style="display:none; margin-top:12px; color:#166534; font-weight:600; text-align:center; font-size: 14px;">¡Mensaje y foto enviados con éxito al panel del anunciante!</div>
           </div>
         `;
 
-        // Asignar el evento de clic por JavaScript
+        // Asignar el evento de clic con subida de imagen incluida
         document.getElementById('btn-submit-msg').addEventListener('click', async () => {
           const btn = document.getElementById('btn-submit-msg');
           const nombre = document.getElementById('contact-name').value.trim();
           const telefono = document.getElementById('contact-phone').value.trim();
           const email = document.getElementById('contact-email').value.trim();
           const mensaje = document.getElementById('contact-msg').value.trim();
+          const photoInput = document.getElementById('contact-photo');
 
           if (!nombre || !mensaje) {
             alert('Por favor, rellena al menos tu nombre y el mensaje.');
             return;
           }
 
-          btn.innerText = 'Enviando...';
+          btn.innerText = 'Subiendo y enviando...';
           btn.disabled = true;
 
+          let fotoUrl = null;
+
+          // Si el usuario seleccionó una foto, la subimos a Supabase Storage
+          if (photoInput && photoInput.files && photoInput.files[0]) {
+            const file = photoInput.files[0];
+            const fileExt = file.name.split('.').pop();
+            const fileName = `candidato_${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+            const filePath = `candidatos/${fileName}`;
+
+            const { error: uploadError } = await cliente.storage
+              .from('ads')
+              .upload(filePath, file);
+
+            if (uploadError) {
+              alert('Error al subir la foto: ' + uploadError.message);
+              btn.disabled = false;
+              btn.innerText = 'Enviar mensaje y foto al anunciante';
+              return;
+            }
+
+            const { data: publicData } = cliente.storage
+              .from('ads')
+              .getPublicUrl(filePath);
+
+            fotoUrl = publicData.publicUrl;
+          }
+
+          // Guardamos el mensaje y la foto en la tabla 'messages'
           const { error: insertError } = await cliente
             .from('messages')
             .insert([
               {
                 ad_id: ad.id,
+                ad_title: ad.title || ad.titulo || 'Oferta',
                 receiver_id: ad.user_id,
                 sender_name: nombre,
                 sender_phone: telefono,
                 sender_email: email,
-                message: mensaje
+                body: mensaje,
+                image_url: fotoUrl
               }
             ]);
 
           if (insertError) {
             alert('Error al enviar el mensaje: ' + insertError.message);
             btn.disabled = false;
-            btn.innerText = 'Enviar mensaje al anunciante';
+            btn.innerText = 'Enviar mensaje y foto al anunciante';
           } else {
             document.getElementById('contact-form-div').style.display = 'none';
             document.getElementById('form-success').style.display = 'block';
