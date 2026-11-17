@@ -63,6 +63,7 @@ header {
 .logo img {
   height: 48px;
   width: auto;
+  object-fit: contain;
 }
 
 .nav-links {
@@ -237,10 +238,24 @@ section h2 {
   padding: 20px;
   box-shadow: var(--shadow);
   transition: transform 0.2s;
+  overflow: hidden;
 }
 
 .ad-card:hover {
   transform: translateY(-4px);
+}
+
+/* REGLA PARA QUE LAS FOTOS DE LOS ANUNCIOS SE VEAN ENTERAS SIN RECORTAR */
+.ad-card img,
+.ads-grid img {
+  width: 100%;
+  height: auto !important;
+  max-height: 320px;
+  object-fit: contain !important;
+  background-color: var(--bg-soft);
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto 16px auto;
 }
 
 .ad-card h3 {
