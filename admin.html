@@ -209,12 +209,12 @@
         </div>
       </section>
 
-      <!-- SECCIÓN 3: MENSAJES -->
+      <!-- SECCIÓN 3: MENSAJES CON FOTO DEL CANDIDATO -->
       <section id="section-messages" class="admin-section hidden space-y-4">
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h2 class="font-bold text-slate-900 text-sm">Postulaciones desde «Ver oferta»</h2>
-            <p class="text-xs text-slate-500">Candidatos que han contactado con anunciantes de la plataforma.</p>
+            <p class="text-xs text-slate-500">Candidatos interesados que han contactado con foto y datos.</p>
           </div>
           <div class="relative sm:w-64">
             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
@@ -455,6 +455,17 @@
           </div>
 
           <p class="text-sm text-slate-700 whitespace-pre-line bg-slate-50 p-3.5 rounded-xl border border-slate-100">${m.body || ''}</p>
+
+          <!-- FOTO DEL CANDIDATO SI LA HA ENVIADO -->
+          ${m.image_url ? `
+            <div class="flex items-center gap-3 bg-brand-50/50 p-3 rounded-xl border border-brand-100">
+              <img src="${m.image_url}" alt="Foto del candidato" onclick="openImageModal('${m.image_url}')" class="w-16 h-16 rounded-xl object-cover cursor-pointer border border-brand-200 shadow-xs hover:opacity-90 transition shrink-0">
+              <div>
+                <span class="text-xs font-bold text-brand-900 block">Foto del candidato</span>
+                <span class="text-[11px] text-stone-500">Haz clic en la imagen para ampliarla</span>
+              </div>
+            </div>
+          ` : ''}
 
           <div class="flex flex-wrap items-center gap-2 pt-1">
             ${m.sender_phone ? `<a href="tel:${m.sender_phone}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-phone mr-1.5 text-brand-600"></i>${m.sender_phone}</a>` : ''}
