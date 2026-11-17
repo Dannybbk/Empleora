@@ -11,7 +11,7 @@
 <body style="background: #f8fafc; font-family: 'Inter', sans-serif; margin: 0; padding: 0;">
   <header style="background: #fff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 40;">
     <div class="container nav" style="max-width: 1100px; margin: 0 auto; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;">
-      <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #1a1a1a; font-weight: 800; font-size: 17px;"><img src="logo.jpg" alt="Roda Trabajo" style="width: 32px; height: 32px; border-radius: 8px; object-fit: cover;"> RODA TRABAJO</a>
+      <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: #1a1a1a; font-weight: 800; font-size: 17px;"><img src="logo.jpg" alt="Roda Trabajo" style="width: 32px; height: 32px; border-radius: 8px; object-fit: contain;"> RODA TRABAJO</a>
       <ul class="nav-links" style="list-style: none; display: flex; gap: 16px; margin: 0; padding: 0;">
         <li><a href="index.html" style="text-decoration: none; color: #78716c; font-weight: 600; font-size: 13px;">Inicio</a></li>
         <li><a href="buscar.html" style="text-decoration: none; color: #78716c; font-weight: 600; font-size: 13px;">Buscar</a></li>
@@ -75,7 +75,8 @@
           if (perfil) {
             if (perfil.full_name) sellerName = perfil.full_name;
             if (perfil.avatar_url) {
-              sellerAvatarHtml = `<img src="${perfil.avatar_url}" alt="${sellerName}" style="width: 100%; height: 100%; object-fit: cover;">`;
+              // Avatar entero sin recortar
+              sellerAvatarHtml = `<img src="${perfil.avatar_url}" alt="${sellerName}" style="width: 100%; height: 100%; object-fit: contain; background: #f1f5f9;">`;
             } else {
               sellerAvatarHtml = sellerName.charAt(0).toUpperCase();
             }
@@ -85,7 +86,16 @@
         const esOferta = ad.tipo === 'oferta' || ad.category === 'oferta' || ad.sueldo || ad.salary;
         const sueldoTexto = ad.sueldo || ad.salary || ad.sueldo_anuncio;
 
+        // Comprobamos si el anuncio tiene imagen (puede venir como image_url, image o foto)
+        const imagenAnuncio = ad.image_url || ad.image || ad.foto;
+
         container.innerHTML = `
+          ${imagenAnuncio ? `
+            <div style="width: 100%; max-height: 450px; background: #0f172a; border-radius: 8px; overflow: hidden; margin-bottom: 20px; display: flex; align-items: center; justify-content: center;">
+              <img src="${imagenAnuncio}" alt="${ad.title || 'Anuncio'}" style="max-width: 100%; max-height: 450px; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto;">
+            </div>
+          ` : ''}
+
           <h1 style="color:#1e293b; margin-bottom:12px; font-size: 22px;">${ad.title || ad.profession || 'Detalle del puesto'}</h1>
           
           <div style="color:#64748b; font-size:14px; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:16px;">
@@ -146,7 +156,7 @@
           </div>
         `;
 
-        // Asignar el evento de clic por JavaScript de forma limpia para evitar comportamientos extraños del navegador
+        // Asignar el evento de clic por JavaScript
         document.getElementById('btn-submit-msg').addEventListener('click', async () => {
           const btn = document.getElementById('btn-submit-msg');
           const nombre = document.getElementById('contact-name').value.trim();
