@@ -148,7 +148,7 @@
                 <textarea id="contact-msg" rows="4" placeholder="Hola, estoy muy interesado/a en este puesto..." style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 14px;"></textarea>
               </div>
               
-              <!-- CAMPO NUEVO: FOTO DEL CANDIDATO -->
+              <!-- CAMPO DE FOTO DEL CANDIDATO -->
               <div>
                 <label style="display:block; font-size:13px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Foto (Opcional)</label>
                 <input type="file" id="contact-photo" accept="image/*" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 13px; background:#fff;">
@@ -161,7 +161,6 @@
           </div>
         `;
 
-        // Asignar el evento de clic con subida de imagen incluida
         document.getElementById('btn-submit-msg').addEventListener('click', async () => {
           const btn = document.getElementById('btn-submit-msg');
           const nombre = document.getElementById('contact-name').value.trim();
@@ -180,7 +179,6 @@
 
           let fotoUrl = null;
 
-          // Si el usuario seleccionó una foto, la subimos a Supabase Storage
           if (photoInput && photoInput.files && photoInput.files[0]) {
             const file = photoInput.files[0];
             const fileExt = file.name.split('.').pop();
@@ -205,7 +203,6 @@
             fotoUrl = publicData.publicUrl;
           }
 
-          // Guardamos el mensaje y la foto en la tabla 'messages'
           const { error: insertError } = await cliente
             .from('messages')
             .insert([
