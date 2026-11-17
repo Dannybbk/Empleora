@@ -496,22 +496,34 @@
         btn.disabled = true;
 
         const email = document.getElementById('reset-email').value.trim();
-        const { error } = await cliente.auth.resetPasswordForEmail(email, {
-          redirectTo: 'https://rodatrabajo.com/login.html'
-        });
 
-        btn.textContent = 'Enviar enlace';
-        btn.disabled = false;
+        try {
+          const response = await fetch('https://ctkiiimazwpztekwfnrn.supabase.co/functions/v1/send-reset-email', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+            },
+            body: JSON.stringify({ email })
+          });
 
-        if (error) {
-          alertBox.className = 'alert alert-error';
-          alertBox.textContent = 'No se pudo enviar. Revisa el correo.';
-          alertBox.style.display = 'block';
-        } else {
+          const result = await response.json();
+
+          if (!response.ok || result.error) {
+            throw new Error(result.error || 'Error al enviar');
+          }
+
           alertBox.className = 'alert alert-success';
           alertBox.textContent = 'Revisa tu bandeja de entrada (y spam).';
           alertBox.style.display = 'block';
+        } catch (err) {
+          alertBox.className = 'alert alert-error';
+          alertBox.textContent = 'No se pudo enviar. Revisa el correo.';
+          alertBox.style.display = 'block';
         }
+
+        btn.textContent = 'Enviar enlace';
+        btn.disabled = false;
       });
     });
   </script>
