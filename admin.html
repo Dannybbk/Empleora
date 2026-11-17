@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - Roda Trabajo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Panel de Control · Roda Trabajo</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,114 +16,316 @@
             brand: {
               50: '#faf6f1', 100: '#f0e6d8', 200: '#e0ccb0',
               500: '#8B5E3C', 600: '#6B4423', 700: '#4A2F18',
-              800: '#3A2414', 900: '#1a1a1a'
+              800: '#3A2414', 900: '#1C1613'
+            },
+            slatecorp: {
+              900: '#0F172A',
+              800: '#1E293B',
+              700: '#334155'
             }
           }
         }
       }
     }
   </script>
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
 </head>
-<body class="bg-stone-50 text-stone-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen flex flex-col lg:flex-row">
 
-  <div id="auth-guard" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
-      <div class="w-14 h-14 bg-red-100 text-red-600 rounded-xl flex items-center justify-center text-2xl mx-auto">
-        <i class="fa-solid fa-lock"></i>
+  <!-- GUARDIA DE SEGURIDAD ADMIN -->
+  <div id="auth-guard" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-7 shadow-2xl text-center space-y-4 border border-slate-200">
+      <div class="w-14 h-14 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-2xl mx-auto border border-red-100">
+        <i class="fa-solid fa-shield-halved"></i>
       </div>
-      <h2 class="text-xl font-bold text-brand-900">Acceso denegado</h2>
-      <p class="text-sm text-stone-500">Solo el administrador puede entrar aquí.</p>
-      <a href="login.html" class="block w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl">Iniciar sesión</a>
+      <div>
+        <h2 class="text-xl font-extrabold text-slate-900">Acceso restringido</h2>
+        <p class="text-sm text-slate-500 mt-1">Esta área es exclusiva para la administración de Roda Trabajo.</p>
+      </div>
+      <a href="login.html" class="block w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl transition shadow-sm">
+        Iniciar sesión como Admin
+      </a>
     </div>
   </div>
 
-  <header class="sticky top-0 z-40 bg-white border-b border-stone-200">
-    <div class="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-2">
-        <div class="w-8 h-8 rounded-lg bg-brand-900 text-brand-100 flex items-center justify-center text-xs font-black">RT</div>
-        <span class="font-extrabold text-brand-900 text-sm">Roda Trabajo</span>
-        <span class="text-[10px] px-2 py-0.5 bg-brand-100 text-brand-800 rounded-md font-bold uppercase">Admin</span>
+  <!-- BARRA LATERAL DESKTOP -->
+  <aside class="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0 bg-slatecorp-900 text-slate-300 z-30 border-r border-slate-800">
+    <div class="h-16 flex items-center gap-3 px-6 border-b border-slate-800/80">
+      <div class="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center text-sm font-black shadow-inner">RT</div>
+      <div>
+        <span class="font-extrabold text-white text-sm tracking-tight block leading-none">Roda Trabajo</span>
+        <span class="text-[10px] font-semibold uppercase tracking-widest text-brand-200 mt-1 block">Enterprise Admin</span>
+      </div>
+    </div>
+
+    <nav class="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto">
+      <p class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">Módulos principales</p>
+      
+      <button onclick="switchSection('overview')" id="nav-desk-overview" class="nav-desk-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-semibold bg-brand-600 text-white transition">
+        <span class="flex items-center gap-3"><i class="fa-solid fa-chart-pie w-4 text-center"></i> Resumen</span>
+      </button>
+
+      <button onclick="switchSection('ads')" id="nav-desk-ads" class="nav-desk-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+        <span class="flex items-center gap-3"><i class="fa-solid fa-briefcase w-4 text-center"></i> Anuncios</span>
+        <span id="desk-badge-pending" class="hidden text-[11px] font-bold bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full">0</span>
+      </button>
+
+      <button onclick="switchSection('messages')" id="nav-desk-messages" class="nav-desk-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+        <span class="flex items-center gap-3"><i class="fa-solid fa-comments w-4 text-center"></i> Mensajes ofertas</span>
+        <span id="desk-badge-msgs" class="hidden text-[11px] font-bold bg-red-500 text-white px-2 py-0.5 rounded-full">0</span>
+      </button>
+
+      <button onclick="switchSection('contact')" id="nav-desk-contact" class="nav-desk-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+        <span class="flex items-center gap-3"><i class="fa-solid fa-headset w-4 text-center"></i> Contacto web</span>
+        <span id="desk-badge-contact" class="hidden text-[11px] font-bold bg-red-500 text-white px-2 py-0.5 rounded-full">0</span>
+      </button>
+    </nav>
+
+    <div class="p-4 border-t border-slate-800 space-y-2">
+      <a href="index.html" class="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 transition">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver portal público
       </a>
+      <button onclick="logoutAdmin()" class="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-red-400 hover:bg-red-950/50 transition">
+        <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="flex-1 lg:pl-64 flex flex-col min-h-screen pb-24 lg:pb-8">
+    
+    <header class="sticky top-0 z-20 bg-white/95 backdrop-blur border-b border-slate-200 px-4 lg:px-8 h-16 flex items-center justify-between shadow-xs">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="lg:hidden flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-slatecorp-900 text-white flex items-center justify-center text-xs font-black">RT</div>
+        </a>
+        <div>
+          <h1 id="topbar-title" class="text-base lg:text-lg font-extrabold text-slate-900 leading-tight">Resumen Ejecutivo</h1>
+          <p id="topbar-subtitle" class="text-[11px] text-slate-500 hidden sm:block">Control centralizado de moderación y actividad</p>
+        </div>
+      </div>
+
       <div class="flex items-center gap-2">
-        <a href="index.html" class="px-3 py-1.5 text-xs font-semibold text-stone-600 bg-stone-100 hover:bg-stone-200 rounded-lg">Ver web</a>
-        <button type="button" onclick="logoutAdmin()" class="px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-lg">Salir</button>
+        <button onclick="loadAdminPanel()" title="Actualizar datos" class="p-2 text-slate-500 hover:text-brand-600 hover:bg-slate-100 rounded-xl transition">
+          <i class="fa-solid fa-arrows-rotate text-sm"></i>
+        </button>
+        <a href="index.html" class="lg:hidden px-3 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg">Ver web</a>
+        <button onclick="logoutAdmin()" class="lg:hidden px-2.5 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-lg">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <main class="max-w-4xl mx-auto px-4 py-8 w-full flex-1 space-y-8">
-    <div>
-      <p class="text-xs font-bold uppercase tracking-wider text-brand-600">Panel de control</p>
-      <h1 class="text-2xl font-extrabold text-brand-900 mt-1">Moderación</h1>
-      <p class="text-sm text-stone-500 mt-1">Anuncios, mensajes entre usuarios y contacto web.</p>
-    </div>
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 lg:px-8 py-6 space-y-6">
 
-    <!-- Contacto web (info) -->
-    <section class="space-y-3">
-      <h2 class="text-lg font-bold text-brand-900 flex items-center gap-2">
-        <i class="fa-solid fa-headset text-brand-600"></i> Contacto web
-        <span id="admin-contact-count" class="hidden text-xs font-bold bg-red-500 text-white px-2 py-0.5 rounded-full"></span>
-      </h2>
-      <p class="text-sm text-stone-500 -mt-1">Mensajes del formulario Contacto (info@rodatrabajo.com).</p>
-      <div id="admin-contact-web" class="space-y-3">
-        <div class="bg-white p-4 rounded-xl border border-stone-200 text-center text-stone-500 text-sm">Cargando...</div>
-      </div>
-    </section>
+      <!-- SECCIÓN 1: RESUMEN -->
+      <section id="section-overview" class="admin-section space-y-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+          <div onclick="switchSection('ads', 'pending')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-amber-400 transition group">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500">Pendientes</span>
+              <span class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm group-hover:scale-110 transition">
+                <i class="fa-solid fa-clock"></i>
+              </span>
+            </div>
+            <p id="kpi-pending" class="text-2xl lg:text-3xl font-extrabold text-slate-900 mt-2">0</p>
+            <p class="text-[11px] text-amber-700 font-medium mt-1">Requieren revisión &rarr;</p>
+          </div>
 
-    <hr class="border-stone-200">
+          <div onclick="switchSection('ads', 'all')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-brand-500 transition group">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500">Total Anuncios</span>
+              <span class="w-8 h-8 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-sm group-hover:scale-110 transition">
+                <i class="fa-solid fa-briefcase"></i>
+              </span>
+            </div>
+            <p id="kpi-total-ads" class="text-2xl lg:text-3xl font-extrabold text-slate-900 mt-2">0</p>
+            <p class="text-[11px] text-slate-500 font-medium mt-1">Publicados en portal &rarr;</p>
+          </div>
 
-    <!-- Mensajes a anunciantes -->
-    <section class="space-y-3">
-      <h2 class="text-lg font-bold text-brand-900 flex items-center gap-2">
-        <i class="fa-solid fa-inbox text-brand-600"></i> Mensajes a anunciantes
-        <span id="admin-msg-count" class="hidden text-xs font-bold bg-red-500 text-white px-2 py-0.5 rounded-full"></span>
-      </h2>
-      <p class="text-sm text-stone-500 -mt-1">Contactos enviados desde «Ver oferta».</p>
-      <div id="admin-messages" class="space-y-3">
-        <div class="bg-white p-4 rounded-xl border border-stone-200 text-center text-stone-500 text-sm">Cargando...</div>
-      </div>
-    </section>
+          <div onclick="switchSection('messages')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-blue-400 transition group">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500">Mensajes Ofertas</span>
+              <span class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm group-hover:scale-110 transition">
+                <i class="fa-solid fa-comments"></i>
+              </span>
+            </div>
+            <p id="kpi-messages" class="text-2xl lg:text-3xl font-extrabold text-slate-900 mt-2">0</p>
+            <p class="text-[11px] text-blue-600 font-medium mt-1">Candidatos interesados &rarr;</p>
+          </div>
 
-    <hr class="border-stone-200">
+          <div onclick="switchSection('contact')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-emerald-400 transition group">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-500">Contacto Web</span>
+              <span class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm group-hover:scale-110 transition">
+                <i class="fa-solid fa-headset"></i>
+              </span>
+            </div>
+            <p id="kpi-contact" class="text-2xl lg:text-3xl font-extrabold text-slate-900 mt-2">0</p>
+            <p class="text-[11px] text-emerald-600 font-medium mt-1">Consultas directas &rarr;</p>
+          </div>
+        </div>
 
-    <section class="space-y-3">
-      <h2 class="text-lg font-bold text-brand-900 flex items-center gap-2">
-        <i class="fa-solid fa-clock text-amber-600"></i> Pendientes de aprobación
-      </h2>
-      <div id="pending-container" class="space-y-3">
-        <div class="bg-white p-6 rounded-xl border border-stone-200 text-center text-stone-500 text-sm">Cargando...</div>
-      </div>
-    </section>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+          <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+              <h2 class="font-bold text-slate-900 text-sm lg:text-base">Cola de aprobación prioritaria</h2>
+            </div>
+            <button onclick="switchSection('ads', 'all')" class="text-xs font-bold text-brand-600 hover:underline">Ver todos los anuncios</button>
+          </div>
+          <div id="overview-pending-list" class="p-4 space-y-3">
+            <div class="text-center py-6 text-sm text-slate-400">Cargando cola de moderación...</div>
+          </div>
+        </div>
+      </section>
 
-    <hr class="border-stone-200">
+      <!-- SECCIÓN 2: ANUNCIOS -->
+      <section id="section-ads" class="admin-section hidden space-y-4">
+        <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row gap-3 justify-between">
+          <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <button onclick="filterAds('all')" id="ad-tab-all" class="ad-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-900 text-white whitespace-nowrap transition">
+              Todos (<span id="count-ads-all">0</span>)
+            </button>
+            <button onclick="filterAds('pending')" id="ad-tab-pending" class="ad-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">
+              Pendientes (<span id="count-ads-pending">0</span>)
+            </button>
+            <button onclick="filterAds('approved')" id="ad-tab-approved" class="ad-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">
+              Aprobados (<span id="count-ads-approved">0</span>)
+            </button>
+          </div>
 
-    <section class="space-y-3">
-      <h2 class="text-lg font-bold text-brand-900 flex items-center gap-2">
-        <i class="fa-solid fa-list text-brand-600"></i> Todos los anuncios
-      </h2>
-      <div id="all-ads-container" class="space-y-3">
-        <div class="bg-white p-6 rounded-xl border border-stone-200 text-center text-stone-500 text-sm">Cargando...</div>
-      </div>
-    </section>
-  </main>
+          <div class="relative flex-1 sm:max-w-xs">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <input type="text" id="search-ads-input" oninput="renderFilteredAds()" placeholder="Buscar título, ciudad o email..." class="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-600 focus:bg-white transition">
+          </div>
+        </div>
 
-  <div id="image-modal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
-    <button type="button" onclick="closeImageModal()" class="absolute top-4 right-4 text-white text-3xl font-bold bg-black/50 hover:bg-black w-12 h-12 rounded-full flex items-center justify-center">
+        <div id="all-ads-container" class="space-y-3">
+          <div class="bg-white p-8 rounded-2xl border border-slate-200 text-center text-slate-400 text-sm">Cargando anuncios...</div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 3: MENSAJES -->
+      <section id="section-messages" class="admin-section hidden space-y-4">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="font-bold text-slate-900 text-sm">Postulaciones desde «Ver oferta»</h2>
+            <p class="text-xs text-slate-500">Candidatos que han contactado con anunciantes de la plataforma.</p>
+          </div>
+          <div class="relative sm:w-64">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+            <input type="text" id="search-msgs-input" oninput="renderFilteredMessages()" placeholder="Buscar candidato u oferta..." class="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-600 focus:bg-white">
+          </div>
+        </div>
+
+        <div id="admin-messages" class="space-y-3">
+          <div class="bg-white p-8 rounded-2xl border border-slate-200 text-center text-slate-400 text-sm">Cargando mensajes...</div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN 4: CONTACTO WEB -->
+      <section id="section-contact" class="admin-section hidden space-y-4">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+          <h2 class="font-bold text-slate-900 text-sm">Bandeja de Contacto Web</h2>
+          <p class="text-xs text-slate-500">Consultas enviadas desde el formulario general (info@rodatrabajo.com).</p>
+        </div>
+
+        <div id="admin-contact-web" class="space-y-3">
+          <div class="bg-white p-8 rounded-2xl border border-slate-200 text-center text-slate-400 text-sm">Cargando consultas...</div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- BARRA INFERIOR MÓVIL -->
+  <nav class="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t border-slate-200 px-2 py-1.5 flex items-center justify-around shadow-lg">
+    <button onclick="switchSection('overview')" id="nav-mob-overview" class="nav-mob-btn flex flex-col items-center justify-center py-1 px-3 rounded-xl text-brand-600 font-bold">
+      <i class="fa-solid fa-chart-pie text-base"></i>
+      <span class="text-[10px] mt-1">Inicio</span>
+    </button>
+
+    <button onclick="switchSection('ads')" id="nav-mob-ads" class="nav-mob-btn relative flex flex-col items-center justify-center py-1 px-3 rounded-xl text-slate-500 font-medium">
+      <i class="fa-solid fa-briefcase text-base"></i>
+      <span class="text-[10px] mt-1">Anuncios</span>
+      <span id="mob-badge-pending" class="hidden absolute top-0.5 right-2 w-4 h-4 rounded-full bg-amber-500 text-slate-950 text-[9px] font-extrabold flex items-center justify-center">0</span>
+    </button>
+
+    <button onclick="switchSection('messages')" id="nav-mob-messages" class="nav-mob-btn relative flex flex-col items-center justify-center py-1 px-3 rounded-xl text-slate-500 font-medium">
+      <i class="fa-solid fa-comments text-base"></i>
+      <span class="text-[10px] mt-1">Mensajes</span>
+      <span id="mob-badge-msgs" class="hidden absolute top-0.5 right-2 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-extrabold flex items-center justify-center">0</span>
+    </button>
+
+    <button onclick="switchSection('contact')" id="nav-mob-contact" class="nav-mob-btn relative flex flex-col items-center justify-center py-1 px-3 rounded-xl text-slate-500 font-medium">
+      <i class="fa-solid fa-headset text-base"></i>
+      <span class="text-[10px] mt-1">Web</span>
+      <span id="mob-badge-contact" class="hidden absolute top-0.5 right-2 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-extrabold flex items-center justify-center">0</span>
+    </button>
+  </nav>
+
+  <!-- MODAL DE IMAGEN -->
+  <div id="image-modal" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-sm flex items-center justify-center p-4">
+    <button type="button" onclick="closeImageModal()" class="absolute top-4 right-4 text-white text-2xl bg-white/10 hover:bg-white/20 w-11 h-11 rounded-full flex items-center justify-center transition">
       <i class="fa-solid fa-xmark"></i>
     </button>
-    <img id="modal-img" src="" alt="Foto" class="max-w-full max-h-[90vh] object-contain rounded-lg">
+    <img id="modal-img" src="" alt="Vista previa" class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl">
   </div>
 
-  <footer class="bg-brand-900 text-brand-100 text-xs text-center py-5 mt-auto">
-    Roda Trabajo © 2026 · Admin
-  </footer>
-
+  <!-- SCRIPT SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = 'https://ctkiiimazwpztekwfnrn.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_xkq1LHED5KxRpR35NRciCw_Na00Hi87';
     const ADMIN_EMAIL = 'danny10bbk@gmail.com';
     const cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let stateAds = [];
+    let stateMessages = [];
+    let currentAdFilter = 'all';
+
+    function switchSection(sectionName, subFilter = null) {
+      document.querySelectorAll('.admin-section').forEach(sec => sec.classList.add('hidden'));
+      document.getElementById('section-' + sectionName).classList.remove('hidden');
+
+      const titles = {
+        overview: ['Resumen Ejecutivo', 'Control centralizado de moderación y actividad'],
+        ads: ['Gestión de Anuncios', 'Aprobación, renovación y control de ofertas publicadas'],
+        messages: ['Mensajes a Anunciantes', 'Candidatos interesados desde «Ver oferta»'],
+        contact: ['Contacto Web', 'Consultas recibidas desde el formulario de la web']
+      };
+      document.getElementById('topbar-title').textContent = titles[sectionName][0];
+      document.getElementById('topbar-subtitle').textContent = titles[sectionName][1];
+
+      document.querySelectorAll('.nav-desk-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-600', 'text-white', 'font-semibold');
+        btn.classList.add('text-slate-300', 'font-medium');
+      });
+      const activeDesk = document.getElementById('nav-desk-' + sectionName);
+      if (activeDesk) {
+        activeDesk.classList.remove('text-slate-300', 'font-medium');
+        activeDesk.classList.add('bg-brand-600', 'text-white', 'font-semibold');
+      }
+
+      document.querySelectorAll('.nav-mob-btn').forEach(btn => {
+        btn.classList.remove('text-brand-600', 'font-bold');
+        btn.classList.add('text-slate-500', 'font-medium');
+      });
+      const activeMob = document.getElementById('nav-mob-' + sectionName);
+      if (activeMob) {
+        activeMob.classList.remove('text-slate-500', 'font-medium');
+        activeMob.classList.add('text-brand-600', 'font-bold');
+      }
+
+      if (sectionName === 'ads' && subFilter) {
+        filterAds(subFilter);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     async function verificarAccesoAdmin() {
       const { data: { session } } = await cliente.auth.getSession();
@@ -135,12 +337,15 @@
       return true;
     }
 
-    function titulo(ad) {
-      return ad.title || ad.titulo || 'Sin título';
+    function titulo(ad) { return ad.title || ad.titulo || 'Sin título'; }
+    function ubicacion(ad) { return ad.city || ad.provincia || ad.municipio || 'España'; }
+    function formatWhatsapp(phone) {
+      if (!phone) return null;
+      const clean = phone.replace(/\D/g, '');
+      if (clean.length === 9) return '34' + clean;
+      return clean;
     }
-    function ubicacion(ad) {
-      return ad.city || ad.provincia || ad.municipio || 'España';
-    }
+
     function openImageModal(url) {
       document.getElementById('modal-img').src = url;
       document.getElementById('image-modal').classList.remove('hidden');
@@ -151,7 +356,6 @@
 
     async function loadContactWeb() {
       const cont = document.getElementById('admin-contact-web');
-      const badge = document.getElementById('admin-contact-count');
       const { data, error } = await cliente
         .from('contact_messages')
         .select('*')
@@ -159,34 +363,47 @@
         .limit(50);
 
       if (error) {
-        cont.innerHTML = '<p class="text-sm text-red-600 bg-white p-4 rounded-xl border">' + error.message + '</p>';
+        cont.innerHTML = `<div class="bg-red-50 text-red-700 p-4 rounded-2xl border border-red-200 text-sm">${error.message}</div>`;
         return;
       }
-      if (!data || !data.length) {
-        cont.innerHTML = '<div class="bg-white p-4 rounded-xl border border-stone-200 text-center text-sm text-stone-500">Sin mensajes de contacto web.</div>';
-        badge.classList.add('hidden');
+
+      const count = data ? data.length : 0;
+      document.getElementById('kpi-contact').textContent = count;
+      updateBadges('contact', count);
+
+      if (!count) {
+        cont.innerHTML = `<div class="bg-white p-8 rounded-2xl border border-slate-200 text-center text-sm text-slate-500">No hay consultas en el formulario web.</div>`;
         return;
       }
-      badge.textContent = data.length;
-      badge.classList.remove('hidden');
-      cont.innerHTML = data.map(m => `
-        <div class="bg-white p-4 rounded-xl border border-stone-200 space-y-1">
-          <div class="flex justify-between gap-2 flex-wrap">
-            <p class="font-bold text-sm text-brand-900">${m.name || '—'}</p>
-            <span class="text-xs text-stone-400">${m.created_at ? new Date(m.created_at).toLocaleString('es-ES') : ''}</span>
+
+      cont.innerHTML = data.map(m => {
+        const wa = formatWhatsapp(m.phone);
+        return `
+        <div class="bg-white p-4 lg:p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+          <div class="flex justify-between items-start gap-2">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs flex items-center justify-center uppercase">
+                ${(m.name || 'W')[0]}
+              </div>
+              <div>
+                <p class="font-bold text-sm text-slate-900">${m.name || 'Usuario Web'}</p>
+                <span class="text-[11px] text-slate-400">${m.created_at ? new Date(m.created_at).toLocaleString('es-ES') : ''}</span>
+              </div>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Formulario Web</span>
           </div>
-          <p class="text-sm text-stone-700 whitespace-pre-line">${m.body || ''}</p>
-          <div class="text-xs flex flex-wrap gap-3 pt-1">
-            ${m.email ? `<a href="mailto:${m.email}" class="text-brand-700 font-semibold"><i class="fa-solid fa-envelope mr-1"></i>${m.email}</a>` : ''}
-            ${m.phone ? `<a href="tel:${m.phone}" class="text-brand-700 font-semibold"><i class="fa-solid fa-phone mr-1"></i>${m.phone}</a>` : ''}
+          <p class="text-sm text-slate-700 whitespace-pre-line bg-slate-50 p-3.5 rounded-xl border border-slate-100">${m.body || ''}</p>
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            ${m.email ? `<a href="mailto:${m.email}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-envelope mr-1.5 text-slate-500"></i>${m.email}</a>` : ''}
+            ${m.phone ? `<a href="tel:${m.phone}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-phone mr-1.5 text-slate-500"></i>${m.phone}</a>` : ''}
+            ${wa ? `<a href="https://wa.me/${wa}" target="_blank" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold transition ml-auto"><i class="fa-brands fa-whatsapp mr-1"></i>WhatsApp</a>` : ''}
           </div>
-        </div>
-      `).join('');
+        </div>`;
+      }).join('');
     }
 
     async function loadAdminMessages() {
       const cont = document.getElementById('admin-messages');
-      const badge = document.getElementById('admin-msg-count');
       const { data: msgs, error } = await cliente
         .from('messages')
         .select('*')
@@ -194,32 +411,58 @@
         .limit(100);
 
       if (error) {
-        cont.innerHTML = '<p class="text-sm text-red-600 bg-white p-4 rounded-xl border">' + error.message + '</p>';
+        cont.innerHTML = `<div class="bg-red-50 text-red-700 p-4 rounded-2xl border border-red-200 text-sm">${error.message}</div>`;
         return;
       }
-      if (!msgs || !msgs.length) {
-        cont.innerHTML = '<div class="bg-white p-4 rounded-xl border border-stone-200 text-center text-sm text-stone-500">No hay mensajes a anunciantes.</div>';
-        badge.classList.add('hidden');
+
+      stateMessages = msgs || [];
+      const count = stateMessages.length;
+      document.getElementById('kpi-messages').textContent = count;
+      updateBadges('msgs', count);
+      renderFilteredMessages();
+    }
+
+    function renderFilteredMessages() {
+      const cont = document.getElementById('admin-messages');
+      const query = (document.getElementById('search-msgs-input')?.value || '').toLowerCase();
+
+      const filtered = stateMessages.filter(m =>
+        (m.sender_name || '').toLowerCase().includes(query) ||
+        (m.ad_title || '').toLowerCase().includes(query) ||
+        (m.body || '').toLowerCase().includes(query)
+      );
+
+      if (!filtered.length) {
+        cont.innerHTML = `<div class="bg-white p-8 rounded-2xl border border-slate-200 text-center text-sm text-slate-500">No se encontraron mensajes.</div>`;
         return;
       }
-      badge.textContent = msgs.length;
-      badge.classList.remove('hidden');
-      cont.innerHTML = msgs.map(m => `
-        <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm space-y-2">
+
+      cont.innerHTML = filtered.map(m => {
+        const wa = formatWhatsapp(m.sender_phone);
+        return `
+        <div class="bg-white p-4 lg:p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
           <div class="flex flex-wrap items-start justify-between gap-2">
-            <div>
-              <p class="font-bold text-brand-900 text-sm">${m.sender_name || 'Interesado'}</p>
-              <p class="text-xs text-stone-500">Anuncio: <span class="font-semibold">${m.ad_title || '—'}</span></p>
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-full bg-brand-100 text-brand-800 font-bold text-xs flex items-center justify-center uppercase shrink-0">
+                ${(m.sender_name || 'I')[0]}
+              </div>
+              <div>
+                <p class="font-bold text-slate-900 text-sm">${m.sender_name || 'Interesado'}</p>
+                <p class="text-xs text-slate-500">Oferta: <span class="font-semibold text-brand-700">${m.ad_title || 'Sin especificar'}</span></p>
+              </div>
             </div>
-            <span class="text-xs text-stone-400">${m.created_at ? new Date(m.created_at).toLocaleString('es-ES') : ''}</span>
+            <span class="text-[11px] text-slate-400">${m.created_at ? new Date(m.created_at).toLocaleString('es-ES') : ''}</span>
           </div>
-          <p class="text-sm text-stone-700 whitespace-pre-line bg-stone-50 p-3 rounded-lg">${m.body || ''}</p>
-          <div class="flex flex-wrap gap-3 text-xs">
-            ${m.sender_phone ? `<a href="tel:${m.sender_phone}" class="font-semibold text-brand-700"><i class="fa-solid fa-phone mr-1"></i>${m.sender_phone}</a>` : ''}
-            ${m.sender_email ? `<a href="mailto:${m.sender_email}" class="font-semibold text-brand-700"><i class="fa-solid fa-envelope mr-1"></i>${m.sender_email}</a>` : ''}
+
+          <p class="text-sm text-slate-700 whitespace-pre-line bg-slate-50 p-3.5 rounded-xl border border-slate-100">${m.body || ''}</p>
+
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            ${m.sender_phone ? `<a href="tel:${m.sender_phone}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-phone mr-1.5 text-brand-600"></i>${m.sender_phone}</a>` : ''}
+            ${m.sender_email ? `<a href="mailto:${m.sender_email}" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition"><i class="fa-solid fa-envelope mr-1.5 text-brand-600"></i>${m.sender_email}</a>` : ''}
+            ${wa ? `<a href="https://wa.me/${wa}" target="_blank" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold transition ml-auto"><i class="fa-brands fa-whatsapp mr-1"></i>WhatsApp</a>` : ''}
           </div>
-        </div>
-      `).join('');
+        </div>`;
+      }).join('');
     }
 
     async function loadAdminPanel() {
@@ -228,36 +471,6 @@
 
       loadContactWeb();
       loadAdminMessages();
-
-      const pendingContainer = document.getElementById('pending-container');
-      const allAdsContainer = document.getElementById('all-ads-container');
-
-      let { data: pendingAds, error: errPending } = await cliente
-        .from('ads')
-        .select(`*, profiles:user_id(*)`)
-        .eq('status', 'pending')
-        .order('created_at', { ascending: false });
-
-      if (errPending) {
-        const res = await cliente.from('ads').select('*').eq('status', 'pending').order('created_at', { ascending: false });
-        pendingAds = res.data;
-      }
-
-      if (!pendingAds || !pendingAds.length) {
-        pendingContainer.innerHTML = `
-          <div class="bg-white p-6 rounded-xl border border-stone-200 text-center text-stone-500">
-            <i class="fa-regular fa-circle-check text-2xl text-brand-600 mb-1"></i>
-            <p class="text-sm font-medium">No hay anuncios pendientes.</p>
-          </div>`;
-      } else {
-        pendingContainer.innerHTML = pendingAds.map(ad => {
-          const profile = ad.profiles || {};
-          const avatarUrl = profile.avatar_url || 'https://ui-avatars.com/api/?name=U&background=8B5E3C&color=fff';
-          const userEmail = profile.email || ad.email || 'No disponible';
-          const userPhone = profile.phone || ad.phone || null;
-          return renderAdCard(ad, avatarUrl, userEmail, userPhone, 'pending');
-        }).join('');
-      }
 
       let { data: allAds, error: errAll } = await cliente
         .from('ads')
@@ -269,49 +482,125 @@
         allAds = res.data;
       }
 
-      if (!allAds || !allAds.length) {
-        allAdsContainer.innerHTML = '<p class="text-stone-500 text-sm bg-white p-4 rounded-xl border text-center">No hay anuncios.</p>';
+      stateAds = allAds || [];
+      const pendingAds = stateAds.filter(a => (a.status || 'pending') === 'pending');
+      const approvedAds = stateAds.filter(a => a.status === 'approved');
+
+      document.getElementById('kpi-pending').textContent = pendingAds.length;
+      document.getElementById('kpi-total-ads').textContent = stateAds.length;
+      document.getElementById('count-ads-all').textContent = stateAds.length;
+      document.getElementById('count-ads-pending').textContent = pendingAds.length;
+      document.getElementById('count-ads-approved').textContent = approvedAds.length;
+      updateBadges('pending', pendingAds.length);
+
+      const overviewPending = document.getElementById('overview-pending-list');
+      if (!pendingAds.length) {
+        overviewPending.innerHTML = `
+          <div class="py-8 text-center text-slate-500">
+            <div class="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto mb-2 text-lg">
+              <i class="fa-solid fa-check"></i>
+            </div>
+            <p class="text-sm font-bold text-slate-800">Todo al día</p>
+            <p class="text-xs text-slate-400 mt-0.5">No hay anuncios pendientes de aprobación.</p>
+          </div>`;
       } else {
-        allAdsContainer.innerHTML = allAds.map(ad => {
-          const profile = ad.profiles || {};
-          const avatarUrl = profile.avatar_url || 'https://ui-avatars.com/api/?name=U&background=8B5E3C&color=fff';
-          const userEmail = profile.email || ad.email || 'No disponible';
-          const userPhone = profile.phone || ad.phone || null;
-          return renderAdCard(ad, avatarUrl, userEmail, userPhone, ad.status || 'pending');
-        }).join('');
+        overviewPending.innerHTML = pendingAds.map(ad => buildAdCardHTML(ad)).join('');
       }
+
+      renderFilteredAds();
     }
 
-    function renderAdCard(ad, avatarUrl, userEmail, userPhone, st) {
-      const badge = st === 'approved' ? 'bg-brand-100 text-brand-800' : st === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800';
+    function filterAds(status) {
+      currentAdFilter = status;
+      document.querySelectorAll('.ad-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-slate-900', 'text-white', 'font-bold');
+        btn.classList.add('bg-slate-100', 'text-slate-600', 'font-semibold');
+      });
+      const activeBtn = document.getElementById('ad-tab-' + status);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-slate-100', 'text-slate-600', 'font-semibold');
+        activeBtn.classList.add('bg-slate-900', 'text-white', 'font-bold');
+      }
+      renderFilteredAds();
+    }
+
+    function renderFilteredAds() {
+      const container = document.getElementById('all-ads-container');
+      const query = (document.getElementById('search-ads-input')?.value || '').toLowerCase();
+
+      const filtered = stateAds.filter(ad => {
+        const st = ad.status || 'pending';
+        const matchesStatus = currentAdFilter === 'all' || st === currentAdFilter;
+        const profile = ad.profiles || {};
+        const email = (profile.email || ad.email || '').toLowerCase();
+        const matchesQuery = titulo(ad).toLowerCase().includes(query) || ubicacion(ad).toLowerCase().includes(query) || email.includes(query);
+        return matchesStatus && matchesQuery;
+      });
+
+      if (!filtered.length) {
+        container.innerHTML = `<div class="bg-white p-8 rounded-2xl border border-slate-200 text-center text-sm text-slate-500">No hay anuncios que coincidan con el filtro.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(ad => buildAdCardHTML(ad)).join('');
+    }
+
+    function buildAdCardHTML(ad) {
+      const profile = ad.profiles || {};
+      const st = ad.status || 'pending';
+      const avatarUrl = profile.avatar_url || 'https://ui-avatars.com/api/?name=U&background=8B5E3C&color=fff';
+      const userEmail = profile.email || ad.email || 'No disponible';
+      const userPhone = profile.phone || ad.phone || null;
+
+      const badge = st === 'approved'
+        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+        : st === 'rejected'
+        ? 'bg-red-50 text-red-700 border-red-200'
+        : 'bg-amber-50 text-amber-700 border-amber-200';
       const label = st === 'approved' ? 'Aprobado' : st === 'rejected' ? 'Rechazado' : 'Pendiente';
+
       const phoneHtml = userPhone
-        ? `<a href="tel:${userPhone}" class="font-semibold text-brand-700 underline">${userPhone}</a>`
-        : `<span class="text-stone-400 italic">No registrado</span>`;
+        ? `<a href="tel:${userPhone}" class="font-semibold text-brand-700 hover:underline">${userPhone}</a>`
+        : `<span class="text-slate-400 italic">No registrado</span>`;
 
       return `
-      <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="bg-white p-4 lg:p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div class="flex items-start gap-3.5 min-w-0">
-          <img src="${avatarUrl}" alt="" onclick="openImageModal('${avatarUrl}')" class="w-12 h-12 rounded-full object-cover cursor-pointer border-2 border-brand-200 shrink-0">
+          <img src="${avatarUrl}" alt="" onclick="openImageModal('${avatarUrl}')" class="w-12 h-12 rounded-xl object-cover cursor-pointer border border-slate-200 shrink-0">
           <div class="space-y-1 min-w-0">
             <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2 py-0.5 rounded text-xs font-bold ${badge}">${label}</span>
-              <span class="text-xs text-stone-400">${ad.created_at ? new Date(ad.created_at).toLocaleDateString('es-ES') : ''}</span>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${badge}">${label}</span>
+              <span class="text-xs text-slate-400">${ad.created_at ? new Date(ad.created_at).toLocaleDateString('es-ES') : ''}</span>
             </div>
-            <h3 class="font-bold text-brand-900 text-base">${titulo(ad)}</h3>
-            <p class="text-xs text-stone-500"><i class="fa-solid fa-location-dot"></i> ${ubicacion(ad)}</p>
-            <div class="text-xs text-stone-600 flex flex-wrap gap-x-4 gap-y-1 pt-1.5 bg-stone-50 px-2.5 py-1.5 rounded-lg border border-stone-100">
-              <span class="flex items-center gap-1.5 truncate"><i class="fa-solid fa-envelope text-brand-600"></i> ${userEmail}</span>
-              <span class="flex items-center gap-1.5"><i class="fa-solid fa-phone text-brand-600"></i> ${phoneHtml}</span>
+            <h3 class="font-bold text-slate-900 text-base leading-snug">${titulo(ad)}</h3>
+            <p class="text-xs text-slate-500"><i class="fa-solid fa-location-dot text-brand-600 mr-1"></i>${ubicacion(ad)}</p>
+            <div class="text-xs text-slate-600 flex flex-wrap gap-x-4 gap-y-1 pt-1.5 mt-1 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100">
+              <span class="flex items-center gap-1.5 truncate"><i class="fa-solid fa-envelope text-slate-400"></i> ${userEmail}</span>
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-phone text-slate-400"></i> ${phoneHtml}</span>
             </div>
           </div>
         </div>
-        <div class="flex items-center gap-2 shrink-0 pt-2 md:pt-0 border-t md:border-t-0 border-stone-100">
-          ${st !== 'approved' ? `<button type="button" onclick="approveAd('${ad.id}')" class="px-3 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-lg">Aprobar</button>` : ''}
-          <button type="button" onclick="renewAd('${ad.id}')" class="px-3 py-2 bg-stone-800 hover:bg-stone-900 text-white font-bold text-xs rounded-lg"><i class="fa-solid fa-rotate"></i></button>
-          <button type="button" onclick="deleteAd('${ad.id}')" class="px-3 py-2 bg-stone-100 hover:bg-red-600 hover:text-white text-stone-700 font-bold text-xs rounded-lg"><i class="fa-solid fa-trash"></i></button>
+
+        <div class="flex items-center gap-2 shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100">
+          ${st !== 'approved' ? `<button type="button" onclick="approveAd('${ad.id}')" class="flex-1 md:flex-none px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition"><i class="fa-solid fa-check mr-1"></i>Aprobar</button>` : ''}
+          <button type="button" onclick="renewAd('${ad.id}')" title="Renovar fecha" class="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition"><i class="fa-solid fa-rotate"></i></button>
+          <button type="button" onclick="deleteAd('${ad.id}')" title="Eliminar anuncio" class="px-3 py-2 bg-slate-100 hover:bg-red-600 hover:text-white text-slate-600 font-bold text-xs rounded-xl transition"><i class="fa-solid fa-trash"></i></button>
         </div>
       </div>`;
+    }
+
+    function updateBadges(type, count) {
+      const deskBadge = document.getElementById('desk-badge-' + type);
+      const mobBadge = document.getElementById('mob-badge-' + type);
+      [deskBadge, mobBadge].forEach(el => {
+        if (!el) return;
+        if (count > 0) {
+          el.textContent = count;
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      });
     }
 
     async function approveAd(id) {
@@ -320,7 +609,7 @@
       else loadAdminPanel();
     }
     async function deleteAd(id) {
-      if (!confirm('¿Borrar este anuncio?')) return;
+      if (!confirm('¿Borrar este anuncio definitivamente?')) return;
       const { error } = await cliente.from('ads').delete().eq('id', id);
       if (error) alert('Error al borrar');
       else loadAdminPanel();
@@ -328,7 +617,7 @@
     async function renewAd(id) {
       const { error } = await cliente.from('ads').update({ created_at: new Date().toISOString() }).eq('id', id);
       if (error) alert('Error al renovar');
-      else { alert('Renovado'); loadAdminPanel(); }
+      else { alert('Anuncio renovado a fecha de hoy'); loadAdminPanel(); }
     }
     async function logoutAdmin() {
       await cliente.auth.signOut();
