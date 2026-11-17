@@ -392,7 +392,6 @@
     document.addEventListener('DOMContentLoaded', () => {
       const cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      // Login normal con email
       document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const alertBox = document.getElementById('login-alert');
@@ -414,7 +413,6 @@
         }
       });
 
-      // Registro
       document.getElementById('register-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const alertBox = document.getElementById('register-alert');
@@ -489,7 +487,6 @@
         }
       });
 
-      // Reset password
       document.getElementById('reset-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const alertBox = document.getElementById('reset-alert');
@@ -500,7 +497,7 @@
 
         const email = document.getElementById('reset-email').value.trim();
         const { error } = await cliente.auth.resetPasswordForEmail(email, {
-          redirectTo: window.location.origin + '/login.html'
+          redirectTo: 'https://rodatrabajo.com/login.html'
         });
 
         btn.textContent = 'Enviar enlace';
