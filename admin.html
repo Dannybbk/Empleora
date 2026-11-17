@@ -439,6 +439,7 @@
 
       cont.innerHTML = filtered.map(m => {
         const wa = formatWhatsapp(m.sender_phone);
+        const foto = m.photo_url || m.image_url || '';
         return `
         <div class="bg-white p-4 lg:p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
           <div class="flex flex-wrap items-start justify-between gap-2">
@@ -457,9 +458,9 @@
           <p class="text-sm text-slate-700 whitespace-pre-line bg-slate-50 p-3.5 rounded-xl border border-slate-100">${m.body || ''}</p>
 
           <!-- FOTO DEL CANDIDATO SI LA HA ENVIADO -->
-          ${m.image_url ? `
+          ${foto ? `
             <div class="flex items-center gap-3 bg-brand-50/50 p-3 rounded-xl border border-brand-100">
-              <img src="${m.image_url}" alt="Foto del candidato" onclick="openImageModal('${m.image_url}')" class="w-16 h-16 rounded-xl object-cover cursor-pointer border border-brand-200 shadow-xs hover:opacity-90 transition shrink-0">
+              <img src="${foto}" alt="Foto del candidato" onclick="openImageModal('${foto}')" class="w-16 h-16 rounded-xl object-cover cursor-pointer border border-brand-200 shadow-xs hover:opacity-90 transition shrink-0">
               <div>
                 <span class="text-xs font-bold text-brand-900 block">Foto del candidato</span>
                 <span class="text-[11px] text-stone-500">Haz clic en la imagen para ampliarla</span>
