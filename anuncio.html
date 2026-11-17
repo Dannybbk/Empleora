@@ -125,7 +125,7 @@
             <p style="color:#475569; line-height:1.6; white-space: pre-line; font-size: 14px;">${ad.description || ad.experience || 'Sin descripción detallada.'}</p>
           </div>
 
-          <!-- FORMULARIO DE CONTACTO INTERNO -->
+          <!-- FORMULARIO DE CONTACTO CON FOTO DEL CANDIDATO -->
           <div style="background:#eff6ff; padding:20px; border-radius:8px; border:1px solid #bfdbfe;">
             <h3 style="color:#1e40af; margin-bottom:10px; font-size:18px;">¿Te interesa este anuncio? ¡Contacta ahora!</h3>
             <p style="color:#3b82f6; font-size:14px; margin-bottom:15px;">Rellena tus datos, añade una foto tuya si lo deseas y envíalo al anunciante.</p>
@@ -149,10 +149,10 @@
               </div>
               
               <!-- CAMPO DE FOTO DEL CANDIDATO -->
-              <div>
-                <label style="display:block; font-size:13px; font-weight:500; color:#1e3a8a; margin-bottom:4px;">Tu Foto (Opcional)</label>
-                <input type="file" id="contact-photo" accept="image/*" style="width:100%; padding:8px; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box; font-size: 13px; background:#fff;">
-                <span style="font-size:11px; color:#64748b; display:block; margin-top:2px;">Sube una foto tuya para que el anunciante te conozca.</span>
+              <div style="background: #ffffff; padding: 12px; border-radius: 6px; border: 1px solid #cbd5e1;">
+                <label style="display:block; font-size:13px; font-weight:600; color:#1e3a8a; margin-bottom:4px;">Tu Foto (Opcional)</label>
+                <input type="file" id="contact-photo" accept="image/*" style="width:100%; font-size: 13px;">
+                <span style="font-size:11px; color:#64748b; display:block; margin-top:4px;">Sube una foto tuya para que el anunciante te conozca.</span>
               </div>
 
               <button type="button" id="btn-submit-msg" style="background:#2563eb; color:#fff; padding:12px; border:none; border-radius:6px; font-weight:600; cursor:pointer; font-size: 14px;">Enviar mensaje y foto al anunciante</button>
@@ -174,7 +174,7 @@
             return;
           }
 
-          btn.innerText = 'Subiendo y enviando...';
+          btn.innerText = 'Subiendo foto y enviando...';
           btn.disabled = true;
 
           let fotoUrl = null;
