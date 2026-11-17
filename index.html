@@ -466,50 +466,75 @@
 
       const modal = document.createElement('div');
       modal.id = 'modal-detalle';
-      modal.className = 'fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50';
+      modal.className = 'fixed inset-0 z-50 bg-white flex flex-col overflow-hidden';
       modal.innerHTML = `
-        <div class="bg-white w-full sm:max-w-lg sm:rounded-2xl rounded-t-2xl shadow-2xl relative max-h-[92vh] flex flex-col overflow-hidden">
-          <button type="button" onclick="document.getElementById('modal-detalle').remove()" class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60"><i class="fa-solid fa-xmark"></i></button>
-          ${foto ? `<img src="${foto}" alt="" class="w-full h-36 sm:h-40 object-cover shrink-0">` : ''}
-          <div class="p-4 space-y-3 overflow-y-auto flex-1">
+        <div class="sticky top-0 z-10 bg-white border-b border-stone-200 px-4 py-3 flex items-center justify-between">
+          <span class="font-bold text-brand-900 text-sm">Detalle de la oferta</span>
+          <button type="button" id="btn-cerrar-detalle" class="w-9 h-9 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-700">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto">
+          ${foto ? `<img src="${foto}" alt="" class="w-full h-52 object-cover">` : ''}
+
+          <div class="p-5 space-y-5">
             <div>
-              <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-brand-100 text-brand-800 uppercase">${ad.categoria || 'Empleo'}</span>
-              <h2 class="text-lg font-bold text-brand-900 leading-snug mt-1 pr-6">${titulo}</h2>
+              <span class="inline-block px-2.5 py-1 rounded-md text-xs font-bold bg-brand-100 text-brand-800 uppercase tracking-wide">${ad.categoria || 'Empleo'}</span>
+              <h2 class="text-2xl font-bold text-brand-900 mt-2 leading-tight">${titulo}</h2>
             </div>
-            <div class="grid grid-cols-2 gap-2 bg-stone-50 p-2.5 rounded-xl text-sm">
-              <div><span class="block text-[10px] font-bold text-stone-400 uppercase">Ubicación</span><span class="font-semibold text-sm">${ad.city || ad.provincia || ad.municipio || 'España'}</span></div>
-              <div><span class="block text-[10px] font-bold text-stone-400 uppercase">Sueldo</span><span class="font-semibold text-sm">${ad.sueldo || '—'}</span></div>
-            </div>
-            <div class="flex items-center gap-2.5">
-              <img src="${avatarSrc}" alt="" class="w-10 h-10 rounded-full object-cover border border-brand-100 shrink-0">
-              <div>
-                <p class="font-bold text-brand-900 text-sm leading-tight">${nombre}</p>
-                <p class="text-[11px] text-stone-500">${rol}</p>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-stone-50 p-3 rounded-xl">
+                <p class="text-xs font-bold text-stone-400 uppercase">Ubicación</p>
+                <p class="font-semibold text-brand-900 mt-0.5">${ad.city || ad.provincia || ad.municipio || 'España'}</p>
+              </div>
+              <div class="bg-stone-50 p-3 rounded-xl">
+                <p class="text-xs font-bold text-stone-400 uppercase">Sueldo</p>
+                <p class="font-semibold text-brand-900 mt-0.5">${ad.sueldo || 'A convenir'}</p>
               </div>
             </div>
-            <div>
-              <h4 class="font-bold text-xs text-brand-900 mb-1">Descripción</h4>
-              <div class="text-sm text-stone-600 bg-stone-50 p-2.5 rounded-xl max-h-24 overflow-y-auto leading-snug">${desc}</div>
+
+            <div class="flex items-center gap-3 bg-white border border-stone-100 p-3 rounded-xl">
+              <img src="${avatarSrc}" alt="" class="w-12 h-12 rounded-full object-cover border-2 border-brand-100">
+              <div>
+                <p class="font-bold text-brand-900">${nombre}</p>
+                <p class="text-xs text-stone-500">${rol}</p>
+              </div>
             </div>
-            <div class="border-t border-stone-100 pt-3 space-y-2">
-              <h4 class="font-bold text-sm text-brand-900"><i class="fa-solid fa-paper-plane text-brand-600 mr-1"></i> Contactar</h4>
+
+            <div>
+              <h3 class="font-bold text-brand-900 mb-2">Descripción</h3>
+              <div class="text-stone-700 leading-relaxed bg-stone-50 p-4 rounded-xl whitespace-pre-line">${desc}</div>
+            </div>
+
+            <div class="border-t border-stone-200 pt-5 space-y-3">
+              <h3 class="font-bold text-brand-900 flex items-center gap-2">
+                <i class="fa-solid fa-paper-plane text-brand-600"></i> Contactar con el anunciante
+              </h3>
               <p id="msg-feedback" class="hidden text-sm font-semibold"></p>
-              <form id="contact-form" class="space-y-2">
-                <input type="text" id="c-nombre" required placeholder="Tu nombre" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm">
-                <div class="grid grid-cols-2 gap-2">
-                  <input type="tel" id="c-telefono" required placeholder="Teléfono" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm">
-                  <input type="email" id="c-email" required placeholder="Email" class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm">
+              <form id="contact-form" class="space-y-3">
+                <input type="text" id="c-nombre" required placeholder="Tu nombre" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <div class="grid grid-cols-2 gap-3">
+                  <input type="tel" id="c-telefono" required placeholder="Teléfono" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                  <input type="email" id="c-email" required placeholder="Email" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
                 </div>
-                <textarea id="c-mensaje" rows="2" required placeholder="Tu mensaje..." class="w-full px-3 py-2 bg-stone-50 border border-stone-200 rounded-lg text-sm"></textarea>
-                <div class="flex gap-2">
-                  <button type="submit" id="btn-enviar-msg" class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-lg">Enviar</button>
-                  <button type="button" onclick="document.getElementById('modal-detalle').remove()" class="px-4 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold text-sm rounded-lg">Cerrar</button>
-                </div>
+                <textarea id="c-mensaje" rows="4" required placeholder="Escribe tu mensaje..." class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                <button type="submit" id="btn-enviar-msg" class="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl">
+                  Enviar mensaje
+                </button>
               </form>
             </div>
           </div>
-        </div>`;
+        </div>
+      `;
       document.body.appendChild(modal);
+      document.body.style.overflow = 'hidden';
+
+      document.getElementById('btn-cerrar-detalle').addEventListener('click', () => {
+        document.getElementById('modal-detalle').remove();
+        document.body.style.overflow = '';
+      });
 
       document.getElementById('contact-form').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -531,7 +556,7 @@
 
         const { error } = await cliente.from('messages').insert([row]);
         btn.disabled = false;
-        btn.textContent = 'Enviar';
+        btn.textContent = 'Enviar mensaje';
 
         if (error) {
           fb.className = 'text-sm font-semibold text-red-600';
