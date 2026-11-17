@@ -520,6 +520,14 @@
                   <input type="email" id="c-email" required placeholder="Email" class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
                 </div>
                 <textarea id="c-mensaje" rows="4" required placeholder="Escribe tu mensaje..." class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+
+                <!-- Foto opcional -->
+                <div>
+                  <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Foto (opcional)</label>
+                  <input type="file" id="c-foto" accept="image/*" class="w-full text-sm text-stone-600">
+                  <img id="c-foto-preview" class="hidden mt-2 w-full h-36 object-contain bg-stone-50 rounded-xl border border-stone-200" alt="Vista previa">
+                </div>
+
                 <button type="submit" id="btn-enviar-msg" class="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl">
                   Enviar mensaje
                 </button>
@@ -536,6 +544,18 @@
         document.body.style.overflow = '';
       });
 
+      // Vista previa de la foto
+      document.getElementById('c-foto').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        const prev = document.getElementById('c-foto-preview');
+        if (file) {
+          prev.src = URL.createObjectURL(file);
+          prev.classList.remove('hidden');
+        } else {
+          prev.classList.add('hidden');
+        }
+      });
+
       document.getElementById('contact-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('btn-enviar-msg');
@@ -544,6 +564,20 @@
         btn.textContent = 'Enviando...';
         fb.classList.add('hidden');
 
+        // Subir foto si hay
+        let photo_url = null;
+        const fotoInput = document.getElementById('c-foto');
+        if (fotoInput.files && fotoInput.files[0]) {
+          const file = fotoInput.files[0];
+          const ext = file.name.split('.').pop();
+          const path = `messages/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+          const { error: upErr } = await cliente.storage.from('ads').upload(path, file);
+          if (!upErr) {
+            const { data } = cliente.storage.from('ads').getPublicUrl(path);
+            photo_url = data.publicUrl;
+          }
+        }
+
         const row = {
           ad_id: adId || null,
           owner_id: ownerId || null,
@@ -551,7 +585,8 @@
           sender_phone: document.getElementById('c-telefono').value.trim(),
           sender_email: document.getElementById('c-email').value.trim(),
           body: document.getElementById('c-mensaje').value.trim(),
-          ad_title: titulo
+          ad_title: titulo,
+          photo_url: photo_url
         };
 
         const { error } = await cliente.from('messages').insert([row]);
@@ -567,6 +602,7 @@
           fb.textContent = '¡Mensaje enviado! El anunciante lo verá en su panel.';
           fb.classList.remove('hidden');
           document.getElementById('contact-form').reset();
+          document.getElementById('c-foto-preview').classList.add('hidden');
         }
       });
     }
