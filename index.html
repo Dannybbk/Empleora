@@ -521,7 +521,6 @@
                 </div>
                 <textarea id="c-mensaje" rows="4" required placeholder="Escribe tu mensaje..." class="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
 
-                <!-- Foto opcional -->
                 <div>
                   <label class="block text-xs font-bold uppercase text-stone-500 mb-1">Foto (opcional)</label>
                   <input type="file" id="c-foto" accept="image/*" class="w-full text-sm text-stone-600">
@@ -544,7 +543,6 @@
         document.body.style.overflow = '';
       });
 
-      // Vista previa de la foto
       document.getElementById('c-foto').addEventListener('change', (e) => {
         const file = e.target.files[0];
         const prev = document.getElementById('c-foto-preview');
@@ -564,7 +562,6 @@
         btn.textContent = 'Enviando...';
         fb.classList.add('hidden');
 
-        // Subir foto si hay
         let photo_url = null;
         const fotoInput = document.getElementById('c-foto');
         if (fotoInput.files && fotoInput.files[0]) {
@@ -590,6 +587,40 @@
         };
 
         const { error } = await cliente.from('messages').insert([row]);
+
+        // Enviar email al anunciante
+        try {
+          const emailDestino = ad.email || ad.user_email || null;
+          if (emailDestino) {
+            await fetch('https://ctkiiimazwpztekwfnrn.supabase.co/functions/v1/send-contact-email', {
+              method: 'POST',
+              headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+              },
+              body: JSON.stringify({
+                to: emailDestino,
+                subject: 'Nuevo interesado en tu anuncio - Roda Trabajo',
+                html: `
+                  <div style="font-family: Arial, sans-serif; max-width: 600px;">
+                    <h2 style="color: #6B4423;">Nuevo contacto en tu anuncio</h2>
+                    <p><strong>Anuncio:</strong> ${titulo}</p>
+                    <hr>
+                    <p><strong>Nombre:</strong> ${row.sender_name}</p>
+                    <p><strong>Teléfono:</strong> ${row.sender_phone}</p>
+                    <p><strong>Email:</strong> ${row.sender_email}</p>
+                    <p><strong>Mensaje:</strong></p>
+                    <p style="background:#f5f5f5; padding:12px; border-radius:8px;">${row.body}</p>
+                    <p style="margin-top:20px; font-size:12px; color:#888;">Este mensaje se ha enviado desde Roda Trabajo.</p>
+                  </div>
+                `
+              })
+            });
+          }
+        } catch (e) {
+          console.log('No se pudo enviar el email:', e);
+        }
+
         btn.disabled = false;
         btn.textContent = 'Enviar mensaje';
 
