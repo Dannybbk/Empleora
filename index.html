@@ -363,7 +363,7 @@
         card.className = 'bg-white rounded-2xl border border-stone-200 hover:border-brand-300 hover:shadow-md transition overflow-hidden flex flex-col sm:flex-row';
         card.innerHTML = `
           ${foto
-            ? `<img src="${foto}" alt="" class="w-full sm:w-40 h-40 sm:h-auto object-cover shrink-0 bg-stone-50">`
+            ? `<img src="${foto}" alt="" class="w-full sm:w-40 h-auto object-contain shrink-0 bg-stone-50">`
             : `<div class="w-full sm:w-40 h-32 sm:h-auto min-h-[8rem] bg-stone-100 flex items-center justify-center text-stone-300 shrink-0"><i class="fa-solid fa-image text-4xl"></i></div>`
           }
           <div class="p-5 flex-1 min-w-0 flex flex-col justify-between gap-3">
