@@ -590,7 +590,18 @@
 
         // Enviar email al anunciante
         try {
-          const emailDestino = ad.email || ad.user_email || null;
+          let emailDestino = ad.email || ad.user_email || null;
+
+          // Si no tiene email en el anuncio, lo buscamos en profiles
+          if (!emailDestino && ad.user_id) {
+            const { data: perfil } = await cliente
+              .from('profiles')
+              .select('email')
+              .eq('id', ad.user_id)
+              .maybeSingle();
+            if (perfil && perfil.email) emailDestino = perfil.email;
+          }
+
           if (emailDestino) {
             await fetch('https://ctkiiimazwpztekwfnrn.supabase.co/functions/v1/send-contact-email', {
               method: 'POST',
