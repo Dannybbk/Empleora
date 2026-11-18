@@ -82,6 +82,10 @@
         <span class="flex items-center gap-3"><i class="fa-solid fa-headset w-4 text-center"></i> Contacto web</span>
         <span id="desk-badge-contact" class="hidden text-[11px] font-bold bg-red-500 text-white px-2 py-0.5 rounded-full">0</span>
       </button>
+
+      <button onclick="switchSection('sendmail')" id="nav-desk-sendmail" class="nav-desk-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition">
+        <span class="flex items-center gap-3"><i class="fa-solid fa-paper-plane w-4 text-center"></i> Enviar email</span>
+      </button>
     </nav>
 
     <div class="p-4 border-t border-slate-800 space-y-2">
@@ -209,7 +213,7 @@
         </div>
       </section>
 
-      <!-- SECCIÓN 3: MENSAJES CON FOTO DEL CANDIDATO -->
+      <!-- SECCIÓN 3: MENSAJES -->
       <section id="section-messages" class="admin-section hidden space-y-4">
         <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
@@ -239,6 +243,33 @@
         </div>
       </section>
 
+      <!-- SECCIÓN 5: ENVIAR EMAIL -->
+      <section id="section-sendmail" class="admin-section hidden space-y-4">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs max-w-2xl">
+          <h2 class="font-bold text-slate-900 text-base mb-1">Enviar email desde info@rodatrabajo.com</h2>
+          <p class="text-xs text-slate-500 mb-4">Se enviará a través de Resend.</p>
+
+          <form id="send-email-form" class="space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-500 mb-1">Para</label>
+              <input type="email" id="mail-to" required placeholder="correo@ejemplo.com" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-600">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-500 mb-1">Asunto</label>
+              <input type="text" id="mail-subject" required placeholder="Asunto del email" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-600">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-500 mb-1">Mensaje</label>
+              <textarea id="mail-body" rows="6" required placeholder="Escribe el mensaje..." class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-600"></textarea>
+            </div>
+            <button type="submit" id="mail-btn" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl">
+              Enviar email
+            </button>
+            <p id="mail-feedback" class="hidden text-sm font-semibold text-center"></p>
+          </form>
+        </div>
+      </section>
+
     </main>
   </div>
 
@@ -265,6 +296,11 @@
       <i class="fa-solid fa-headset text-base"></i>
       <span class="text-[10px] mt-1">Web</span>
       <span id="mob-badge-contact" class="hidden absolute top-0.5 right-2 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-extrabold flex items-center justify-center">0</span>
+    </button>
+
+    <button onclick="switchSection('sendmail')" id="nav-mob-sendmail" class="nav-mob-btn flex flex-col items-center justify-center py-1 px-3 rounded-xl text-slate-500 font-medium">
+      <i class="fa-solid fa-paper-plane text-base"></i>
+      <span class="text-[10px] mt-1">Email</span>
     </button>
   </nav>
 
@@ -296,7 +332,8 @@
         overview: ['Resumen Ejecutivo', 'Control centralizado de moderación y actividad'],
         ads: ['Gestión de Anuncios', 'Aprobación, renovación y control de ofertas publicadas'],
         messages: ['Mensajes a Anunciantes', 'Candidatos interesados desde «Ver oferta»'],
-        contact: ['Contacto Web', 'Consultas recibidas desde el formulario de la web']
+        contact: ['Contacto Web', 'Consultas recibidas desde el formulario de la web'],
+        sendmail: ['Enviar email', 'Envía emails desde info@rodatrabajo.com']
       };
       document.getElementById('topbar-title').textContent = titles[sectionName][0];
       document.getElementById('topbar-subtitle').textContent = titles[sectionName][1];
@@ -390,7 +427,10 @@
                 <span class="text-[11px] text-slate-400">${m.created_at ? new Date(m.created_at).toLocaleString('es-ES') : ''}</span>
               </div>
             </div>
-            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Formulario Web</span>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Formulario Web</span>
+              <button onclick="deleteContact('${m.id}')" class="text-red-500 hover:text-red-700 text-sm"><i class="fa-solid fa-trash"></i></button>
+            </div>
           </div>
           <p class="text-sm text-slate-700 whitespace-pre-line bg-slate-50 p-3.5 rounded-xl border border-slate-100">${m.body || ''}</p>
           <div class="flex flex-wrap items-center gap-2 pt-1">
@@ -400,6 +440,13 @@
           </div>
         </div>`;
       }).join('');
+    }
+
+    async function deleteContact(id) {
+      if (!confirm('¿Eliminar esta consulta?')) return;
+      const { error } = await cliente.from('contact_messages').delete().eq('id', id);
+      if (error) alert('Error al eliminar');
+      else loadContactWeb();
     }
 
     async function loadAdminMessages() {
@@ -452,12 +499,14 @@
                 <p class="text-xs text-slate-500">Oferta: <span class="font-semibold text-brand-700">${m.ad_title || 'Sin especificar'}</span></p>
               </div>
             </div>
-            <span class="text-[11px] text-slate-400">${m.created_at ? new Date(m.created_at).toLocaleString('es-ES') : ''}</span>
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] text-slate-400">${m.created_at ? new Date(m.created_at).toLocaleString('es-ES') : ''}</span>
+              <button onclick="deleteMessage('${m.id}')" class="text-red-500 hover:text-red-700 text-sm"><i class="fa-solid fa-trash"></i></button>
+            </div>
           </div>
 
           <p class="text-sm text-slate-700 whitespace-pre-line bg-slate-50 p-3.5 rounded-xl border border-slate-100">${m.body || ''}</p>
 
-          <!-- FOTO DEL CANDIDATO SI LA HA ENVIADO -->
           ${foto ? `
             <div class="flex items-center gap-3 bg-brand-50/50 p-3 rounded-xl border border-brand-100">
               <img src="${foto}" alt="Foto del candidato" onclick="openImageModal('${foto}')" class="w-16 h-16 rounded-xl object-cover cursor-pointer border border-brand-200 shadow-xs hover:opacity-90 transition shrink-0">
@@ -475,6 +524,13 @@
           </div>
         </div>`;
       }).join('');
+    }
+
+    async function deleteMessage(id) {
+      if (!confirm('¿Eliminar este mensaje?')) return;
+      const { error } = await cliente.from('messages').delete().eq('id', id);
+      if (error) alert('Error al eliminar');
+      else loadAdminMessages();
     }
 
     async function loadAdminPanel() {
@@ -635,6 +691,50 @@
       await cliente.auth.signOut();
       window.location.href = 'login.html';
     }
+
+    // Enviar email
+    document.getElementById('send-email-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('mail-btn');
+      const fb = document.getElementById('mail-feedback');
+      const to = document.getElementById('mail-to').value.trim();
+      const subject = document.getElementById('mail-subject').value.trim();
+      const body = document.getElementById('mail-body').value.trim();
+
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+      fb.classList.add('hidden');
+
+      try {
+        const response = await fetch('https://ctkiiimazwpztekwfnrn.supabase.co/functions/v1/send-contact-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+          },
+          body: JSON.stringify({
+            to: to,
+            subject: subject,
+            html: `<div style="font-family:Arial,sans-serif;max-width:600px;">${body.replace(/\n/g, '<br>')}</div>`
+          })
+        });
+
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Error al enviar');
+
+        fb.className = 'text-sm font-semibold text-center text-green-700';
+        fb.textContent = 'Email enviado correctamente.';
+        fb.classList.remove('hidden');
+        document.getElementById('send-email-form').reset();
+      } catch (err) {
+        fb.className = 'text-sm font-semibold text-center text-red-600';
+        fb.textContent = 'Error: ' + err.message;
+        fb.classList.remove('hidden');
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Enviar email';
+    });
 
     document.addEventListener('DOMContentLoaded', loadAdminPanel);
   </script>
