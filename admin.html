@@ -312,6 +312,22 @@
     <img id="modal-img" src="" alt="Vista previa" class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl">
   </div>
 
+  <!-- MODAL CONTACTAR ANUNCIANTE -->
+  <div id="contact-owner-modal" class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 space-y-4">
+      <div class="flex justify-between items-center">
+        <h3 class="font-bold text-slate-900">Contactar anunciante</h3>
+        <button onclick="closeContactOwner()" class="text-slate-500 hover:text-slate-800"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <p class="text-xs text-slate-500">Se enviará desde info@rodatrabajo.com</p>
+      <input type="hidden" id="owner-email">
+      <input type="text" id="owner-subject" placeholder="Asunto" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+      <textarea id="owner-body" rows="5" placeholder="Escribe el mensaje..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm"></textarea>
+      <button onclick="sendToOwner()" class="w-full py-2.5 bg-brand-600 text-white font-bold rounded-xl text-sm">Enviar</button>
+      <p id="owner-feedback" class="hidden text-sm text-center"></p>
+    </div>
+  </div>
+
   <!-- SCRIPT SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -389,6 +405,56 @@
     }
     function closeImageModal() {
       document.getElementById('image-modal').classList.add('hidden');
+    }
+
+    function openContactOwner(email, title) {
+      document.getElementById('owner-email').value = email || '';
+      document.getElementById('owner-subject').value = 'Sobre tu anuncio: ' + (title || '');
+      document.getElementById('owner-body').value = '';
+      document.getElementById('owner-feedback').classList.add('hidden');
+      document.getElementById('contact-owner-modal').classList.remove('hidden');
+    }
+    function closeContactOwner() {
+      document.getElementById('contact-owner-modal').classList.add('hidden');
+    }
+
+    async function sendToOwner() {
+      const to = document.getElementById('owner-email').value.trim();
+      const subject = document.getElementById('owner-subject').value.trim();
+      const body = document.getElementById('owner-body').value.trim();
+      const fb = document.getElementById('owner-feedback');
+
+      if (!to || !subject || !body) {
+        alert('Rellena todos los campos');
+        return;
+      }
+
+      try {
+        const response = await fetch('https://ctkiiimazwpztekwfnrn.supabase.co/functions/v1/send-contact-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+          },
+          body: JSON.stringify({
+            to: to,
+            subject: subject,
+            html: `<div style="font-family:Arial,sans-serif;">${body.replace(/\n/g,'<br>')}</div>`
+          })
+        });
+
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Error');
+
+        fb.className = 'text-sm text-center text-green-700';
+        fb.textContent = 'Email enviado';
+        fb.classList.remove('hidden');
+        setTimeout(closeContactOwner, 1500);
+      } catch (err) {
+        fb.className = 'text-sm text-center text-red-600';
+        fb.textContent = 'Error: ' + err.message;
+        fb.classList.remove('hidden');
+      }
     }
 
     async function loadContactWeb() {
@@ -617,7 +683,7 @@
       const profile = ad.profiles || {};
       const st = ad.status || 'pending';
       const avatarUrl = profile.avatar_url || 'https://ui-avatars.com/api/?name=U&background=8B5E3C&color=fff';
-      const userEmail = profile.email || ad.email || 'No disponible';
+      const userEmail = profile.email || ad.email || '';
       const userPhone = profile.phone || ad.phone || null;
 
       const badge = st === 'approved'
@@ -643,13 +709,14 @@
             <h3 class="font-bold text-slate-900 text-base leading-snug">${titulo(ad)}</h3>
             <p class="text-xs text-slate-500"><i class="fa-solid fa-location-dot text-brand-600 mr-1"></i>${ubicacion(ad)}</p>
             <div class="text-xs text-slate-600 flex flex-wrap gap-x-4 gap-y-1 pt-1.5 mt-1 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100">
-              <span class="flex items-center gap-1.5 truncate"><i class="fa-solid fa-envelope text-slate-400"></i> ${userEmail}</span>
+              <span class="flex items-center gap-1.5 truncate"><i class="fa-solid fa-envelope text-slate-400"></i> ${userEmail || 'No disponible'}</span>
               <span class="flex items-center gap-1.5"><i class="fa-solid fa-phone text-slate-400"></i> ${phoneHtml}</span>
             </div>
           </div>
         </div>
 
         <div class="flex items-center gap-2 shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100">
+          ${userEmail ? `<button type="button" onclick="openContactOwner('${userEmail}', '${titulo(ad).replace(/'/g, "\\'")}')" class="px-3 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl transition"><i class="fa-solid fa-envelope mr-1"></i>Contactar</button>` : ''}
           ${st !== 'approved' ? `<button type="button" onclick="approveAd('${ad.id}')" class="flex-1 md:flex-none px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition"><i class="fa-solid fa-check mr-1"></i>Aprobar</button>` : ''}
           <button type="button" onclick="renewAd('${ad.id}')" title="Renovar fecha" class="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition"><i class="fa-solid fa-rotate"></i></button>
           <button type="button" onclick="deleteAd('${ad.id}')" title="Eliminar anuncio" class="px-3 py-2 bg-slate-100 hover:bg-red-600 hover:text-white text-slate-600 font-bold text-xs rounded-xl transition"><i class="fa-solid fa-trash"></i></button>
@@ -692,7 +759,7 @@
       window.location.href = 'login.html';
     }
 
-    // Enviar email
+    // Enviar email general
     document.getElementById('send-email-form')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('mail-btn');
