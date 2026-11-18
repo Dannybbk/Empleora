@@ -54,7 +54,7 @@
         <i class="fa-solid fa-user"></i> Publicar demanda de empleo
       </button>
     </div>
-    <p id="tipo-hint" class="text-xs text-stone-500 mb-4 -mt-2">Oferta = necesitas contratar. Demanda = buscas trabajo.</p>
+    <!-- Se eliminó el texto estático de aquí -->
 
     <form id="publish-form" class="bg-white rounded-2xl border border-stone-200 p-5 sm:p-6 space-y-4 shadow-sm">
       <input type="hidden" id="tipo" value="ofrezco_empleo">
@@ -166,18 +166,16 @@
       const btnOferta = document.getElementById('btn-oferta');
       const btnDemanda = document.getElementById('btn-demanda');
       const bloqueSueldo = document.getElementById('bloque-sueldo');
-      const hint = document.getElementById('tipo-hint');
+      
       if (tipo === 'ofrezco_empleo') {
         btnOferta.className = 'w-full py-3 px-4 rounded-xl border-2 border-brand-600 bg-brand-50 text-brand-900 font-bold text-sm flex items-center justify-center gap-2';
         btnDemanda.className = 'w-full py-3 px-4 rounded-xl border-2 border-stone-200 bg-white text-stone-700 font-bold text-sm flex items-center justify-center gap-2 hover:border-brand-400';
         bloqueSueldo.classList.remove('hidden');
-        hint.textContent = 'Oferta de empleo: necesitas contratar. Puedes indicar sueldo.';
       } else {
         btnDemanda.className = 'w-full py-3 px-4 rounded-xl border-2 border-brand-600 bg-brand-50 text-brand-900 font-bold text-sm flex items-center justify-center gap-2';
         btnOferta.className = 'w-full py-3 px-4 rounded-xl border-2 border-stone-200 bg-white text-stone-700 font-bold text-sm flex items-center justify-center gap-2 hover:border-brand-400';
         bloqueSueldo.classList.add('hidden');
         document.getElementById('sueldo').value = '';
-        hint.textContent = 'Demanda de empleo: buscas trabajo. No se pide sueldo.';
       }
     }
 
