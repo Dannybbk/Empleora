@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Roda Trabajo - Empleo gratis en España</title>
-  <meta name="description" content="Roda Trabajo: publica y busca anuncios de empleo gratis. Ofertas y demandas en toda España.">
+  <meta name="description" content="Publica y busca ofertas de empleo gratis en toda España. Sin comisiones.">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -77,82 +77,89 @@
     </div>
   </div>
 
-  <section class="bg-brand-900 text-white pt-8 pb-10 px-4">
-    <div class="max-w-2xl mx-auto">
-      <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-xl text-left space-y-3 text-stone-800">
-        <form onsubmit="filtrarAnuncios(event)" class="space-y-3">
-          <div class="relative">
-            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
-            <input type="text" id="search-keyword" placeholder="¿Qué trabajo buscas?" class="w-full pl-10 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
-          </div>
-          <div class="relative">
-            <i class="fa-solid fa-layer-group absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
-            <select id="search-category" class="w-full pl-10 pr-8 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-brand-500">
-              <option value="">Todas las categorías</option>
-              <option value="construccion">Construcción y reformas</option>
-              <option value="limpieza">Limpieza</option>
-              <option value="hosteleria">Hostelería y turismo</option>
-              <option value="transporte">Transporte y conducción</option>
-              <option value="logistica">Logística y almacén</option>
-              <option value="administracion">Administración y oficina</option>
-              <option value="comercio">Comercio y ventas</option>
-              <option value="atencion-cliente">Atención al cliente</option>
-              <option value="informatica">Informática y tecnología</option>
-              <option value="sanidad">Sanidad</option>
-              <option value="educacion">Educación</option>
-              <option value="mantenimiento">Mantenimiento</option>
-              <option value="agricultura">Agricultura y campo</option>
-              <option value="industria">Industria</option>
-              <option value="peluqueria">Peluquería y estética</option>
-              <option value="cuidado">Cuidado de personas</option>
-              <option value="domestico">Trabajo doméstico</option>
-              <option value="otros">Otros sectores</option>
-            </select>
-            <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs pointer-events-none"></i>
-          </div>
-          <div class="relative">
-            <i class="fa-solid fa-location-dot absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
-            <select id="search-province" onchange="actualizarMunicipios()" class="w-full pl-10 pr-8 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-brand-500">
-              <option value="">Toda España</option>
-              <option value="Madrid">Madrid</option>
-              <option value="Barcelona">Barcelona</option>
-              <option value="Valencia">Valencia</option>
-              <option value="Sevilla">Sevilla</option>
-              <option value="Málaga">Málaga</option>
-              <option value="Alicante">Alicante</option>
-              <option value="Murcia">Murcia</option>
-              <option value="Zaragoza">Zaragoza</option>
-              <option value="Bilbao">Bilbao</option>
-              <option value="Toledo">Toledo</option>
-              <option value="Córdoba">Córdoba</option>
-              <option value="Granada">Granada</option>
-              <option value="Valladolid">Valladolid</option>
-              <option value="A Coruña">A Coruña</option>
-              <option value="Gijón">Gijón</option>
-              <option value="Vigo">Vigo</option>
-              <option value="Santander">Santander</option>
-              <option value="San Sebastián">San Sebastián</option>
-              <option value="Palma de Mallorca">Palma de Mallorca</option>
-              <option value="Las Palmas de Gran Canaria">Las Palmas de Gran Canaria</option>
-            </select>
-            <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs pointer-events-none"></i>
-          </div>
-          <div id="container-municipio" class="hidden relative">
-            <i class="fa-solid fa-city absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
-            <select id="search-municipio" class="w-full pl-10 pr-8 py-3 bg-brand-50 border border-brand-200 rounded-xl text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-brand-500">
-              <option value="">Todos los municipios</option>
-            </select>
-            <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs pointer-events-none"></i>
-          </div>
-          <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl flex items-center justify-center gap-2">
-            <i class="fa-solid fa-magnifying-glass text-xs"></i> Buscar ofertas
-          </button>
-        </form>
-        <div class="pt-2 border-t border-stone-100">
-          <a id="btn-publicar-hero" href="registro.html" class="flex items-center justify-center gap-2 w-full py-3 px-4 bg-brand-50 hover:bg-brand-100 text-brand-800 font-bold text-sm rounded-xl border border-brand-200">
-            <i class="fa-solid fa-circle-plus"></i> Publicar anuncio gratis
-          </a>
+  <!-- HERO MEJORADO -->
+  <section class="bg-gradient-to-b from-brand-900 to-brand-800 text-white pt-12 pb-16 px-4">
+    <div class="max-w-3xl mx-auto text-center space-y-4">
+      <h1 class="text-3xl sm:text-4xl font-extrabold leading-tight">Encuentra trabajo o publica tu oferta <span class="text-brand-200">gratis</span></h1>
+      <p class="text-brand-100 text-base sm:text-lg">Sin comisiones. Ofertas y demandas en toda España.</p>
+    </div>
+  </section>
+
+  <!-- BUSCADOR -->
+  <section class="max-w-2xl mx-auto px-4 -mt-10">
+    <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-xl text-left space-y-3 text-stone-800">
+      <form onsubmit="filtrarAnuncios(event)" class="space-y-3">
+        <div class="relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
+          <input type="text" id="search-keyword" placeholder="¿Qué trabajo buscas?" class="w-full pl-10 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
         </div>
+        <div class="relative">
+          <i class="fa-solid fa-layer-group absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
+          <select id="search-category" class="w-full pl-10 pr-8 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="">Todas las categorías</option>
+            <option value="construccion">Construcción y reformas</option>
+            <option value="limpieza">Limpieza</option>
+            <option value="hosteleria">Hostelería y turismo</option>
+            <option value="transporte">Transporte y conducción</option>
+            <option value="logistica">Logística y almacén</option>
+            <option value="administracion">Administración y oficina</option>
+            <option value="comercio">Comercio y ventas</option>
+            <option value="atencion-cliente">Atención al cliente</option>
+            <option value="informatica">Informática y tecnología</option>
+            <option value="sanidad">Sanidad</option>
+            <option value="educacion">Educación</option>
+            <option value="mantenimiento">Mantenimiento</option>
+            <option value="agricultura">Agricultura y campo</option>
+            <option value="industria">Industria</option>
+            <option value="peluqueria">Peluquería y estética</option>
+            <option value="cuidado">Cuidado de personas</option>
+            <option value="domestico">Trabajo doméstico</option>
+            <option value="otros">Otros sectores</option>
+          </select>
+          <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs pointer-events-none"></i>
+        </div>
+        <div class="relative">
+          <i class="fa-solid fa-location-dot absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
+          <select id="search-province" onchange="actualizarMunicipios()" class="w-full pl-10 pr-8 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="">Toda España</option>
+            <option value="Madrid">Madrid</option>
+            <option value="Barcelona">Barcelona</option>
+            <option value="Valencia">Valencia</option>
+            <option value="Sevilla">Sevilla</option>
+            <option value="Málaga">Málaga</option>
+            <option value="Alicante">Alicante</option>
+            <option value="Murcia">Murcia</option>
+            <option value="Zaragoza">Zaragoza</option>
+            <option value="Bilbao">Bilbao</option>
+            <option value="Toledo">Toledo</option>
+            <option value="Córdoba">Córdoba</option>
+            <option value="Granada">Granada</option>
+            <option value="Valladolid">Valladolid</option>
+            <option value="A Coruña">A Coruña</option>
+            <option value="Gijón">Gijón</option>
+            <option value="Vigo">Vigo</option>
+            <option value="Santander">Santander</option>
+            <option value="San Sebastián">San Sebastián</option>
+            <option value="Palma de Mallorca">Palma de Mallorca</option>
+            <option value="Las Palmas de Gran Canaria">Las Palmas de Gran Canaria</option>
+          </select>
+          <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs pointer-events-none"></i>
+        </div>
+        <div id="container-municipio" class="hidden relative">
+          <i class="fa-solid fa-city absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
+          <select id="search-municipio" class="w-full pl-10 pr-8 py-3 bg-brand-50 border border-brand-200 rounded-xl text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="">Todos los municipios</option>
+          </select>
+          <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs pointer-events-none"></i>
+        </div>
+        <button type="submit" class="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl flex items-center justify-center gap-2">
+          <i class="fa-solid fa-magnifying-glass text-xs"></i> Buscar ofertas
+        </button>
+      </form>
+      <div class="pt-2 border-t border-stone-100">
+        <a id="btn-publicar-hero" href="registro.html" class="flex items-center justify-center gap-2 w-full py-3 px-4 bg-brand-50 hover:bg-brand-100 text-brand-800 font-bold text-sm rounded-xl border border-brand-200">
+          <i class="fa-solid fa-circle-plus"></i> Publicar anuncio gratis
+        </a>
       </div>
     </div>
   </section>
@@ -179,7 +186,8 @@
   <footer class="bg-brand-900 text-brand-100 text-sm mt-auto border-t border-brand-800">
     <div class="max-w-6xl mx-auto px-4 py-8 text-center space-y-2">
       <p class="font-bold text-white">Roda Trabajo © 2026</p>
-      <p class="text-xs text-brand-200">Contacto: info@rodatrabajo.com</p>
+      <p class="text-xs text-brand-200">Publica y busca empleo gratis · Sin comisiones</p>
+      <p class="text-xs text-brand-200">Contacto: <a href="mailto:info@rodatrabajo.com" class="underline">info@rodatrabajo.com</a></p>
     </div>
   </footer>
 
@@ -347,26 +355,26 @@
         const tipo = ad.tipo === 'busco_trabajo' ? 'Demanda' : (ad.tipo === 'ofrezco_empleo' ? 'Oferta' : '');
         const foto = ad.image_url || ad.photo_url || '';
         const card = document.createElement('div');
-        card.className = 'bg-white rounded-xl border border-stone-200 hover:border-brand-300 hover:shadow-md transition overflow-hidden flex flex-col sm:flex-row';
+        card.className = 'bg-white rounded-2xl border border-stone-200 hover:border-brand-300 hover:shadow-md transition overflow-hidden flex flex-col sm:flex-row';
         card.innerHTML = `
           ${foto
-            ? `<img src="${foto}" alt="" class="w-full sm:w-36 h-auto object-contain shrink-0 bg-stone-50">`
-            : `<div class="w-full sm:w-36 h-28 sm:h-auto min-h-[7rem] bg-stone-100 flex items-center justify-center text-stone-300 shrink-0"><i class="fa-solid fa-image text-3xl"></i></div>`
+            ? `<img src="${foto}" alt="" class="w-full sm:w-40 h-40 sm:h-auto object-cover shrink-0 bg-stone-50">`
+            : `<div class="w-full sm:w-40 h-32 sm:h-auto min-h-[8rem] bg-stone-100 flex items-center justify-center text-stone-300 shrink-0"><i class="fa-solid fa-image text-4xl"></i></div>`
           }
-          <div class="p-4 flex-1 min-w-0 flex flex-col justify-between gap-3">
-            <div class="space-y-1.5">
+          <div class="p-5 flex-1 min-w-0 flex flex-col justify-between gap-3">
+            <div class="space-y-2">
               <div class="flex flex-wrap items-center gap-2">
-                <span class="px-2 py-0.5 rounded text-xs font-bold bg-brand-100 text-brand-800">${ad.categoria || 'Empleo'}</span>
-                ${tipo ? `<span class="px-2 py-0.5 rounded text-xs font-bold bg-stone-100 text-stone-700">${tipo}</span>` : ''}
+                <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-brand-100 text-brand-800">${ad.categoria || 'Empleo'}</span>
+                ${tipo ? `<span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-stone-100 text-stone-700">${tipo}</span>` : ''}
                 <span class="text-xs text-stone-400">${ad.created_at ? new Date(ad.created_at).toLocaleDateString('es-ES') : ''}</span>
               </div>
-              <h3 class="font-bold text-brand-900 leading-snug">${ad.titulo || ad.title || 'Oferta'}</h3>
-              <p class="text-sm text-stone-600 flex flex-wrap gap-3">
+              <h3 class="font-bold text-brand-900 leading-snug text-lg">${ad.titulo || ad.title || 'Oferta'}</h3>
+              <p class="text-sm text-stone-600 flex flex-wrap gap-x-4 gap-y-1">
                 <span><i class="fa-solid fa-location-dot text-stone-400 mr-1"></i>${ad.city || ad.provincia || ad.municipio || 'España'}</span>
                 ${ad.sueldo ? `<span><i class="fa-solid fa-euro-sign text-stone-400 mr-1"></i>${ad.sueldo}</span>` : ''}
               </p>
             </div>
-            <button type="button" class="btn-ver w-full sm:w-auto self-start px-4 py-2 bg-brand-900 hover:bg-brand-800 text-white text-sm font-semibold rounded-lg">Ver oferta</button>
+            <button type="button" class="btn-ver w-full sm:w-auto self-start px-5 py-2.5 bg-brand-900 hover:bg-brand-800 text-white text-sm font-semibold rounded-xl">Ver oferta</button>
           </div>`;
         card.querySelector('.btn-ver').onclick = () => verDetalleAnuncio(ad);
         cont.appendChild(card);
@@ -592,7 +600,6 @@
         try {
           let emailDestino = ad.email || ad.user_email || null;
 
-          // Si no tiene email en el anuncio, lo buscamos en profiles
           if (!emailDestino && ad.user_id) {
             const { data: perfil } = await cliente
               .from('profiles')
