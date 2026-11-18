@@ -70,22 +70,28 @@
       </a>
     </div>
 
-    <!-- MENSAJES -->
-    <div>
-      <h2 class="text-lg font-bold text-brand-900 mb-3 flex items-center gap-2">
-        <i class="fa-solid fa-inbox text-brand-600"></i> Mensajes recibidos
-        <span id="msg-count" class="hidden text-xs font-bold bg-red-500 text-white px-2 py-0.5 rounded-full"></span>
-      </h2>
-      <div id="messages-container" class="space-y-3">
-        <p class="text-stone-500 text-sm py-4 text-center">Cargando mensajes...</p>
+    <!-- PESTAÑAS -->
+    <div class="flex border-b border-stone-200">
+      <button id="tab-ads" onclick="switchTab('ads')" class="px-5 py-3 text-sm font-bold border-b-2 border-brand-600 text-brand-600">
+        Tus anuncios
+      </button>
+      <button id="tab-messages" onclick="switchTab('messages')" class="px-5 py-3 text-sm font-bold text-stone-500 relative">
+        Mensajes
+        <span id="msg-count" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center"></span>
+      </button>
+    </div>
+
+    <!-- CONTENIDO ANUNCIOS -->
+    <div id="ads-panel">
+      <div id="user-ads-container" class="space-y-3">
+        <p class="text-stone-500 text-sm py-6 text-center">Cargando...</p>
       </div>
     </div>
 
-    <!-- ANUNCIOS -->
-    <div>
-      <h2 class="text-lg font-bold text-brand-900 mb-3">Tus anuncios</h2>
-      <div id="user-ads-container" class="space-y-3">
-        <p class="text-stone-500 text-sm py-6 text-center">Cargando...</p>
+    <!-- CONTENIDO MENSAJES -->
+    <div id="messages-panel" class="hidden">
+      <div id="messages-container" class="space-y-3">
+        <p class="text-stone-500 text-sm py-4 text-center">Cargando mensajes...</p>
       </div>
     </div>
   </main>
@@ -136,6 +142,29 @@
     function getClient() {
       if (!cliente) cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       return cliente;
+    }
+
+    function switchTab(tab) {
+      const adsPanel = document.getElementById('ads-panel');
+      const msgPanel = document.getElementById('messages-panel');
+      const tabAds = document.getElementById('tab-ads');
+      const tabMsg = document.getElementById('tab-messages');
+
+      if (tab === 'ads') {
+        adsPanel.classList.remove('hidden');
+        msgPanel.classList.add('hidden');
+        tabAds.classList.add('border-brand-600', 'text-brand-600');
+        tabAds.classList.remove('text-stone-500');
+        tabMsg.classList.remove('border-brand-600', 'text-brand-600');
+        tabMsg.classList.add('text-stone-500');
+      } else {
+        adsPanel.classList.add('hidden');
+        msgPanel.classList.remove('hidden');
+        tabMsg.classList.add('border-brand-600', 'text-brand-600');
+        tabMsg.classList.remove('text-stone-500');
+        tabAds.classList.remove('border-brand-600', 'text-brand-600');
+        tabAds.classList.add('text-stone-500');
+      }
     }
 
     async function ensureProfile(session) {
