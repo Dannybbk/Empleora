@@ -356,6 +356,25 @@
         </div>
       </div>
 
+      <!-- NUEVA CONTRASEÑA (cuando llega el enlace del email) -->
+      <div id="new-password-wrapper" style="display:none;">
+        <h1>Nueva contraseña</h1>
+        <p class="sub">Escribe tu nueva contraseña</p>
+        <div id="newpass-alert" class="alert"></div>
+        <form id="new-password-form">
+          <div class="form-group">
+            <label>Nueva contraseña</label>
+            <div class="password-wrapper">
+              <input type="password" id="new-password" placeholder="Mínimo 6 caracteres" required minlength="6">
+              <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility('new-password', this)">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          <button type="submit" id="btn-newpass" class="btn">Guardar contraseña</button>
+        </form>
+      </div>
+
     </div>
   </main>
 
@@ -387,10 +406,47 @@
       document.getElementById('login-form-wrapper').style.display = type === 'login' ? 'block' : 'none';
       document.getElementById('register-form-wrapper').style.display = type === 'register' ? 'block' : 'none';
       document.getElementById('reset-form-wrapper').style.display = type === 'reset' ? 'block' : 'none';
+      document.getElementById('new-password-wrapper').style.display = type === 'newpass' ? 'block' : 'none';
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       const cliente = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      // Detectar si llega del enlace de recuperación
+      const hash = window.location.hash;
+      if (hash.includes('type=recovery') || hash.includes('access_token')) {
+        toggleForms('newpass');
+      }
+
+      // Formulario de nueva contraseña
+      document.getElementById('new-password-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const alertBox = document.getElementById('newpass-alert');
+        const btn = document.getElementById('btn-newpass');
+        const newPassword = document.getElementById('new-password').value;
+
+        btn.disabled = true;
+        btn.textContent = 'Guardando...';
+        alertBox.style.display = 'none';
+
+        const { error } = await cliente.auth.updateUser({ password: newPassword });
+
+        btn.disabled = false;
+        btn.textContent = 'Guardar contraseña';
+
+        if (error) {
+          alertBox.className = 'alert alert-error';
+          alertBox.textContent = 'Error: ' + error.message;
+          alertBox.style.display = 'block';
+        } else {
+          alertBox.className = 'alert alert-success';
+          alertBox.textContent = 'Contraseña actualizada. Ya puedes iniciar sesión.';
+          alertBox.style.display = 'block';
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 2000);
+        }
+      });
 
       document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
