@@ -257,15 +257,31 @@
         msg.textContent = 'Introduce tu correo primero.';
         return;
       }
-      const { error } = await cliente.auth.resetPasswordForEmail(email, {
-        redirectTo: window.location.origin + '/login.html'
-      });
-      if (error) {
+
+      msg.style.color = '#78716c';
+      msg.textContent = 'Enviando...';
+
+      try {
+        const response = await fetch('https://ctkiiimazwpztekwfnrn.supabase.co/functions/v1/send-reset-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+          },
+          body: JSON.stringify({ email })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || result.error) {
+          throw new Error(result.error || 'Error al enviar');
+        }
+
+        msg.style.color = '#166534';
+        msg.textContent = 'Revisa tu bandeja de entrada (y spam).';
+      } catch (err) {
         msg.style.color = '#b91c1c';
         msg.textContent = 'No se pudo enviar. Revisa el correo.';
-      } else {
-        msg.style.color = '#166534';
-        msg.textContent = 'Revisa tu bandeja (y spam).';
       }
     });
   </script>
