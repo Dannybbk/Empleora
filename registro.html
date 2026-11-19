@@ -240,7 +240,6 @@
       const avatarFile = document.getElementById('reg-avatar').files[0];
 
       try {
-        // 1. Crear el usuario en Supabase Auth
         const { data, error: authError } = await cliente.auth.signUp({
           email,
           password,
@@ -249,30 +248,29 @@
           }
         });
 
-        if (authError && !authError.message.includes('email') && !authError.message.includes('sending')) {
+        if (authError) {
+          if (authError.message.toLowerCase().includes('already') || authError.message.toLowerCase().includes('registered')) {
+            throw new Error('Este correo ya está registrado. Inicia sesión o recupera tu contraseña.');
+          }
           throw new Error('Error en el registro: ' + authError.message);
         }
 
-        // Si Supabase devuelve el usuario directamente o podemos iniciar sesión para obtener su ID
         let userId = data?.user?.id;
 
         if (!userId) {
-          // Intentamos hacer login rápido para capturar el ID
           const { data: loginData } = await cliente.auth.signInWithPassword({ email, password });
           userId = loginData?.user?.id;
         }
 
-        // Si aun así no tenemos ID (porque requiere confirmación estricta), avisamos que vaya a iniciar sesión
         if (!userId) {
           msg.style.color = '#166534';
-          msg.textContent = '¡Cuenta creada! Ya puedes iniciar sesión.';
-          setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+          msg.textContent = '¡Cuenta creada! Revisa tu correo para confirmarla y luego inicia sesión.';
+          setTimeout(() => { window.location.href = 'login.html'; }, 2500);
           return;
         }
 
         let avatarUrl = '';
 
-        // 2. Subir foto de perfil si se seleccionó
         if (avatarFile) {
           msg.textContent = 'Subiendo imagen...';
           const fileExt = avatarFile.name.split('.').pop();
@@ -290,7 +288,6 @@
           }
         }
 
-        // 3. Guardar en la tabla public.profiles
         msg.textContent = 'Guardando perfil...';
         await cliente.from('profiles').upsert({
           id: userId,
