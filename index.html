@@ -83,7 +83,6 @@
     </div>
   </div>
 
-  <!-- HERO + BUSCADOR CON EFECTO CRISTAL -->
   <section class="bg-gradient-to-b from-brand-900 via-brand-800 to-brand-700 text-white pt-10 pb-8 px-4">
     <div class="max-w-2xl mx-auto text-center mb-6">
       <h1 class="text-3xl sm:text-4xl font-extrabold leading-tight">Encuentra trabajo o publica tu oferta <span class="text-brand-200">gratis</span></h1>
@@ -119,6 +118,15 @@
               <option value="cuidado">Cuidado de personas</option>
               <option value="domestico">Trabajo doméstico</option>
               <option value="otros">Otros sectores</option>
+            </select>
+            <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs pointer-events-none"></i>
+          </div>
+          <div class="relative">
+            <i class="fa-solid fa-briefcase absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
+            <select id="search-tipo" class="w-full pl-10 pr-8 py-3.5 bg-white/70 border border-white/40 rounded-xl text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-brand-500 backdrop-blur-sm">
+              <option value="">Todos</option>
+              <option value="oferta">Oferta de empleo</option>
+              <option value="demanda">Demanda de empleo</option>
             </select>
             <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs pointer-events-none"></i>
           </div>
@@ -193,6 +201,10 @@
       <p class="font-bold text-white">Roda Trabajo © 2026</p>
       <p class="text-xs text-brand-200">Publica y busca empleo gratis · Sin comisiones</p>
       <p class="text-xs text-brand-200">Contacto: <a href="mailto:info@rodatrabajo.com" class="underline">info@rodatrabajo.com</a></p>
+      <div class="flex justify-center gap-4 text-xs mt-3">
+        <button onclick="abrirModalLegal('seguridad')" class="underline hover:text-white">Seguridad y normas de uso</button>
+        <button onclick="abrirModalLegal('privacidad')" class="underline hover:text-white">Política de privacidad</button>
+      </div>
     </div>
   </footer>
 
@@ -217,6 +229,13 @@
         <button type="submit" id="sc-btn" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm rounded-xl">Enviar mensaje</button>
       </form>
       <p class="text-[11px] text-center text-stone-400">info@rodatrabajo.com</p>
+    </div>
+  </div>
+
+  <div id="modal-legal" class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto p-6 relative">
+      <button onclick="document.getElementById('modal-legal').classList.add('hidden')" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+      <div id="modal-legal-content" class="text-sm text-stone-700 space-y-3 leading-relaxed"></div>
     </div>
   </div>
 
@@ -282,6 +301,27 @@
     async function cerrarSesion() {
       await cliente.auth.signOut();
       location.reload();
+    }
+
+    function abrirModalLegal(tipo) {
+      const cont = document.getElementById('modal-legal-content');
+      if (tipo === 'seguridad') {
+        cont.innerHTML = `
+          <h3 class="text-lg font-bold text-brand-900 mb-3">Seguridad y normas de uso</h3>
+          <p>Roda Trabajo es un tablón gratuito de anuncios de empleo entre usuarios. No intermediamos ni cobramos ninguna comisión.</p>
+          <p>Nunca pagues dinero por trámites, formación, material o cualquier concepto relacionado con la obtención de un empleo.</p>
+          <p>No envíes fotografías de tu DNI, pasaporte, datos bancarios ni otra documentación personal sensible antes de haber verificado la empresa en una entrevista real.</p>
+          <p>Nos reservamos el derecho de eliminar cualquier anuncio que consideremos fraudulento o que incumpla estas normas.</p>
+        `;
+      } else {
+        cont.innerHTML = `
+          <h3 class="text-lg font-bold text-brand-900 mb-3">Política de privacidad</h3>
+          <p>Los datos que nos facilitas (nombre, correo electrónico, teléfono y mensajes) se utilizan exclusivamente para el funcionamiento del portal: permitir el registro, el inicio de sesión y la comunicación entre usuarios.</p>
+          <p>No compartimos tu información con terceros con fines comerciales ni publicitarios.</p>
+          <p>Puedes solicitar la eliminación de tu cuenta y de los datos asociados en cualquier momento contactando con nosotros.</p>
+        `;
+      }
+      document.getElementById('modal-legal').classList.remove('hidden');
     }
 
     async function gestionarEstadoSesion() {
@@ -357,7 +397,9 @@
 
       cont.innerHTML = '';
       pagina.forEach(ad => {
-        const tipo = ad.tipo === 'busco_trabajo' ? 'Demanda' : (ad.tipo === 'ofrezco_empleo' ? 'Oferta' : '');
+        const tipoAnuncio = ad.tipo === 'busco_trabajo' ? 'demanda' : 'oferta';
+        const tipoLabel = tipoAnuncio === 'demanda' ? 'Demanda' : 'Oferta';
+        const tipoColor = tipoAnuncio === 'demanda' ? 'bg-blue-100 text-blue-800' : 'bg-brand-100 text-brand-800';
         const foto = ad.image_url || ad.photo_url || '';
         const card = document.createElement('div');
         card.className = 'bg-white rounded-2xl border border-stone-200 hover:border-brand-300 hover:shadow-md transition overflow-hidden flex flex-col sm:flex-row';
@@ -369,8 +411,8 @@
           <div class="p-5 flex-1 min-w-0 flex flex-col justify-between gap-3">
             <div class="space-y-2">
               <div class="flex flex-wrap items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-brand-100 text-brand-800">${ad.categoria || 'Empleo'}</span>
-                ${tipo ? `<span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-stone-100 text-stone-700">${tipo}</span>` : ''}
+                <span class="px-2.5 py-0.5 rounded-md text-xs font-bold ${tipoColor}">${tipoLabel}</span>
+                <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-stone-100 text-stone-700">${ad.categoria || 'Empleo'}</span>
                 <span class="text-xs text-stone-400">${ad.created_at ? new Date(ad.created_at).toLocaleDateString('es-ES') : ''}</span>
               </div>
               <h3 class="font-bold text-brand-900 leading-snug text-lg">${ad.titulo || ad.title || 'Oferta'}</h3>
@@ -416,6 +458,7 @@
       e.preventDefault();
       const kw = document.getElementById('search-keyword').value.toLowerCase().trim();
       const cat = document.getElementById('search-category').value.toLowerCase().trim();
+      const tipo = document.getElementById('search-tipo').value;
       const prov = document.getElementById('search-province').value.toLowerCase().trim();
       const mun = document.getElementById('search-municipio').value.toLowerCase().trim();
       const filtrados = todosLosAnuncios.filter(ad => {
@@ -423,8 +466,10 @@
         const d = (ad.descripcion || ad.description || '').toLowerCase();
         const c = (ad.categoria || '').toLowerCase();
         const u = (ad.city || ad.provincia || ad.municipio || '').toLowerCase();
+        const adTipo = ad.tipo === 'busco_trabajo' ? 'demanda' : 'oferta';
         return (!kw || t.includes(kw) || d.includes(kw)) &&
                (!cat || c.includes(cat)) &&
+               (!tipo || adTipo === tipo) &&
                (!prov || u.includes(prov)) &&
                (!mun || u.includes(mun));
       });
@@ -436,6 +481,7 @@
     function limpiarFiltros() {
       document.getElementById('search-keyword').value = '';
       document.getElementById('search-category').value = '';
+      document.getElementById('search-tipo').value = '';
       document.getElementById('search-province').value = '';
       document.getElementById('search-municipio').value = '';
       document.getElementById('container-municipio').classList.add('hidden');
@@ -476,6 +522,8 @@
       const adId = ad.id || '';
       const ownerId = ad.user_id || '';
       const desc = ad.descripcion || ad.description || 'Sin descripción.';
+      const tipoAnuncio = ad.tipo === 'busco_trabajo' ? 'demanda' : 'oferta';
+      const tipoLabel = tipoAnuncio === 'demanda' ? 'Demanda' : 'Oferta';
 
       const modal = document.createElement('div');
       modal.id = 'modal-detalle';
@@ -493,7 +541,7 @@
 
           <div class="p-5 space-y-5">
             <div>
-              <span class="inline-block px-2.5 py-1 rounded-md text-xs font-bold bg-brand-100 text-brand-800 uppercase tracking-wide">${ad.categoria || 'Empleo'}</span>
+              <span class="inline-block px-2.5 py-1 rounded-md text-xs font-bold ${tipoAnuncio === 'demanda' ? 'bg-blue-100 text-blue-800' : 'bg-brand-100 text-brand-800'} uppercase tracking-wide">${tipoLabel}</span>
               <h2 class="text-2xl font-bold text-brand-900 mt-2 leading-tight">${titulo}</h2>
             </div>
 
@@ -519,6 +567,14 @@
             <div>
               <h3 class="font-bold text-brand-900 mb-2">Descripción</h3>
               <div class="text-stone-700 leading-relaxed bg-stone-50 p-4 rounded-xl whitespace-pre-line">${desc}</div>
+            </div>
+
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3 text-sm text-amber-900">
+              <i class="fa-solid fa-shield-halved text-amber-600 text-lg mt-0.5"></i>
+              <div>
+                <p class="font-bold mb-1">Consejos de seguridad</p>
+                <p>Roda Trabajo es un tablón gratuito entre usuarios. Nunca pagues dinero por trámites, formación o material para conseguir un empleo. No envíes fotos de tu DNI, pasaporte ni datos bancarios antes de verificar la empresa en una entrevista real.</p>
+              </div>
             </div>
 
             <div class="border-t border-stone-200 pt-5 space-y-3">
@@ -601,48 +657,24 @@
 
         const { error } = await cliente.from('messages').insert([row]);
 
-        // Enviar email al anunciante
         try {
           let emailDestino = ad.email || ad.user_email || null;
-
           if (!emailDestino && ad.user_id) {
-            const { data: perfil } = await cliente
-              .from('profiles')
-              .select('email')
-              .eq('id', ad.user_id)
-              .maybeSingle();
+            const { data: perfil } = await cliente.from('profiles').select('email').eq('id', ad.user_id).maybeSingle();
             if (perfil && perfil.email) emailDestino = perfil.email;
           }
-
           if (emailDestino) {
             await fetch('https://ctkiiimazwpztekwfnrn.supabase.co/functions/v1/send-contact-email', {
               method: 'POST',
-              headers: { 
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
-              },
+              headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY },
               body: JSON.stringify({
                 to: emailDestino,
                 subject: 'Nuevo interesado en tu anuncio - Roda Trabajo',
-                html: `
-                  <div style="font-family: Arial, sans-serif; max-width: 600px;">
-                    <h2 style="color: #6B4423;">Nuevo contacto en tu anuncio</h2>
-                    <p><strong>Anuncio:</strong> ${titulo}</p>
-                    <hr>
-                    <p><strong>Nombre:</strong> ${row.sender_name}</p>
-                    <p><strong>Teléfono:</strong> ${row.sender_phone}</p>
-                    <p><strong>Email:</strong> ${row.sender_email}</p>
-                    <p><strong>Mensaje:</strong></p>
-                    <p style="background:#f5f5f5; padding:12px; border-radius:8px;">${row.body}</p>
-                    <p style="margin-top:20px; font-size:12px; color:#888;">Este mensaje se ha enviado desde Roda Trabajo.</p>
-                  </div>
-                `
+                html: `<div style="font-family:Arial,sans-serif;max-width:600px;"><h2 style="color:#6B4423;">Nuevo contacto en tu anuncio</h2><p><strong>Anuncio:</strong> ${titulo}</p><hr><p><strong>Nombre:</strong> ${row.sender_name}</p><p><strong>Teléfono:</strong> ${row.sender_phone}</p><p><strong>Email:</strong> ${row.sender_email}</p><p><strong>Mensaje:</strong></p><p style="background:#f5f5f5;padding:12px;border-radius:8px;">${row.body}</p></div>`
               })
             });
           }
-        } catch (e) {
-          console.log('No se pudo enviar el email:', e);
-        }
+        } catch (e) {}
 
         btn.disabled = false;
         btn.textContent = 'Enviar mensaje';
@@ -650,14 +682,13 @@
         if (error) {
           fb.className = 'text-sm font-semibold text-red-600';
           fb.textContent = 'Error: ' + error.message;
-          fb.classList.remove('hidden');
         } else {
           fb.className = 'text-sm font-semibold text-green-700';
           fb.textContent = '¡Mensaje enviado! El anunciante lo verá en su panel.';
-          fb.classList.remove('hidden');
           document.getElementById('contact-form').reset();
           document.getElementById('c-foto-preview').classList.add('hidden');
         }
+        fb.classList.remove('hidden');
       });
     }
 
