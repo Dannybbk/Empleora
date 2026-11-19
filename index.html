@@ -124,9 +124,9 @@
           <div class="relative">
             <i class="fa-solid fa-briefcase absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm"></i>
             <select id="search-tipo" class="w-full pl-10 pr-8 py-3.5 bg-white/70 border border-white/40 rounded-xl text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-brand-500 backdrop-blur-sm">
-              <option value="">Todos (Oferta y Demanda)</option>
-              <option value="oferta">Busco trabajador (Oferta)</option>
-              <option value="demanda">Busco empleo (Demanda)</option>
+              <option value="">Todos</option>
+              <option value="oferta">Oferta de empleo</option>
+              <option value="demanda">Demanda de empleo</option>
             </select>
             <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs pointer-events-none"></i>
           </div>
@@ -232,8 +232,7 @@
     </div>
   </div>
 
-  <!-- Modal Denuncia -->
-  <div id="modal-denuncia" class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+  <div id="modal-denuncia" class="hidden fixed inset-0 z-[60] bg-black/50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full p-5 space-y-4">
       <div class="flex justify-between items-center">
         <h3 class="font-bold text-brand-900">Denunciar anuncio</h3>
@@ -251,7 +250,6 @@
     </div>
   </div>
 
-  <!-- Modal Legal -->
   <div id="modal-legal" class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto p-6 relative">
       <button onclick="document.getElementById('modal-legal').classList.add('hidden')" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
@@ -684,6 +682,7 @@
 
       document.getElementById('btn-cerrar-detalle').addEventListener('click', () => {
         document.getElementById('modal-detalle').remove();
+        document.getElementById('modal-denuncia').classList.add('hidden');
         document.body.style.overflow = '';
       });
 
