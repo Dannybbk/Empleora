@@ -562,7 +562,10 @@
             <div class="flex items-center gap-3 bg-white border border-stone-100 p-3 rounded-xl">
               <img src="${avatarSrc}" alt="" class="w-12 h-12 rounded-full object-cover border-2 border-brand-100">
               <div>
-                <p class="font-bold text-brand-900">${nombre}</p>
+                <p class="font-bold text-brand-900 flex items-center gap-1.5">
+                  ${nombre}
+                  <i class="fa-solid fa-circle-check text-blue-500 text-sm" title="Verificado"></i>
+                </p>
                 <p class="text-xs text-stone-500">${rol}</p>
               </div>
             </div>
